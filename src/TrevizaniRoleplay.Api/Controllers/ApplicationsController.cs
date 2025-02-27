@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using TrevizaniRoleplay.Core.Extesions;
+using TrevizaniRoleplay.Core.Extensions;
 using TrevizaniRoleplay.Core.Models.Requests;
 using TrevizaniRoleplay.Core.Models.Responses;
 using TrevizaniRoleplay.Core.Models.Settings;
@@ -44,7 +44,7 @@ public class ApplicationsController(DatabaseContext context) : BaseController(co
                 Name = app.Name,
                 Date = app.RegisterDate,
                 History = app.History,
-                Sex = app.Sex.GetDisplay(),
+                Sex = app.Sex.GetDescription(),
                 UserName = app.User!.Name,
                 Age = app.Age,
             };

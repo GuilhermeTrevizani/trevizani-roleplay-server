@@ -4,6 +4,7 @@ namespace TrevizaniRoleplay.Core.Extesions;
 
 public static class EnumExtensions
 {
+    [Obsolete("Each Enum will have its own GetDescription extension method")]
     public static string GetDisplay(this Enum value)
     {
         var fieldInfo = value.GetType().GetField(value.ToString());

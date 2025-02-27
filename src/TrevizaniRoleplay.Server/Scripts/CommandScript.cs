@@ -1,5 +1,6 @@
 ﻿using GTANetworkAPI;
 using Microsoft.EntityFrameworkCore;
+using TrevizaniRoleplay.Core.Extensions;
 using TrevizaniRoleplay.Core.Extesions;
 using TrevizaniRoleplay.Domain.Entities;
 using TrevizaniRoleplay.Domain.Enums;
@@ -644,7 +645,7 @@ public class CommandScript : Script
         }
 
         target.SendMessage(MessageType.Title, $"ID de {player.Character.Name}");
-        target.SendMessage(MessageType.None, $"Sexo: {player.Character.Sex.GetDisplay()}");
+        target.SendMessage(MessageType.None, $"Sexo: {player.Character.Sex.GetDescription()}");
         target.SendMessage(MessageType.None, $"Idade: {player.Character.Age} anos");
         player.SendMessageToNearbyPlayers(player == target ? "olha sua própria ID." : $"mostra sua ID para {target.ICName}.", MessageCategory.Ame);
     }

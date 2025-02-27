@@ -1,5 +1,6 @@
 ﻿using GTANetworkAPI;
 using Microsoft.EntityFrameworkCore;
+using TrevizaniRoleplay.Core.Extensions;
 using TrevizaniRoleplay.Core.Extesions;
 using TrevizaniRoleplay.Domain.Entities;
 using TrevizaniRoleplay.Domain.Enums;
@@ -385,7 +386,7 @@ public class MDCScript : Script
                 character.Id,
                 character.Name,
                 character.Age,
-                Sex = character.Sex.GetDisplay(),
+                Sex = character.Sex.GetDescription(),
                 Job = job,
                 DriverLicenseColor = GetDriverLicenseColor(),
                 DriverLicenseText = GetDriverLicenseText(),

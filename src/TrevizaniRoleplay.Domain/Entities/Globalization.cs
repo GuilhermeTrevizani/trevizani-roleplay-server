@@ -1,9 +1,8 @@
 ﻿namespace TrevizaniRoleplay.Domain.Entities;
 
+[Obsolete("It will be migrated to TrevizaniRoleplay.Core.Globalization.Resources")]
 public abstract class Globalization
 {
-    public const string WOMAN = "Mulher";
-    public const string MAN = "Homem";
     public const string NONE = "Nenhum";
     public const string BRONZE = "Bronze";
     public const string SILVER = "Prata";
