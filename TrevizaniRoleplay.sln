@@ -1,0 +1,63 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32112.339
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrevizaniRoleplay.Server", "src\TrevizaniRoleplay.Server\TrevizaniRoleplay.Server.csproj", "{3C6EDB2B-A15E-4838-A9B1-4BDC0FF968EA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{549516F9-1232-42BA-A38A-FA0B0D18DC1E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F9B9FA25-F24B-475D-8C82-21EAFC1F9D91}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrevizaniRoleplay.Domain", "src\TrevizaniRoleplay.Domain\TrevizaniRoleplay.Domain.csproj", "{55D683E7-8444-4FB9-84BD-D83F9A764651}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrevizaniRoleplay.Infra", "src\TrevizaniRoleplay.Infra\TrevizaniRoleplay.Infra.csproj", "{EE81CCD5-4DF9-440D-A692-D711EA962DD8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrevizaniRoleplay.Api", "src\TrevizaniRoleplay.Api\TrevizaniRoleplay.Api.csproj", "{5EB9A0AD-0EC6-424A-82D1-F0BDBB6D64B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrevizaniRoleplay.Core", "src\TrevizaniRoleplay.Core\TrevizaniRoleplay.Core.csproj", "{2415DDF1-AA65-4EBD-AE89-301C44F14079}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3C6EDB2B-A15E-4838-A9B1-4BDC0FF968EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C6EDB2B-A15E-4838-A9B1-4BDC0FF968EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C6EDB2B-A15E-4838-A9B1-4BDC0FF968EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C6EDB2B-A15E-4838-A9B1-4BDC0FF968EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55D683E7-8444-4FB9-84BD-D83F9A764651}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55D683E7-8444-4FB9-84BD-D83F9A764651}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55D683E7-8444-4FB9-84BD-D83F9A764651}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55D683E7-8444-4FB9-84BD-D83F9A764651}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE81CCD5-4DF9-440D-A692-D711EA962DD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE81CCD5-4DF9-440D-A692-D711EA962DD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE81CCD5-4DF9-440D-A692-D711EA962DD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE81CCD5-4DF9-440D-A692-D711EA962DD8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5EB9A0AD-0EC6-424A-82D1-F0BDBB6D64B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5EB9A0AD-0EC6-424A-82D1-F0BDBB6D64B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5EB9A0AD-0EC6-424A-82D1-F0BDBB6D64B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5EB9A0AD-0EC6-424A-82D1-F0BDBB6D64B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2415DDF1-AA65-4EBD-AE89-301C44F14079}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2415DDF1-AA65-4EBD-AE89-301C44F14079}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2415DDF1-AA65-4EBD-AE89-301C44F14079}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2415DDF1-AA65-4EBD-AE89-301C44F14079}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3C6EDB2B-A15E-4838-A9B1-4BDC0FF968EA} = {549516F9-1232-42BA-A38A-FA0B0D18DC1E}
+		{55D683E7-8444-4FB9-84BD-D83F9A764651} = {549516F9-1232-42BA-A38A-FA0B0D18DC1E}
+		{EE81CCD5-4DF9-440D-A692-D711EA962DD8} = {549516F9-1232-42BA-A38A-FA0B0D18DC1E}
+		{5EB9A0AD-0EC6-424A-82D1-F0BDBB6D64B3} = {549516F9-1232-42BA-A38A-FA0B0D18DC1E}
+		{2415DDF1-AA65-4EBD-AE89-301C44F14079} = {549516F9-1232-42BA-A38A-FA0B0D18DC1E}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AB803A41-9CC3-43D6-9194-E29DCEF649C0}
+	EndGlobalSection
+EndGlobal

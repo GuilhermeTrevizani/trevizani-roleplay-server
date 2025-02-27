@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+        <ImplicitUsings>true</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+        <OutputPath>C:\RAGEMP\server-files\dotnet\resources\LSC\</OutputPath>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Content Include="meta.xml">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Discord.Net" Version="3.17.1" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.10">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\TrevizaniRoleplay.Core\TrevizaniRoleplay.Core.csproj" />
+      <ProjectReference Include="..\TrevizaniRoleplay.Domain\TrevizaniRoleplay.Domain.csproj" />
+      <ProjectReference Include="..\TrevizaniRoleplay.Infra\TrevizaniRoleplay.Infra.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Bootstrapper">
+        <HintPath>Bootstrapper.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+</Project>
