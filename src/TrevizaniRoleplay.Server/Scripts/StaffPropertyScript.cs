@@ -1,5 +1,4 @@
 ﻿using GTANetworkAPI;
-using TrevizaniRoleplay.Core.Extesions;
 using TrevizaniRoleplay.Domain.Entities;
 using TrevizaniRoleplay.Domain.Enums;
 using TrevizaniRoleplay.Server.Extensions;
@@ -159,7 +158,7 @@ public class StaffPropertyScript : Script
             .Select(x => new
             {
                 Value = x,
-                Label = x.GetDisplay(),
+                Label = x.ToString(),
             })
             .OrderBy(x => x.Label)
         );
@@ -169,7 +168,7 @@ public class StaffPropertyScript : Script
             property.Id,
             property.Number,
             property.Interior,
-            InteriorDisplay = property.Interior.GetDisplay(),
+            InteriorDisplay = property.Interior.ToString(),
             property.Address,
             property.Value,
             property.EntranceDimension,

@@ -117,8 +117,101 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Animations" xml:space="preserve">
+    <value>Animations</value>
+  </data>
+  <data name="Blips" xml:space="preserve">
+    <value>Blips</value>
+  </data>
+  <data name="Carry" xml:space="preserve">
+    <value>Carry</value>
+  </data>
+  <data name="CK" xml:space="preserve">
+    <value>CK</value>
+  </data>
+  <data name="Companies" xml:space="preserve">
+    <value>Companies</value>
+  </data>
+  <data name="Company" xml:space="preserve">
+    <value>Company</value>
+  </data>
+  <data name="CrackDens" xml:space="preserve">
+    <value>Crack Dens</value>
+  </data>
+  <data name="Doors" xml:space="preserve">
+    <value>Doors</value>
+  </data>
+  <data name="Drugs" xml:space="preserve">
+    <value>Drugs</value>
+  </data>
+  <data name="Events" xml:space="preserve">
+    <value>Events</value>
+  </data>
+  <data name="Faction" xml:space="preserve">
+    <value>Faction</value>
+  </data>
+  <data name="Factions" xml:space="preserve">
+    <value>Factions</value>
+  </data>
+  <data name="FactionsStorages" xml:space="preserve">
+    <value>Factions Storages</value>
+  </data>
+  <data name="Frisk" xml:space="preserve">
+    <value>Frisk</value>
+  </data>
+  <data name="Furnitures" xml:space="preserve">
+    <value>Furnitures</value>
+  </data>
+  <data name="GarbageCollector" xml:space="preserve">
+    <value>Garbage Collector</value>
+  </data>
+  <data name="GiveItem" xml:space="preserve">
+    <value>Give Item</value>
+  </data>
+  <data name="Items" xml:space="preserve">
+    <value>Items</value>
+  </data>
+  <data name="Jobs" xml:space="preserve">
+    <value>Jobs</value>
+  </data>
   <data name="Man" xml:space="preserve">
     <value>Man</value>
+  </data>
+  <data name="Mechanic" xml:space="preserve">
+    <value>Mechanic</value>
+  </data>
+  <data name="Properties" xml:space="preserve">
+    <value>Properties</value>
+  </data>
+  <data name="PropertySell" xml:space="preserve">
+    <value>Property Sell</value>
+  </data>
+  <data name="Spots" xml:space="preserve">
+    <value>Spots</value>
+  </data>
+  <data name="TaxiDriver" xml:space="preserve">
+    <value>Taxi Driver</value>
+  </data>
+  <data name="Trucker" xml:space="preserve">
+    <value>Trucker</value>
+  </data>
+  <data name="TruckerLocations" xml:space="preserve">
+    <value>Trucker Locations</value>
+  </data>
+  <data name="Unemployed" xml:space="preserve">
+    <value>Unemployed</value>
+  </data>
+  <data name="VehicleMaintenance" xml:space="preserve">
+    <value>Vehicle Maintenance</value>
+  </data>
+  <data name="Vehicles" xml:space="preserve">
+    <value>Vehicles</value>
+  </data>
+  <data name="VehicleSell" xml:space="preserve">
+    <value>Vehicle Sell</value>
+  </data>
+  <data name="VehicleTransfer" xml:space="preserve">
+    <value>Vehicle Transfer</value>
   </data>
   <data name="Woman" xml:space="preserve">
     <value>Woman</value>

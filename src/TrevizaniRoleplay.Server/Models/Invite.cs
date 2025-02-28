@@ -1,4 +1,6 @@
-﻿namespace TrevizaniRoleplay.Server.Models;
+﻿using TrevizaniRoleplay.Domain.Enums;
+
+namespace TrevizaniRoleplay.Server.Models;
 
 public class Invite
 {

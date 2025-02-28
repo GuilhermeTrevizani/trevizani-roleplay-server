@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using TrevizaniRoleplay.Core.Extesions;
 using TrevizaniRoleplay.Core.Models.Responses;
 using TrevizaniRoleplay.Core.Models.Settings;
 using TrevizaniRoleplay.Infra.Data;
@@ -24,7 +23,7 @@ public class PropertiesController(DatabaseContext context) : BaseController(cont
             {
                 Id = x.Id,
                 Number = x.Number,
-                InteriorDisplay = x.Interior.GetDisplay(),
+                InteriorDisplay = x.Interior.ToString(),
                 Address = x.Address,
                 Value = x.Value,
                 EntranceDimension = x.EntranceDimension,

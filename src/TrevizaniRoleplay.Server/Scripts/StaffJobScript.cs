@@ -1,5 +1,5 @@
 ﻿using GTANetworkAPI;
-using TrevizaniRoleplay.Core.Extesions;
+using TrevizaniRoleplay.Core.Extensions;
 using TrevizaniRoleplay.Domain.Entities;
 using TrevizaniRoleplay.Domain.Enums;
 using TrevizaniRoleplay.Server.Extensions;
@@ -111,7 +111,7 @@ public class StaffJobScript : Script
             .Select(x => new
             {
                 x.Id,
-                Name = x.CharacterJob.GetDisplay(),
+                Name = x.CharacterJob.GetDescription(),
                 x.PosX,
                 x.PosY,
                 x.PosZ,

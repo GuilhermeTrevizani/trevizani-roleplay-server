@@ -26,7 +26,7 @@ public class Server : Script
     private async Task InsertJobs()
     {
         var context = Functions.GetDatabaseContext();
-        foreach (var characterJob in Enum.GetValues<CharacterJob>().Where(x => x != CharacterJob.None))
+        foreach (var characterJob in Enum.GetValues<CharacterJob>().Where(x => x != CharacterJob.Unemployed))
         {
             var job = await context.Jobs.FirstOrDefaultAsync(x => x.CharacterJob == characterJob);
             if (job is null)

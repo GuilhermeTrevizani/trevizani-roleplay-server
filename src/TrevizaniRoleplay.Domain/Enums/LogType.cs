@@ -122,9 +122,7 @@ public enum LogType : byte
     [Display(Name = Globalization.STEAL_PROPERTY)]
     StealProperty = 39,
 
-    [Obsolete("Não é mais utilizado")]
-    [Display(Name = Globalization.STEAL_STORAGE)]
-    StealStorage = 40,
+    // 40 is free
 
     [Display(Name = Globalization.VIEW_CRACK_DEN_SALES)]
     ViewCrackDenSales = 41,

@@ -1,5 +1,6 @@
 ﻿using GTANetworkAPI;
 using Microsoft.EntityFrameworkCore;
+using TrevizaniRoleplay.Core.Extensions;
 using TrevizaniRoleplay.Core.Extesions;
 using TrevizaniRoleplay.Domain.Entities;
 using TrevizaniRoleplay.Domain.Enums;
@@ -428,9 +429,9 @@ public class StaffScript : Script
 
         player.User.AddHelpRequestsAnswersQuantity();
 
-        await Functions.SendServerMessage($"{player.User.Name} está respondendo o {helpRequest.Type.GetDisplay()} de {helpRequest.CharacterName} ({helpRequest.CharacterSessionId}) ({helpRequest.UserName}).", UserStaff.ServerSupport, false);
+        await Functions.SendServerMessage($"{player.User.Name} está respondendo o {helpRequest.Type.GetDescription()} de {helpRequest.CharacterName} ({helpRequest.CharacterSessionId}) ({helpRequest.UserName}).", UserStaff.ServerSupport, false);
         player.LastPMSessionId = helpRequest.CharacterSessionId;
-        target.SendMessage(MessageType.Success, $"{player.User.Name} atendeu o seu {helpRequest.Type.GetDisplay()}: {helpRequest.Message}");
+        target.SendMessage(MessageType.Success, $"{player.User.Name} atendeu o seu {helpRequest.Type.GetDescription()}: {helpRequest.Message}");
     }
 
     [Command("ar", "/ar (ID)")]
@@ -471,9 +472,9 @@ public class StaffScript : Script
 
         player.User.AddHelpRequestsAnswersQuantity();
 
-        await Functions.SendServerMessage($"{player.User.Name} está respondendo o {helpRequest.Type.GetDisplay()} de {helpRequest.CharacterName} ({helpRequest.CharacterSessionId}) ({helpRequest.UserName}).", UserStaff.JuniorServerAdmin, false);
+        await Functions.SendServerMessage($"{player.User.Name} está respondendo o {helpRequest.Type.GetDescription()} de {helpRequest.CharacterName} ({helpRequest.CharacterSessionId}) ({helpRequest.UserName}).", UserStaff.JuniorServerAdmin, false);
         player.LastPMSessionId = helpRequest.CharacterSessionId;
-        target.SendMessage(MessageType.Success, $"{player.User.Name} atendeu o seu {helpRequest.Type.GetDisplay()}: {helpRequest.Message}");
+        target.SendMessage(MessageType.Success, $"{player.User.Name} atendeu o seu {helpRequest.Type.GetDescription()}: {helpRequest.Message}");
     }
 
     [Command("listasos")]
@@ -494,7 +495,7 @@ public class StaffScript : Script
 
         foreach (var helpRequest in helpRequests)
         {
-            player.SendMessage(MessageType.Error, $"{helpRequest.Type.GetDisplay()} de {helpRequest.CharacterName} ({helpRequest.CharacterSessionId}) ({helpRequest.UserName}) em {helpRequest.RegisterDate}");
+            player.SendMessage(MessageType.Error, $"{helpRequest.Type.GetDescription()} de {helpRequest.CharacterName} ({helpRequest.CharacterSessionId}) ({helpRequest.UserName}) em {helpRequest.RegisterDate}");
             player.SendMessage(MessageType.Error, $"Pergunta: {{#B0B0B0}}{helpRequest.Message} {{{Constants.ERROR_COLOR}}}(/at {helpRequest.CharacterSessionId} /csos {helpRequest.CharacterSessionId})");
         }
     }
@@ -517,7 +518,7 @@ public class StaffScript : Script
 
         foreach (var helpRequest in helpRequests)
         {
-            player.SendMessage(MessageType.Error, $"{helpRequest.Type.GetDisplay()} de {helpRequest.CharacterName} ({helpRequest.CharacterSessionId}) ({helpRequest.UserName}) em {helpRequest.RegisterDate}");
+            player.SendMessage(MessageType.Error, $"{helpRequest.Type.GetDescription()} de {helpRequest.CharacterName} ({helpRequest.CharacterSessionId}) ({helpRequest.UserName}) em {helpRequest.RegisterDate}");
             player.SendMessage(MessageType.Error, $"Pergunta: {{#B0B0B0}}{helpRequest.Message} {{{Constants.ERROR_COLOR}}}(/ar {helpRequest.CharacterSessionId} /creport {helpRequest.CharacterSessionId})");
         }
     }
@@ -551,8 +552,8 @@ public class StaffScript : Script
         context.HelpRequests.Update(helpRequest);
         await context.SaveChangesAsync();
 
-        target.SendMessage(MessageType.Error, $"{player.User.Name} converteu o seu {HelpRequestType.SOS.GetDisplay()} para um {helpRequest.Type.GetDisplay()}.");
-        await Functions.SendServerMessage($"{player.User.Name} converteu o {HelpRequestType.SOS.GetDisplay()} de {helpRequest.CharacterName} ({helpRequest.CharacterSessionId}) ({helpRequest.UserName}) para um {helpRequest.Type.GetDisplay()}.", UserStaff.ServerSupport, false);
+        target.SendMessage(MessageType.Error, $"{player.User.Name} converteu o seu {HelpRequestType.SOS.GetDescription()} para um {helpRequest.Type.GetDescription()}.");
+        await Functions.SendServerMessage($"{player.User.Name} converteu o {HelpRequestType.SOS.GetDescription()} de {helpRequest.CharacterName} ({helpRequest.CharacterSessionId}) ({helpRequest.UserName}) para um {helpRequest.Type.GetDescription()}.", UserStaff.ServerSupport, false);
     }
 
     [Command("creport", "/creport (ID)")]
@@ -584,8 +585,8 @@ public class StaffScript : Script
         context.HelpRequests.Update(helpRequest);
         await context.SaveChangesAsync();
 
-        target.SendMessage(MessageType.Error, $"{player.User.Name} converteu o seu {HelpRequestType.Report.GetDisplay()} para um {helpRequest.Type.GetDisplay()}.");
-        await Functions.SendServerMessage($"{player.User.Name} converteu o {HelpRequestType.Report.GetDisplay()} de {helpRequest.CharacterName} ({helpRequest.CharacterSessionId}) ({helpRequest.UserName}) para um {helpRequest.Type.GetDisplay()}.", UserStaff.ServerSupport, false);
+        target.SendMessage(MessageType.Error, $"{player.User.Name} converteu o seu {HelpRequestType.Report.GetDescription()} para um {helpRequest.Type.GetDescription()}.");
+        await Functions.SendServerMessage($"{player.User.Name} converteu o {HelpRequestType.Report.GetDescription()} de {helpRequest.CharacterName} ({helpRequest.CharacterSessionId}) ({helpRequest.UserName}) para um {helpRequest.Type.GetDescription()}.", UserStaff.ServerSupport, false);
     }
 
     [Command("spec", "/spec (ID ou nome)")]
@@ -1533,7 +1534,7 @@ public class StaffScript : Script
             .Select(x => new
             {
                 Value = x,
-                Label = x.GetDisplay(),
+                Label = x.GetDescription(),
             })
             .OrderBy(x => x.Label)
         );
@@ -1624,7 +1625,7 @@ public class StaffScript : Script
                 await context.SaveChangesAsync();
             }
 
-            await player.WriteLog(LogType.Staff, $"Alterar Usuário {user.Name} ({user.DiscordUsername}) {staff} {Functions.Serialize(staffFlags.Select(x => x.GetDisplay()))}", target);
+            await player.WriteLog(LogType.Staff, $"Alterar Usuário {user.Name} ({user.DiscordUsername}) {staff} {Functions.Serialize(staffFlags.Select(x => x.GetDescription()))}", target);
             player.SendNotification(NotificationType.Success, $"Você alterou as configurações administrativas de {user.Name}.");
         }
         catch (Exception ex)
@@ -1710,7 +1711,7 @@ public class StaffScript : Script
                     x.Name,
                     Owner = x.CharacterId == character.Id,
                 }),
-                Job = character.Job.GetDisplay(),
+                Job = character.Job.GetDescription(),
                 character.RegisterDate,
                 Premium = userPremium.GetDisplay(),
                 character.ConnectedTime,

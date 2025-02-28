@@ -1143,7 +1143,7 @@ public class CommandScript : Script
                 Type = x.Type.GetDisplay(),
                 WaitingTime = Functions.GetTimespan(x.Date),
             }),
-            Job = player.Character.Job.GetDisplay(),
+            Job = player.Character.Job.GetDescription(),
             NameChanges = player.User.NameChanges,
             PaycheckItems = paycheck.PaycheckItems,
             PaycheckValue = paycheck.PaycheckValue,
@@ -1369,7 +1369,7 @@ public class CommandScript : Script
             new("Geral", "/fixinvi", "Corrige a invisibilidade do seu personagem"),
         };
 
-        if (player.Character.Job != CharacterJob.None)
+        if (player.Character.Job != CharacterJob.Unemployed)
         {
             commands.AddRange(
             [
@@ -1546,113 +1546,113 @@ public class CommandScript : Script
             if (player.StaffFlags.Contains(StaffFlag.Doors))
                 commands.AddRange(
                 [
-                    new($"Flag Staff {StaffFlag.Doors.GetDisplay()}", "/portas", "Abre o painel de gerenciamento de portas"),
+                    new($"Flag Staff {StaffFlag.Doors.GetDescription()}", "/portas", "Abre o painel de gerenciamento de portas"),
                 ]);
 
             if (player.StaffFlags.Contains(StaffFlag.Jobs))
                 commands.AddRange(
                 [
-                    new($"Flag Staff {StaffFlag.Jobs.GetDisplay()}", "/empregos", "Abre o painel de gerenciamento de empregos"),
+                    new($"Flag Staff {StaffFlag.Jobs.GetDescription()}", "/empregos", "Abre o painel de gerenciamento de empregos"),
                 ]);
 
             if (player.StaffFlags.Contains(StaffFlag.Factions))
                 commands.AddRange(
                 [
-                    new($"Flag Staff {StaffFlag.Factions.GetDisplay()}", "/faccoes", "Abre o painel de gerenciamento de facções"),
-                    new($"Flag Staff {StaffFlag.Factions.GetDisplay()}", "/contrabandistas", "Abre o painel de gerenciamento de contrabandistas"),
-                    new($"Flag Staff {StaffFlag.Factions.GetDisplay()}", "/setfaccao", "Define a facção de um jogador"),
+                    new($"Flag Staff {StaffFlag.Factions.GetDescription()}", "/faccoes", "Abre o painel de gerenciamento de facções"),
+                    new($"Flag Staff {StaffFlag.Factions.GetDescription()}", "/contrabandistas", "Abre o painel de gerenciamento de contrabandistas"),
+                    new($"Flag Staff {StaffFlag.Factions.GetDescription()}", "/setfaccao", "Define a facção de um jogador"),
                 ]);
 
             if (player.StaffFlags.Contains(StaffFlag.FactionsStorages))
                 commands.AddRange(
                 [
-                    new($"Flag Staff {StaffFlag.FactionsStorages.GetDisplay()}", "/aarmazenamentos", "Abre o painel de gerenciamento de armazenamentos"),
-                    new($"Flag Staff {StaffFlag.FactionsStorages.GetDisplay()}", "/aequipamentos", "Abre o painel de gerenciamento de equipamentos"),
+                    new($"Flag Staff {StaffFlag.FactionsStorages.GetDescription()}", "/aarmazenamentos", "Abre o painel de gerenciamento de armazenamentos"),
+                    new($"Flag Staff {StaffFlag.FactionsStorages.GetDescription()}", "/aequipamentos", "Abre o painel de gerenciamento de equipamentos"),
                 ]);
 
             if (player.StaffFlags.Contains(StaffFlag.Properties))
                 commands.AddRange(
                 [
-                    new($"Flag Staff {StaffFlag.Properties.GetDisplay()}", "/eprop", "Edita uma propriedade"),
-                    new($"Flag Staff {StaffFlag.Properties.GetDisplay()}", "/int", "Visualiza um tipo de interior"),
-                    new($"Flag Staff {StaffFlag.Properties.GetDisplay()}", "/aarmazenamento", "Visualiza o armazenamento de uma propriedade"),
-                    new($"Flag Staff {StaffFlag.Properties.GetDisplay()}", "/criarpropriedade /cprop", "Cria uma propriedade"),
-                    new($"Flag Staff {StaffFlag.Properties.GetDisplay()}", "/criarapartamento /cap", "Cria um apartamento"),
-                    new($"Flag Staff {StaffFlag.Properties.GetDisplay()}", "/irprop", "Vai para uma propriedade"),
-                    new($"Flag Staff {StaffFlag.Properties.GetDisplay()}", "/delprop", "Deleta uma propriedade"),
-                    new($"Flag Staff {StaffFlag.Properties.GetDisplay()}", "/rdonoprop", "Remove o dono da propriedade"),
-                    new($"Flag Staff {StaffFlag.Properties.GetDisplay()}", "/entradasprop", "Edita as entradas de uma propriedade"),
+                    new($"Flag Staff {StaffFlag.Properties.GetDescription()}", "/eprop", "Edita uma propriedade"),
+                    new($"Flag Staff {StaffFlag.Properties.GetDescription()}", "/int", "Visualiza um tipo de interior"),
+                    new($"Flag Staff {StaffFlag.Properties.GetDescription()}", "/aarmazenamento", "Visualiza o armazenamento de uma propriedade"),
+                    new($"Flag Staff {StaffFlag.Properties.GetDescription()}", "/criarpropriedade /cprop", "Cria uma propriedade"),
+                    new($"Flag Staff {StaffFlag.Properties.GetDescription()}", "/criarapartamento /cap", "Cria um apartamento"),
+                    new($"Flag Staff {StaffFlag.Properties.GetDescription()}", "/irprop", "Vai para uma propriedade"),
+                    new($"Flag Staff {StaffFlag.Properties.GetDescription()}", "/delprop", "Deleta uma propriedade"),
+                    new($"Flag Staff {StaffFlag.Properties.GetDescription()}", "/rdonoprop", "Remove o dono da propriedade"),
+                    new($"Flag Staff {StaffFlag.Properties.GetDescription()}", "/entradasprop", "Edita as entradas de uma propriedade"),
                 ]);
 
             if (player.StaffFlags.Contains(StaffFlag.GiveItem))
                 commands.AddRange(
                 [
-                    new($"Flag Staff {StaffFlag.GiveItem.GetDisplay()}", "/daritem", "Dá um item para um personagem"),
+                    new($"Flag Staff {StaffFlag.GiveItem.GetDescription()}", "/daritem", "Dá um item para um personagem"),
                 ]);
 
             if (player.StaffFlags.Contains(StaffFlag.CrackDens))
                 commands.AddRange(
                 [
-                    new($"Flag Staff {StaffFlag.CrackDens.GetDisplay()}", "/bocasfumo", "Abre o painel de gerenciamento de bocas de fumo"),
+                    new($"Flag Staff {StaffFlag.CrackDens.GetDescription()}", "/bocasfumo", "Abre o painel de gerenciamento de bocas de fumo"),
                 ]);
 
             if (player.StaffFlags.Contains(StaffFlag.TruckerLocations))
                 commands.AddRange(
                 [
-                    new($"Flag Staff {StaffFlag.TruckerLocations.GetDisplay()}", "/acaminhoneiro", "Abre o painel de gerenciamento de localizações de caminhoneiros"),
+                    new($"Flag Staff {StaffFlag.TruckerLocations.GetDescription()}", "/acaminhoneiro", "Abre o painel de gerenciamento de localizações de caminhoneiros"),
                 ]);
 
             if (player.StaffFlags.Contains(StaffFlag.Companies))
                 commands.AddRange(
                 [
-                    new($"Flag Staff {StaffFlag.Companies.GetDisplay()}", "/empresas", "Abre o painel de gerenciamento de empresas"),
+                    new($"Flag Staff {StaffFlag.Companies.GetDescription()}", "/empresas", "Abre o painel de gerenciamento de empresas"),
                 ]);
 
             if (player.StaffFlags.Contains(StaffFlag.Vehicles))
                 commands.AddRange(
                 [
-                    new($"Flag Staff {StaffFlag.Vehicles.GetDisplay()}", "/veiculos", "Abre o painel de gerenciamento de veículos"),
-                    new($"Flag Staff {StaffFlag.Vehicles.GetDisplay()}", "/atunar", "Realiza modificações em um veículo"),
+                    new($"Flag Staff {StaffFlag.Vehicles.GetDescription()}", "/veiculos", "Abre o painel de gerenciamento de veículos"),
+                    new($"Flag Staff {StaffFlag.Vehicles.GetDescription()}", "/atunar", "Realiza modificações em um veículo"),
                 ]);
 
             if (player.StaffFlags.Contains(StaffFlag.Items))
                 commands.AddRange(
                 [
-                    new($"Flag Staff {StaffFlag.Items.GetDisplay()}", "/itens", "Abre o painel de gerenciamento de itens"),
+                    new($"Flag Staff {StaffFlag.Items.GetDescription()}", "/itens", "Abre o painel de gerenciamento de itens"),
                 ]);
 
             if (player.StaffFlags.Contains(StaffFlag.VehicleMaintenance))
                 commands.AddRange(
                 [
-                    new($"Flag Staff {StaffFlag.VehicleMaintenance.GetDisplay()}", "/areparar", "Conserta um veículo"),
-                    new($"Flag Staff {StaffFlag.VehicleMaintenance.GetDisplay()}", "/amotor", "Liga/desliga o motor de um veículo"),
-                    new($"Flag Staff {StaffFlag.VehicleMaintenance.GetDisplay()}", "/aabastecer", "Abastece um veículo"),
-                    new($"Flag Staff {StaffFlag.VehicleMaintenance.GetDisplay()}", "/aveiculo", "Cria um veículo temporário"),
+                    new($"Flag Staff {StaffFlag.VehicleMaintenance.GetDescription()}", "/areparar", "Conserta um veículo"),
+                    new($"Flag Staff {StaffFlag.VehicleMaintenance.GetDescription()}", "/amotor", "Liga/desliga o motor de um veículo"),
+                    new($"Flag Staff {StaffFlag.VehicleMaintenance.GetDescription()}", "/aabastecer", "Abastece um veículo"),
+                    new($"Flag Staff {StaffFlag.VehicleMaintenance.GetDescription()}", "/aveiculo", "Cria um veículo temporário"),
                 ]);
 
             if (player.StaffFlags.Contains(StaffFlag.Drugs))
                 commands.AddRange(
                 [
-                    new($"Flag Staff {StaffFlag.Drugs.GetDisplay()}", "/drogas", "Abre o painel de gerenciamento de drogas"),
+                    new($"Flag Staff {StaffFlag.Drugs.GetDescription()}", "/drogas", "Abre o painel de gerenciamento de drogas"),
                 ]);
 
             if (player.StaffFlags.Contains(StaffFlag.Spots))
                 commands.AddRange(
                 [
-                    new($"Flag Staff {StaffFlag.Spots.GetDisplay()}", "/pontos", "Abre o painel de gerenciamento de pontos"),
-                    new($"Flag Staff {StaffFlag.Spots.GetDisplay()}", "/criarponto", "Cria um ponto"),
-                    new($"Flag Staff {StaffFlag.Spots.GetDisplay()}", "/delponto", "Deleta o ponto mais próximo"),
+                    new($"Flag Staff {StaffFlag.Spots.GetDescription()}", "/pontos", "Abre o painel de gerenciamento de pontos"),
+                    new($"Flag Staff {StaffFlag.Spots.GetDescription()}", "/criarponto", "Cria um ponto"),
+                    new($"Flag Staff {StaffFlag.Spots.GetDescription()}", "/delponto", "Deleta o ponto mais próximo"),
                 ]);
 
-            if (player.StaffFlags.Contains(StaffFlag.Spots))
+            if (player.StaffFlags.Contains(StaffFlag.Events))
                 commands.AddRange(
                 [
-                    new($"Flag Staff {StaffFlag.Events.GetDisplay()}", "/tempo", "Define um tempo e temperatura fixos"),
-                    new($"Flag Staff {StaffFlag.Events.GetDisplay()}", "/anrp", "Envia um anúncio de roleplay"),
-                    new($"Flag Staff {StaffFlag.Events.GetDisplay()}", "/rtempo", "Remove o tempo e ativa a sincronização automática"),
-                    new($"Flag Staff {StaffFlag.Events.GetDisplay()}", "/enome", "Define um nome temporário para seu personagem"),
-                    new($"Flag Staff {StaffFlag.Events.GetDisplay()}", "/skin", "Altera a skin de um jogador"),
-                    new($"Flag Staff {StaffFlag.Events.GetDisplay()}", "/objetos", "Abre o painel de gerenciamento de objetos"),
+                    new($"Flag Staff {StaffFlag.Events.GetDescription()}", "/tempo", "Define um tempo e temperatura fixos"),
+                    new($"Flag Staff {StaffFlag.Events.GetDescription()}", "/anrp", "Envia um anúncio de roleplay"),
+                    new($"Flag Staff {StaffFlag.Events.GetDescription()}", "/rtempo", "Remove o tempo e ativa a sincronização automática"),
+                    new($"Flag Staff {StaffFlag.Events.GetDescription()}", "/enome", "Define um nome temporário para seu personagem"),
+                    new($"Flag Staff {StaffFlag.Events.GetDescription()}", "/skin", "Altera a skin de um jogador"),
+                    new($"Flag Staff {StaffFlag.Events.GetDescription()}", "/objetos", "Abre o painel de gerenciamento de objetos"),
                 ]);
         }
 

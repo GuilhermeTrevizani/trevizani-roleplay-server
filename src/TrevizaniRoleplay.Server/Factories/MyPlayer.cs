@@ -1,7 +1,7 @@
 ﻿using GTANetworkAPI;
 using Microsoft.EntityFrameworkCore;
 using System.Text.RegularExpressions;
-using TrevizaniRoleplay.Core.Extesions;
+using TrevizaniRoleplay.Core.Extensions;
 using TrevizaniRoleplay.Domain.Entities;
 using TrevizaniRoleplay.Domain.Enums;
 using TrevizaniRoleplay.Server.Extensions;
@@ -1413,7 +1413,7 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
                 OnDuty = Masked = Cuffed = OnAdminDuty = VehicleAnimation =
                     CanTalkInTransmission = FollowingTransmission = AutoLow =
                     HasSpikeStrip = NoClip = PropertyNoClip = PhotoMode = Fishing = false;
-                WaitingServiceType = CharacterJob.None;
+                WaitingServiceType = CharacterJob.Unemployed;
                 IPLs = [];
                 Wounds = [];
                 CollectSpots = [];
@@ -1507,7 +1507,7 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
                     Status = x.GetStatus(),
                     x.LastAccessDate,
                     ConnectedTime = Convert.ToInt32(x.ConnectedTime / 60),
-                    Job = x.Job.GetDisplay(),
+                    Job = x.Job.GetDescription(),
                     Faction = x.Faction is not null ? x.Faction.Name : Globalization.NONE,
                 })),
                 User.CharacterSlots);
@@ -1562,7 +1562,7 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
 
         if (FactionRank?.Salary > 0)
             factionSalary = FactionRank.Salary;
-        else if (Character.Job != CharacterJob.None)
+        else if (Character.Job != CharacterJob.Unemployed)
             jobSalary = Global.Jobs.FirstOrDefault(x => x.CharacterJob == Character.Job)!.Salary;
         else
             unemploymentAssistance = Global.Parameter.UnemploymentAssistance;
@@ -1596,7 +1596,7 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
             if (jobSalary > 0)
                 items.Add(new()
                 {
-                    Description = $"Salário {Character.Job.GetDisplay()}",
+                    Description = $"Salário {Character.Job.GetDescription()}",
                     Value = jobSalary,
                 });
 
@@ -1610,7 +1610,7 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
             if (Character.ExtraPayment > 0)
                 items.Add(new()
                 {
-                    Description = $"Extra {Character.Job.GetDisplay()}",
+                    Description = $"Extra {Character.Job.GetDescription()}",
                     Value = Character.ExtraPayment,
                 });
 
@@ -1651,13 +1651,13 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
                     SendMessage(MessageType.None, $"Salário {Faction!.Name}: {{{Constants.SUCCESS_COLOR}}}+ ${FactionRank.Salary:N0}");
 
                 if (jobSalary > 0)
-                    SendMessage(MessageType.None, $"Salário {Character.Job.GetDisplay()}: {{{Constants.SUCCESS_COLOR}}}+ ${jobSalary:N0}");
+                    SendMessage(MessageType.None, $"Salário {Character.Job.GetDescription()}: {{{Constants.SUCCESS_COLOR}}}+ ${jobSalary:N0}");
 
                 if (unemploymentAssistance > 0)
                     SendMessage(MessageType.None, $"Ajuda Desemprego: {{{Constants.SUCCESS_COLOR}}}+ ${unemploymentAssistance:N0}");
 
                 if (Character.ExtraPayment > 0)
-                    SendMessage(MessageType.None, $"Extra {Character.Job.GetDisplay()}: {{{Constants.SUCCESS_COLOR}}}+ ${Character.ExtraPayment:N0}");
+                    SendMessage(MessageType.None, $"Extra {Character.Job.GetDescription()}: {{{Constants.SUCCESS_COLOR}}}+ ${Character.ExtraPayment:N0}");
 
                 if (initialHelp > 0)
                 {

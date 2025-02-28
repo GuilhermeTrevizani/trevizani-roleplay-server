@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using TrevizaniRoleplay.Core.Extesions;
+using TrevizaniRoleplay.Core.Extensions;
 using TrevizaniRoleplay.Core.Models.Requests;
 using TrevizaniRoleplay.Core.Models.Responses;
 using TrevizaniRoleplay.Core.Models.Settings;
@@ -54,8 +54,8 @@ public class CharactersController(DatabaseContext context) : BaseController(cont
 
             if (character.Faction is not null)
                 patrimony.Job = $"{character.Faction.Name} {character.FactionRank!.Name} (${character.FactionRank.Salary:N0})";
-            else if (character.Job != CharacterJob.None)
-                patrimony.Job = character.Job.GetDisplay();
+            else if (character.Job != CharacterJob.Unemployed)
+                patrimony.Job = character.Job.GetDescription();
 
             var money = character.Items!
                 .Where(x => x.ItemTemplateId == new Guid(Constants.MONEY_ITEM_TEMPLATE_ID))

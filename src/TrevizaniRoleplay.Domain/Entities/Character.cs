@@ -23,7 +23,7 @@ public class Character : BaseEntity
     public int Bank { get; private set; } = 5000;
     public DateTime? DeathDate { get; private set; }
     public string DeathReason { get; private set; } = string.Empty;
-    public CharacterJob Job { get; private set; } = CharacterJob.None;
+    public CharacterJob Job { get; private set; } = CharacterJob.Unemployed;
     public string? PersonalizationJSON { get; private set; }
     public string History { get; private set; } = string.Empty;
     public Guid? EvaluatingStaffUserId { get; private set; }
@@ -168,7 +168,7 @@ public class Character : BaseEntity
 
     public void QuitJob()
     {
-        Job = CharacterJob.None;
+        Job = CharacterJob.Unemployed;
         ResetExtraPayment();
     }
 
@@ -215,7 +215,7 @@ public class Character : BaseEntity
         FactionId = factionId;
         FactionRankId = factionRankId;
         if (!criminal)
-            Job = CharacterJob.None;
+            Job = CharacterJob.Unemployed;
     }
 
     public void UpdateFaction(Guid factionRankId, string factionFlagsJSON, int badge)

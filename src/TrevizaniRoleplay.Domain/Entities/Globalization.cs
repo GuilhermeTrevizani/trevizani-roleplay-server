@@ -38,14 +38,10 @@ public abstract class Globalization
     public const string GARBAGE_COLLECTOR = "Lixeiro";
     public const string TATTOO_SHOP = "Estúdio de Tatuagens";
     public const string MECHANIC_WORKSHOP = "Oficina Mecânica";
-    public const string JOBS = "Empregos";
     public const string POLICE = "Polícia";
     public const string FIREFIGHTER = "Bombeiros";
     public const string CRIMINAL = "Criminal";
     public const string POLICE_AND_FIREFIGHTER = "Polícia e Bombeiros";
-    public const string TAXI_DRIVER = "Taxista";
-    public const string MECHANIC = "Mecânico";
-    public const string TRUCKER = "Caminhoneiro";
     public const string STAFF = "Staff";
     public const string FACTION = "Facção";
     public const string FACTION_CHAT = "Chat da Facção";
@@ -79,7 +75,6 @@ public abstract class Globalization
     public const string DISMANTLING = "Desmanche";
     public const string BREAK_IN = "Arrombar";
     public const string STEAL_PROPERTY = "Roubar Propriedade";
-    public const string STEAL_STORAGE = "Roubar Armazenamento";
     public const string VIEW_CRACK_DEN_SALES = "Visualizar Vendas Boca de Fumo";
     public const string PROPERTY_FURNITURE_EDIT = "Editar Mobília Propriedade";
     public const string GLOBAL_OOC_CHAT = "Chat OOC Global";
@@ -126,20 +121,7 @@ public abstract class Globalization
     public const string YOU_ARE_NOT_AUTHORIZED = "Você não possui autorização para usar esse comando.";
     public const string JAIL = "Prisão";
     public const string VEHICLE_PRICE_NOT_SET = "Preço do veículo não configurado. Por favor, reporte o bug.";
-    public const string DEALERSHIPS = "Concessionárias";
-    public const string DOORS = "Portas";
-    public const string FACTIONS = "Facções";
-    public const string FACTIONS_STORAGES = "Armazenamentos de Facções";
-    public const string PROPERTIES = "Propriedades";
-    public const string SPOTS = "Pontos";
-    public const string BLIPS = "Blips";
-    public const string VEHICLES = "Veículos";
-    public const string CK = "CK";
-    public const string CRACK_DENS = "Bocas de Fumo";
-    public const string TRUCKER_LOCATIONS = "Localizações de Caminhoneiro";
     public const string FURNITURES = "Mobílias";
-    public const string ANIMATIONS = "Animações";
-    public const string COMPANIES = "Empresas";
     public const string YOU_ARE_NOT_CLOSE_TO_THE_PLAYER = "Você não está próximo do jogador.";
     public const string VEHICLE_PART = "Peça de Veículo";
     public const string SMUGGLER = "Contrabandista";
@@ -147,7 +129,6 @@ public abstract class Globalization
     public const string PLASTIC_SURGERY = "Cirurgia Plástica";
     public const string FOOD = "Comida";
     public const string DISPLAY = "Exibição";
-    public const string ITEMS = "Itens";
     public const string OTHER = "Outro";
     public const string INVITE_EMPLOYEE = "Adicionar Funcionário";
     public const string EDIT_EMPLOYEE = "Editar Funcionário";
@@ -242,7 +223,6 @@ public abstract class Globalization
     public const string FORENSIC_LABORATORY = "Laboratório Forense";
     public const string BLOOD = "Sangue";
     public const string BULLET_SHELL = "Cápsula";
-    public const string VEHICLE_MAINTENANCE = "Manutenção de Veículo";
     public const string WEAPON_LICENSE = "Licença de Armas";
     public const string PF = "PF";
     public const string CCW = "CCW";
@@ -258,7 +238,6 @@ public abstract class Globalization
     public const string PREMIUM_BRONZE = "Premium Bronze (30 dias)";
     public const string PREMIUM_SILVER = "Premium Prata (30 dias)";
     public const string PREMIUM_GOLD = "Premium Ouro (30 dias)";
-    public const string DRUGS = "Drogas";
     public const string ALL = "Todos";
     public const string ONLY_STAFF_OR_PREMIUM_POINTS = "Apenas staff ou quem possui LS Points";
     public const string ONLY_STAFF = "Apenas staff";
@@ -278,7 +257,6 @@ public abstract class Globalization
     public const string DONATE = "Doação";
     public const string FIRE_MANAGER = "Gerenciar Incêndios";
     public const string NEED_ADMIN_DUTY = "Você não está em serviço administrativo.";
-    public const string POKER = "Poker";
     public const string RESPAWN_VEHICLES = "Respawnar Veículos";
     public const string MANAGE_VEHICLES = "Gerenciar Veículos";
     public const string GOVERNMENT = "Governo";
@@ -287,7 +265,6 @@ public abstract class Globalization
     public const string FIX = "Corrigir";
     public const string CIVIL = "Civil";
     public const string ATTRIBUTES = "Atributos";
-    public const string EVENTS = "Eventos";
     public const string GENERAL = "Geral";
     public const string IC_CHAT = "Chat IC";
     public const string OOC_CHAT = "Chat OOC";

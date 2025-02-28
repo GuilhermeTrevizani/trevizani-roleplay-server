@@ -2280,7 +2280,7 @@ public class VehicleScript : Script
     [Command("valugar")]
     public async Task CMD_valugar(MyPlayer player)
     {
-        if (player.Character.Job == CharacterJob.None || !player.OnDuty)
+        if (player.Character.Job == CharacterJob.Unemployed || !player.OnDuty)
         {
             player.SendMessage(MessageType.Error, "Você não tem um emprego ou não está em serviço.");
             return;

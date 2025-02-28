@@ -61,11 +61,290 @@ namespace TrevizaniRoleplay.Core.Globalization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Animations.
+        /// </summary>
+        internal static string Animations {
+            get {
+                return ResourceManager.GetString("Animations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Blips.
+        /// </summary>
+        internal static string Blips {
+            get {
+                return ResourceManager.GetString("Blips", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Carry.
+        /// </summary>
+        internal static string Carry {
+            get {
+                return ResourceManager.GetString("Carry", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CK.
+        /// </summary>
+        internal static string CK {
+            get {
+                return ResourceManager.GetString("CK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Companies.
+        /// </summary>
+        internal static string Companies {
+            get {
+                return ResourceManager.GetString("Companies", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Company.
+        /// </summary>
+        internal static string Company {
+            get {
+                return ResourceManager.GetString("Company", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Crack Dens.
+        /// </summary>
+        internal static string CrackDens {
+            get {
+                return ResourceManager.GetString("CrackDens", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Doors.
+        /// </summary>
+        internal static string Doors {
+            get {
+                return ResourceManager.GetString("Doors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Drugs.
+        /// </summary>
+        internal static string Drugs {
+            get {
+                return ResourceManager.GetString("Drugs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Events.
+        /// </summary>
+        internal static string Events {
+            get {
+                return ResourceManager.GetString("Events", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Faction.
+        /// </summary>
+        internal static string Faction {
+            get {
+                return ResourceManager.GetString("Faction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Factions.
+        /// </summary>
+        internal static string Factions {
+            get {
+                return ResourceManager.GetString("Factions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Factions Storages.
+        /// </summary>
+        internal static string FactionsStorages {
+            get {
+                return ResourceManager.GetString("FactionsStorages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Frisk.
+        /// </summary>
+        internal static string Frisk {
+            get {
+                return ResourceManager.GetString("Frisk", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Furnitures.
+        /// </summary>
+        internal static string Furnitures {
+            get {
+                return ResourceManager.GetString("Furnitures", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Garbage Collector.
+        /// </summary>
+        internal static string GarbageCollector {
+            get {
+                return ResourceManager.GetString("GarbageCollector", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Give Item.
+        /// </summary>
+        internal static string GiveItem {
+            get {
+                return ResourceManager.GetString("GiveItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Items.
+        /// </summary>
+        internal static string Items {
+            get {
+                return ResourceManager.GetString("Items", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Jobs.
+        /// </summary>
+        internal static string Jobs {
+            get {
+                return ResourceManager.GetString("Jobs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Man.
         /// </summary>
         internal static string Man {
             get {
                 return ResourceManager.GetString("Man", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mechanic.
+        /// </summary>
+        internal static string Mechanic {
+            get {
+                return ResourceManager.GetString("Mechanic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Properties.
+        /// </summary>
+        internal static string Properties {
+            get {
+                return ResourceManager.GetString("Properties", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Property Sell.
+        /// </summary>
+        internal static string PropertySell {
+            get {
+                return ResourceManager.GetString("PropertySell", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Spots.
+        /// </summary>
+        internal static string Spots {
+            get {
+                return ResourceManager.GetString("Spots", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Taxi Driver.
+        /// </summary>
+        internal static string TaxiDriver {
+            get {
+                return ResourceManager.GetString("TaxiDriver", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trucker.
+        /// </summary>
+        internal static string Trucker {
+            get {
+                return ResourceManager.GetString("Trucker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trucker Locations.
+        /// </summary>
+        internal static string TruckerLocations {
+            get {
+                return ResourceManager.GetString("TruckerLocations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unemployed.
+        /// </summary>
+        internal static string Unemployed {
+            get {
+                return ResourceManager.GetString("Unemployed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vehicle Maintenance.
+        /// </summary>
+        internal static string VehicleMaintenance {
+            get {
+                return ResourceManager.GetString("VehicleMaintenance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vehicles.
+        /// </summary>
+        internal static string Vehicles {
+            get {
+                return ResourceManager.GetString("Vehicles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vehicle Sell.
+        /// </summary>
+        internal static string VehicleSell {
+            get {
+                return ResourceManager.GetString("VehicleSell", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vehicle Transfer.
+        /// </summary>
+        internal static string VehicleTransfer {
+            get {
+                return ResourceManager.GetString("VehicleTransfer", resourceCulture);
             }
         }
         

@@ -1,5 +1,5 @@
 ﻿using GTANetworkAPI;
-using TrevizaniRoleplay.Core.Extesions;
+using TrevizaniRoleplay.Core.Extensions;
 using TrevizaniRoleplay.Domain.Entities;
 using TrevizaniRoleplay.Domain.Enums;
 using TrevizaniRoleplay.Server.Extensions;
@@ -13,7 +13,7 @@ public class JobScript : Script
     [Command("sairemprego")]
     public async Task CMD_sairemprego(MyPlayer player)
     {
-        if (player.Character.Job == CharacterJob.None || player.OnDuty)
+        if (player.Character.Job == CharacterJob.Unemployed || player.OnDuty)
         {
             player.SendMessage(MessageType.Error, "Você não tem um emprego ou está em serviço.");
             return;
@@ -38,7 +38,7 @@ public class JobScript : Script
     [Command("emprego")]
     public async Task CMD_emprego(MyPlayer player)
     {
-        if (player.Character.Job != CharacterJob.None)
+        if (player.Character.Job != CharacterJob.Unemployed)
         {
             player.SendMessage(MessageType.Error, "Você já tem um emprego.");
             return;
@@ -59,7 +59,7 @@ public class JobScript : Script
 
         player.Character.SetJob(job.CharacterJob);
         await player.WriteLog(LogType.Job, $"/emprego {player.Character.Job}", null);
-        player.SendMessage(MessageType.Success, $"Você pegou o emprego {player.Character.Job.GetDisplay()}.");
+        player.SendMessage(MessageType.Success, $"Você pegou o emprego {player.Character.Job.GetDescription()}.");
     }
 
     [Command("chamadas")]
@@ -117,7 +117,7 @@ public class JobScript : Script
             return;
         }
 
-        target.WaitingServiceType = CharacterJob.None;
+        target.WaitingServiceType = CharacterJob.Unemployed;
         player.SetWaypoint(target.GetPosition().X, target.GetPosition().Y);
         player.SendMessage(MessageType.Success, $"Você está atendendo a chamada {chamada} e a localização do solicitante foi marcada em seu GPS.");
         if (player.Character.Job == CharacterJob.TaxiDriver)
@@ -172,7 +172,7 @@ public class JobScript : Script
             return;
         }
 
-        if (player.Character.Job != CharacterJob.None)
+        if (player.Character.Job != CharacterJob.Unemployed)
         {
             if (player.Character.Job == CharacterJob.GarbageCollector)
             {

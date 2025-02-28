@@ -250,7 +250,7 @@ public class MDCScript : Script
                 return;
             }
 
-            var job = character.Job.GetDisplay();
+            var job = character.Job.GetDescription();
             if (character.FactionId.HasValue)
             {
                 var faction = Global.Factions.FirstOrDefault(x => x.Id == character.FactionId);

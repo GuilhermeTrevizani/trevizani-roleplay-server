@@ -1,5 +1,5 @@
 ﻿using GTANetworkAPI;
-using TrevizaniRoleplay.Core.Extesions;
+using TrevizaniRoleplay.Core.Extensions;
 using TrevizaniRoleplay.Domain.Entities;
 
 namespace TrevizaniRoleplay.Server.Extensions;
@@ -20,7 +20,7 @@ public static class JobExtension
             var blip = Functions.CreateBlip(position, job.BlipType, job.BlipColor, job.BlipName, 0.8f, true);
             blip.JobId = job.Id;
 
-            var name = job.CharacterJob.GetDisplay().ToUpper();
+            var name = job.CharacterJob.GetDescription().ToUpper();
 
             var colShape = Functions.CreateColShapeCylinder(position, 1, 1.5f, 0);
             colShape.Description = $"[EMPREGO DE {name}] {{#FFFFFF}}Use /emprego para se tornar um {name.ToLower()}.";

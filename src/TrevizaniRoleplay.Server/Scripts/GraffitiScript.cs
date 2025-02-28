@@ -1,5 +1,4 @@
 ﻿using GTANetworkAPI;
-using TrevizaniRoleplay.Core.Extesions;
 using TrevizaniRoleplay.Domain.Entities;
 using TrevizaniRoleplay.Domain.Enums;
 using TrevizaniRoleplay.Server.Extensions;
@@ -24,7 +23,7 @@ public class GraffitiScript : Script
             .Select(x => new
             {
                 Value = (byte)x,
-                Label = x.GetDisplay(),
+                Label = x.ToString(),
             })
             .OrderBy(x => x.Label)
         );
