@@ -31,8 +31,9 @@ I'll soon update the documentation with the configuration steps. But you can fin
 ```
 4. Configure your database connection [here](https://github.com/GuilhermeTrevizani/trevizani-roleplay-server/blob/e2a1a790e7517d2c43d748ff42c3595efd766dcf/src/TrevizaniRoleplay.Core/Models/Server/Constants.cs#L39).
 5. Build client-side with `yarn build` and put the files in your client_resources folder. By default the files are created in `C:\RAGEMP\server-files\client_packages`.
-6. Run your server to create the database.
-7. Configure your Discord Url on UCP [here](https://github.com/GuilhermeTrevizani/trevizani-roleplay-ucp/blob/63df99b4d2bcbf166c3fa7a31898637884d33604/.env#L2).
-8. Configure Discord Client Id, Secret and Redirect Uri in TrevizaniRoleplay.Api's appsettings.json.
+6. You need to use .NET 9.0 runtime files, you can use [these](https://drive.google.com/file/d/1tLWE1ByteqL5SQ3iz3WZkDaXdI8KRXv7/view). Put them inside `server-files\dotnet\runtime`.
+7. Run your server to create the database.
+8. Configure your Discord Url on UCP [here](https://github.com/GuilhermeTrevizani/trevizani-roleplay-ucp/blob/63df99b4d2bcbf166c3fa7a31898637884d33604/.env#L2).
+9. Configure Discord Client Id, Secret and Redirect Uri in TrevizaniRoleplay.Api's appsettings.json.
 
 The user creation can be on both sides (game or UCP), but to create a Character you need to create it on UCP. The first user created has the highest staff rank.
