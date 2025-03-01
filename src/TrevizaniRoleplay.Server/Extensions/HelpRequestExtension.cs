@@ -1,5 +1,4 @@
-﻿using TrevizaniRoleplay.Domain.Entities;
-using TrevizaniRoleplay.Server.Factories;
+﻿using TrevizaniRoleplay.Server.Factories;
 
 namespace TrevizaniRoleplay.Server.Extensions;
 

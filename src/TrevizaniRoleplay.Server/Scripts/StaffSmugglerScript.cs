@@ -1,6 +1,4 @@
 ﻿using GTANetworkAPI;
-using TrevizaniRoleplay.Domain.Entities;
-using TrevizaniRoleplay.Domain.Enums;
 using TrevizaniRoleplay.Server.Extensions;
 using TrevizaniRoleplay.Server.Factories;
 using TrevizaniRoleplay.Server.Models;
@@ -14,7 +12,7 @@ public class StaffSmugglerScript : Script
     {
         if (!player.StaffFlags.Contains(StaffFlag.Factions))
         {
-            player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -29,7 +27,7 @@ public class StaffSmugglerScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (!player.StaffFlags.Contains(StaffFlag.Factions))
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -37,7 +35,7 @@ public class StaffSmugglerScript : Script
             var smuggler = Global.Smugglers.FirstOrDefault(x => x.Id == id);
             if (smuggler is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -57,7 +55,7 @@ public class StaffSmugglerScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (!player.StaffFlags.Contains(StaffFlag.Factions))
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -92,7 +90,7 @@ public class StaffSmugglerScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (!player.StaffFlags.Contains(StaffFlag.Factions))
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -134,7 +132,7 @@ public class StaffSmugglerScript : Script
                 smuggler = Global.Smugglers.FirstOrDefault(x => x.Id == id);
                 if (smuggler is null)
                 {
-                    player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                    player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                     return;
                 }
 

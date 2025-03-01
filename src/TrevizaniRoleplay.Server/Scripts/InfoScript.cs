@@ -1,6 +1,4 @@
 ﻿using GTANetworkAPI;
-using TrevizaniRoleplay.Domain.Entities;
-using TrevizaniRoleplay.Domain.Enums;
 using TrevizaniRoleplay.Server.Extensions;
 using TrevizaniRoleplay.Server.Factories;
 using TrevizaniRoleplay.Server.Models;
@@ -85,13 +83,13 @@ public class InfoScript : Script
             var info = Global.Infos.FirstOrDefault(x => x.Id == id);
             if (info is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
             if (info.CharacterId != player.Character.Id)
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using TrevizaniRoleplay.Core.Extesions;
+using TrevizaniRoleplay.Core.Extensions;
 using TrevizaniRoleplay.Core.Models.Requests;
 using TrevizaniRoleplay.Core.Models.Responses;
 using TrevizaniRoleplay.Core.Models.Server;
@@ -22,7 +22,7 @@ public class ParametersController(DatabaseContext context) : BaseController(cont
            .Select(x => new SelectOptionResponse
            {
                Value = (byte)x,
-               Label = x.GetDisplay(),
+               Label = x.GetDescription(),
            })
            .OrderBy(x => x.Label);
     }

@@ -5,8 +5,6 @@ using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using TrevizaniRoleplay.Core.Models.Server;
-using TrevizaniRoleplay.Domain.Entities;
-using TrevizaniRoleplay.Domain.Enums;
 using TrevizaniRoleplay.Server.Factories;
 using TrevizaniRoleplay.Server.Models;
 

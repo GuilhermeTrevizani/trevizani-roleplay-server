@@ -1,9 +1,6 @@
 ﻿using GTANetworkAPI;
 using Microsoft.EntityFrameworkCore;
 using TrevizaniRoleplay.Core.Extensions;
-using TrevizaniRoleplay.Core.Extesions;
-using TrevizaniRoleplay.Domain.Entities;
-using TrevizaniRoleplay.Domain.Enums;
 using TrevizaniRoleplay.Server.Extensions;
 using TrevizaniRoleplay.Server.Factories;
 using TrevizaniRoleplay.Server.Models;
@@ -73,7 +70,7 @@ public class CommandScript : Script
             case InviteType.PropertySell:
                 if (!player.CheckIfTargetIsCloseIC(target, Constants.RP_DISTANCE))
                 {
-                    player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_CLOSE_TO_THE_PLAYER);
+                    player.SendNotification(NotificationType.Error, Resources.YouAreNotCloseToThePlayer);
                     return;
                 }
 
@@ -82,7 +79,7 @@ public class CommandScript : Script
 
                 if (player.Money < value)
                 {
-                    player.SendMessage(MessageType.Error, string.Format(Globalization.INSUFFICIENT_MONEY_ERROR_MESSAGE, value));
+                    player.SendMessage(MessageType.Error, string.Format(Resources.YouDontHaveEnoughMoney, value));
                     break;
                 }
 
@@ -117,7 +114,7 @@ public class CommandScript : Script
             case InviteType.Frisk:
                 if (!player.CheckIfTargetIsCloseIC(target, Constants.RP_DISTANCE))
                 {
-                    player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_CLOSE_TO_THE_PLAYER);
+                    player.SendNotification(NotificationType.Error, Resources.YouAreNotCloseToThePlayer);
                     return;
                 }
 
@@ -128,7 +125,7 @@ public class CommandScript : Script
             case InviteType.VehicleSell:
                 if (!player.CheckIfTargetIsCloseIC(target, Constants.RP_DISTANCE))
                 {
-                    player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_CLOSE_TO_THE_PLAYER);
+                    player.SendNotification(NotificationType.Error, Resources.YouAreNotCloseToThePlayer);
                     return;
                 }
 
@@ -137,7 +134,7 @@ public class CommandScript : Script
 
                 if (player.Money < vehicleValue)
                 {
-                    player.SendMessage(MessageType.Error, string.Format(Globalization.INSUFFICIENT_MONEY_ERROR_MESSAGE, vehicleValue));
+                    player.SendMessage(MessageType.Error, string.Format(Resources.YouDontHaveEnoughMoney, vehicleValue));
                     break;
                 }
 
@@ -199,7 +196,7 @@ public class CommandScript : Script
             case InviteType.VehicleTransfer:
                 if (!player.CheckIfTargetIsCloseIC(target, Constants.RP_DISTANCE))
                 {
-                    player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_CLOSE_TO_THE_PLAYER);
+                    player.SendNotification(NotificationType.Error, Resources.YouAreNotCloseToThePlayer);
                     return;
                 }
 
@@ -231,7 +228,7 @@ public class CommandScript : Script
             case InviteType.Carry:
                 if (!player.CheckIfTargetIsCloseIC(target, Constants.RP_DISTANCE))
                 {
-                    player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_CLOSE_TO_THE_PLAYER);
+                    player.SendNotification(NotificationType.Error, Resources.YouAreNotCloseToThePlayer);
                     return;
                 }
 
@@ -308,7 +305,7 @@ public class CommandScript : Script
 
         if (!player.CheckIfTargetIsCloseIC(target, Constants.RP_DISTANCE))
         {
-            player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_CLOSE_TO_THE_PLAYER);
+            player.SendNotification(NotificationType.Error, Resources.YouAreNotCloseToThePlayer);
             return;
         }
 
@@ -347,7 +344,7 @@ public class CommandScript : Script
 
         if (player.Money < property.Value)
         {
-            player.SendMessage(MessageType.Error, string.Format(Globalization.INSUFFICIENT_MONEY_ERROR_MESSAGE, property.Value));
+            player.SendMessage(MessageType.Error, string.Format(Resources.YouDontHaveEnoughMoney, property.Value));
             return;
         }
 
@@ -469,7 +466,7 @@ public class CommandScript : Script
 
         if (!player.CheckIfTargetIsCloseIC(target, Constants.RP_DISTANCE))
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_CLOSE_TO_THE_PLAYER);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotCloseToThePlayer);
             return;
         }
 
@@ -640,7 +637,7 @@ public class CommandScript : Script
 
         if (!player.CheckIfTargetIsCloseIC(target, Constants.RP_DISTANCE))
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_CLOSE_TO_THE_PLAYER);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotCloseToThePlayer);
             return;
         }
 
@@ -665,7 +662,7 @@ public class CommandScript : Script
 
         if (!player.CheckIfTargetIsCloseIC(target, Constants.RP_DISTANCE))
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_CLOSE_TO_THE_PLAYER);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotCloseToThePlayer);
             return;
         }
 
@@ -744,7 +741,7 @@ public class CommandScript : Script
 
         if (!player.CheckIfTargetIsCloseIC(target, Constants.RP_DISTANCE))
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_CLOSE_TO_THE_PLAYER);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotCloseToThePlayer);
             return;
         }
 
@@ -772,7 +769,7 @@ public class CommandScript : Script
             .OrderByDescending(x => x.OnAdminDuty)
             .ThenByDescending(x => x.User.Staff)
             .ThenBy(x => x.User.Name))
-            player.SendMessage(MessageType.None, $"{admin.User.Staff.GetDisplay()} {admin.User.Name}{(player.User.Staff >= UserStaff.JuniorServerAdmin ? $" ({admin.SessionId})" : string.Empty)}", admin.OnAdminDuty ? admin.StaffColor : "#B0B0B0");
+            player.SendMessage(MessageType.None, $"{admin.User.Staff.GetDescription()} {admin.User.Name}{(player.User.Staff >= UserStaff.JuniorServerAdmin ? $" ({admin.SessionId})" : string.Empty)}", admin.OnAdminDuty ? admin.StaffColor : "#B0B0B0");
 
         var adminsOffDuty = admins.Count(x => !x.OnAdminDuty);
         player.SendMessage(MessageType.None, $"{adminsOffDuty} administrador{(adminsOffDuty == 1 ? " está" : "es estão")} online em roleplay. Se precisar de ajuda de um administrador, utilize o /reportar.");
@@ -822,7 +819,7 @@ public class CommandScript : Script
         var type = (InviteType)tipo;
         if (!target.Invites.Any(x => x.SenderCharacterId == player.Character.Id && x.Type == type))
         {
-            player.SendMessage(MessageType.Error, $"Você não enviou um convite do tipo {type.GetDisplay()} para {target.ICName}.");
+            player.SendMessage(MessageType.Error, $"Você não enviou um convite do tipo {type.GetDescription()} para {target.ICName}.");
             return;
         }
 
@@ -936,7 +933,7 @@ public class CommandScript : Script
 
         if (!player.CheckIfTargetIsCloseIC(target, Constants.RP_DISTANCE))
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_CLOSE_TO_THE_PLAYER);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotCloseToThePlayer);
             return;
         }
 
@@ -1115,7 +1112,7 @@ public class CommandScript : Script
         {
             FactionId = player.Character.FactionId,
             Staff = player.User.Staff,
-            Premium = $"{currentPremium.GetDisplay()}{(currentPremium != UserPremium.None ? $" (até {player.Character.PremiumValidDate ?? player.User.PremiumValidDate})" : string.Empty)}",
+            Premium = $"{currentPremium.GetDescription()}{(currentPremium != UserPremium.None ? $" (até {player.Character.PremiumValidDate ?? player.User.PremiumValidDate})" : string.Empty)}",
             Armor = player.GetArmor(),
             Health = player.GetHealth(),
             Bank = player.Character.Bank,
@@ -1140,7 +1137,7 @@ public class CommandScript : Script
             }),
             Invites = player.Invites.Select(x => new CharacterInfoResponse.Invite
             {
-                Type = x.Type.GetDisplay(),
+                Type = x.Type.GetDescription(),
                 WaitingTime = Functions.GetTimespan(x.Date),
             }),
             Job = player.Character.Job.GetDescription(),
@@ -1159,7 +1156,7 @@ public class CommandScript : Script
             RegisterDate = player.Character.RegisterDate,
             Skin = ((PedHash)player.GetModel()).ToString(),
             StaffDutyTime = player.User.StaffDutyTime,
-            StaffName = player.User.Staff.GetDisplay(),
+            StaffName = player.User.Staff.GetDescription(),
             ThresoldDeath = $"{player.Character.ThresoldDeath}/100",
             ThresoldDeathReset = player.Character.ThresoldDeathEndDate.HasValue ? player.Character.ThresoldDeathEndDate.ToString()! : "N/A",
             UsingDrug = player.Character.DrugItemTemplateId.HasValue ? (Global.ItemsTemplates.FirstOrDefault(x => x.Id == player.Character.DrugItemTemplateId)?.Name ?? string.Empty) : "N/A",
@@ -1404,59 +1401,59 @@ public class CommandScript : Script
         {
             commands.AddRange(
             [
-                new(Globalization.FACTION, "/f", "Chat OOC da facção"),
-                new(Globalization.FACTION, "/faccao", "Abre o painel de gerenciamento da facção"),
-                new(Globalization.FACTION, "/sairfaccao", "Sai da facção"),
+                new(Resources.Faction, "/f", "Chat OOC da facção"),
+                new(Resources.Faction, "/faccao", "Abre o painel de gerenciamento da facção"),
+                new(Resources.Faction, "/sairfaccao", "Sai da facção"),
             ]);
 
             if (player.Faction!.Government)
                 commands.AddRange(
                 [
                     new("Teclas", "Q", "Desliga/liga som da sirene de um veículo"),
-                    new(Globalization.FACTION, "/rapel", "Desce de rapel dos assentos traseiros de um helicóptero apropriado"),
-                    new(Globalization.FACTION, "/meg", "Fala no megafone"),
-                    new(Globalization.FACTION, "/equipar", "Pega equipamentos"),
-                    new(Globalization.FACTION, "/ploc", "Atualiza a localização da sua unidade"),
-                    new(Globalization.FACTION, "/ps", "Atualiza o status da sua unidade"),
+                    new(Resources.Faction, "/rapel", "Desce de rapel dos assentos traseiros de um helicóptero apropriado"),
+                    new(Resources.Faction, "/meg", "Fala no megafone"),
+                    new(Resources.Faction, "/equipar", "Pega equipamentos"),
+                    new(Resources.Faction, "/ploc", "Atualiza a localização da sua unidade"),
+                    new(Resources.Faction, "/ps", "Atualiza o status da sua unidade"),
                     new("Teclas", "F3", "Ativa/desativa a câmera do helicóptero"),
                 ]);
 
             if (player.Faction!.HasWalkieTalkie)
                 commands.AddRange(
                 [
-                    new(Globalization.FACTION, "/dep", "Fala no canal interdepartamental"),
-                    new(Globalization.FACTION, "/setdep", "Define qual o departamento de destino no canal interdepartamental"),
+                    new(Resources.Faction, "/dep", "Fala no canal interdepartamental"),
+                    new(Resources.Faction, "/setdep", "Define qual o departamento de destino no canal interdepartamental"),
                 ]);
 
             if (player.Faction!.HasDuty)
                 commands.AddRange(
                 [
-                    new(Globalization.FACTION, "/mostrardistintivo", "Mostra seu distintivo para um personagem"),
-                    new(Globalization.FACTION, "/duty /trabalho", "Entra/sai de trabalho"),
-                    new(Globalization.FACTION, "/uniforme", "Abre o menu de seleção de roupas"),
-                    new(Globalization.FACTION, "/usaruniforme", "Veste um uniforme pré-definido"),
-                    new(Globalization.FACTION, "/freparar", "Conserta veículos da facção"),
+                    new(Resources.Faction, "/mostrardistintivo", "Mostra seu distintivo para um personagem"),
+                    new(Resources.Faction, "/duty /trabalho", "Entra/sai de trabalho"),
+                    new(Resources.Faction, "/uniforme", "Abre o menu de seleção de roupas"),
+                    new(Resources.Faction, "/usaruniforme", "Veste um uniforme pré-definido"),
+                    new(Resources.Faction, "/freparar", "Conserta veículos da facção"),
                 ]);
 
             if (player.Faction!.HasBarriers)
                 commands.AddRange(
                 [
-                    new(Globalization.FACTION, "/br", "Cria uma barreira"),
-                    new(Globalization.FACTION, "/rb", "Remove uma barreira"),
-                    new(Globalization.FACTION, "/rballme", "Remove todas barreiras criadas por você"),
-                    new(Globalization.FACTION, "/rball", "Remove todas barreiras"),
+                    new(Resources.Faction, "/br", "Cria uma barreira"),
+                    new(Resources.Faction, "/rb", "Remove uma barreira"),
+                    new(Resources.Faction, "/rballme", "Remove todas barreiras criadas por você"),
+                    new(Resources.Faction, "/rball", "Remove todas barreiras"),
                 ]);
 
             if (player.Faction!.CanSeizeVehicles)
                 commands.AddRange(
                 [
-                    new(Globalization.FACTION, "/apreender", "Apreende um veículo"),
+                    new(Resources.Faction, "/apreender", "Apreende um veículo"),
                 ]);
 
             if (player.Faction!.HasMDC)
                 commands.AddRange(
                 [
-                    new(Globalization.FACTION, "/mdc", "Abre o MDC"),
+                    new(Resources.Faction, "/mdc", "Abre o MDC"),
                 ]);
 
             if (player.Faction.Type == FactionType.Police)
@@ -1464,27 +1461,27 @@ public class CommandScript : Script
                 [
                     new("Teclas", "Botão Esquerdo do Mouse", "Ativa/desativa a luz do helicóptero enquanto a câmera estiver ativa"),
                     new("Teclas", "Botão Direito do Mouse", "Altera o modo da visão do helicóptero enquanto a câmera estiver ativa"),
-                    new(Globalization.FACTION, "/algemar", "Algema/desalgema um personagem"),
-                    new(Globalization.FACTION, "/radar", "Coloca um radar de velocidade"),
-                    new(Globalization.FACTION, "/radaroff", "Remove um radar de velocidade"),
-                    //new(Globalization.FACTION, "/spotlight /holofote", "Ativa/desativa o holofote de um veículo"),
-                    new(Globalization.FACTION, "/confisco", "Cria um registro de confisco"),
-                    new(Globalization.FACTION, "/vpegarpregos", "Pega um tapete de pregos do porta-malas de um veículo"),
-                    new(Globalization.FACTION, "/colocarpregos", "Coloca um tapete de pregos no chão"),
-                    new(Globalization.FACTION, "/pegarpregos", "Pega um tapete de pregos do chão"),
-                    new(Globalization.FACTION, "/vcolocarpregos", "Coloca um tapete de pregos no porta-malas de um veículo"),
-                    new(Globalization.FACTION, "/recolhercorpo", "Envia um corpo para o necrotério"),
+                    new(Resources.Faction, "/algemar", "Algema/desalgema um personagem"),
+                    new(Resources.Faction, "/radar", "Coloca um radar de velocidade"),
+                    new(Resources.Faction, "/radaroff", "Remove um radar de velocidade"),
+                    //new(Resources.Faction, "/spotlight /holofote", "Ativa/desativa o holofote de um veículo"),
+                    new(Resources.Faction, "/confisco", "Cria um registro de confisco"),
+                    new(Resources.Faction, "/vpegarpregos", "Pega um tapete de pregos do porta-malas de um veículo"),
+                    new(Resources.Faction, "/colocarpregos", "Coloca um tapete de pregos no chão"),
+                    new(Resources.Faction, "/pegarpregos", "Pega um tapete de pregos do chão"),
+                    new(Resources.Faction, "/vcolocarpregos", "Coloca um tapete de pregos no porta-malas de um veículo"),
+                    new(Resources.Faction, "/recolhercorpo", "Envia um corpo para o necrotério"),
                 ]);
             else if (player.Faction.Type == FactionType.Firefighter)
                 commands.AddRange(
                 [
-                    new(Globalization.FACTION, "/curar", "Cura um personagem ferido"),
+                    new(Resources.Faction, "/curar", "Cura um personagem ferido"),
                 ]);
             else if (player.Faction.Type == FactionType.Media)
                 commands.AddRange(
                 [
-                    new(Globalization.FACTION, "/transmissao", "Inicia/para uma transmissão"),
-                    new(Globalization.FACTION, "/tplayer", "Convida/expulsa alguém para uma transmissão"),
+                    new(Resources.Faction, "/transmissao", "Inicia/para uma transmissão"),
+                    new(Resources.Faction, "/tplayer", "Convida/expulsa alguém para uma transmissão"),
                 ]);
 
             if (player.FactionFlags.Count > 0)
@@ -1492,51 +1489,51 @@ public class CommandScript : Script
                 if (player.FactionFlags.Contains(FactionFlag.BlockChat))
                     commands.AddRange(
                     [
-                        new($"Flag Facção {FactionFlag.BlockChat.GetDisplay()}", "/blockf", "Bloqueia/desbloqueia o chat OOC da facção"),
+                        new($"Flag Facção {FactionFlag.BlockChat.GetDescription()}", "/blockf", "Bloqueia/desbloqueia o chat OOC da facção"),
                     ]);
 
                 if (player.FactionFlags.Contains(FactionFlag.GovernmentAdvertisement))
                     commands.AddRange(
                     [
-                        new($"Flag Facção {FactionFlag.GovernmentAdvertisement.GetDisplay()}", "/gov", "Envia um anúncio governamental da facção"),
+                        new($"Flag Facção {FactionFlag.GovernmentAdvertisement.GetDescription()}", "/gov", "Envia um anúncio governamental da facção"),
                     ]);
 
                 if (player.FactionFlags.Contains(FactionFlag.HQ))
                     commands.AddRange(
                     [
-                        new($"Flag Facção {FactionFlag.HQ.GetDisplay()}", "/hq", "Envia uma mensagem no rádio da facção como dispatcher"),
+                        new($"Flag Facção {FactionFlag.HQ.GetDescription()}", "/hq", "Envia uma mensagem no rádio da facção como dispatcher"),
                     ]);
 
                 if (player.FactionFlags.Contains(FactionFlag.Storage))
                     commands.AddRange(
                     [
-                        new($"Flag Facção {FactionFlag.Storage.GetDisplay()}", "/farmazenamento", "Usa o armazenamento da facção"),
+                        new($"Flag Facção {FactionFlag.Storage.GetDescription()}", "/farmazenamento", "Usa o armazenamento da facção"),
                     ]);
 
                 if (player.FactionFlags.Contains(FactionFlag.Uniform))
                     commands.AddRange(
                     [
-                        new($"Flag Facção {FactionFlag.Uniform.GetDisplay()}", "/adduniforme", "Cria um uniforme com as roupas que está vestindo"),
-                        new($"Flag Facção {FactionFlag.Uniform.GetDisplay()}", "/deluniforme", "Remove um uniforme"),
-                        new($"Flag Facção {FactionFlag.Uniform.GetDisplay()}", "/criaruniforme", "Cria um uniforme através do menu de seleção"),
+                        new($"Flag Facção {FactionFlag.Uniform.GetDescription()}", "/adduniforme", "Cria um uniforme com as roupas que está vestindo"),
+                        new($"Flag Facção {FactionFlag.Uniform.GetDescription()}", "/deluniforme", "Remove um uniforme"),
+                        new($"Flag Facção {FactionFlag.Uniform.GetDescription()}", "/criaruniforme", "Cria um uniforme através do menu de seleção"),
                     ]);
 
                 if (player.FactionFlags.Contains(FactionFlag.FireManager))
                     commands.AddRange(
                     [
-                        new($"Flag Facção {FactionFlag.FireManager.GetDisplay()}", "/incendios", "Abre o painel de gerenciamento de incêndios"),
+                        new($"Flag Facção {FactionFlag.FireManager.GetDescription()}", "/incendios", "Abre o painel de gerenciamento de incêndios"),
                     ]);
 
                 if (player.FactionFlags.Contains(FactionFlag.RespawnVehicles))
                     commands.AddRange(
                     [
-                        new($"Flag Facção {FactionFlag.RespawnVehicles.GetDisplay()}", "/ftow", "Respawna todos os veículos da facção sem ocupantes"),
+                        new($"Flag Facção {FactionFlag.RespawnVehicles.GetDescription()}", "/ftow", "Respawna todos os veículos da facção sem ocupantes"),
                     ]);
 
                 if (player.FactionFlags.Contains(FactionFlag.InviteMember))
                     commands.AddRange(
                     [
-                        new($"Flag Facção {FactionFlag.InviteMember.GetDisplay()}", "/convidar", "Convida um jogador para sua facção"),
+                        new($"Flag Facção {FactionFlag.InviteMember.GetDescription()}", "/convidar", "Convida um jogador para sua facção"),
                     ]);
             }
         }
@@ -1658,7 +1655,7 @@ public class CommandScript : Script
 
         if (player.User.Staff >= UserStaff.ServerSupport)
         {
-            var display = UserStaff.ServerSupport.GetDisplay();
+            var display = UserStaff.ServerSupport.GetDescription();
             commands.AddRange(
             [
                 new(display, "/at", "Atende um SOS"),
@@ -1670,7 +1667,7 @@ public class CommandScript : Script
 
         if (player.User.Staff >= UserStaff.JuniorServerAdmin)
         {
-            var display = UserStaff.JuniorServerAdmin.GetDisplay();
+            var display = UserStaff.JuniorServerAdmin.GetDescription();
             commands.AddRange(
             [
                 new(display, "/checar", "Visualiza as informações de um personagem"),
@@ -1725,7 +1722,7 @@ public class CommandScript : Script
 
         if (player.User.Staff >= UserStaff.ServerAdminI)
         {
-            var display = UserStaff.ServerAdminI.GetDisplay();
+            var display = UserStaff.ServerAdminI.GetDescription();
             commands.AddRange(
             [
                 new(display, "/aremovercorpo", "Remove um corpo"),
@@ -1735,7 +1732,7 @@ public class CommandScript : Script
 
         if (player.User.Staff >= UserStaff.ServerAdminII)
         {
-            var display = UserStaff.ServerAdminII.GetDisplay();
+            var display = UserStaff.ServerAdminII.GetDescription();
             commands.AddRange(
             [
                 new(display, "/idade", "Altera a idade de um personagem"),
@@ -1745,7 +1742,7 @@ public class CommandScript : Script
 
         if (player.User.Staff >= UserStaff.SeniorServerAdmin)
         {
-            var display = UserStaff.SeniorServerAdmin.GetDisplay();
+            var display = UserStaff.SeniorServerAdmin.GetDescription();
             commands.AddRange(
             [
                 new(display, "/alteracoesplaca", "Lista as solicitações de alterações de placa"),
@@ -1757,7 +1754,7 @@ public class CommandScript : Script
 
         if (player.User.Staff >= UserStaff.LeadServerAdmin)
         {
-            var display = UserStaff.LeadServerAdmin.GetDisplay();
+            var display = UserStaff.LeadServerAdmin.GetDescription();
             commands.AddRange(
             [
                 new(display, "/limparchatgeral", "Limpa o chat de todos os personagens"),
@@ -1770,7 +1767,7 @@ public class CommandScript : Script
 
         if (player.User.Staff >= UserStaff.ServerManager)
         {
-            var display = UserStaff.ServerManager.GetDisplay();
+            var display = UserStaff.ServerManager.GetDescription();
             commands.AddRange(
             [
                 new(display, "/lsp", "Adiciona LS Points para um usuário"),
@@ -1802,7 +1799,7 @@ public class CommandScript : Script
                 .Select(x => new
                 {
                     Value = x,
-                    Label = x.GetDisplay(),
+                    Label = x.GetDescription(),
                 })
             ));
     }
@@ -1865,7 +1862,7 @@ public class CommandScript : Script
 
         if (player.Money < quantity)
         {
-            player.SendMessage(MessageType.Error, string.Format(Globalization.INSUFFICIENT_MONEY_ERROR_MESSAGE, quantity));
+            player.SendMessage(MessageType.Error, string.Format(Resources.YouDontHaveEnoughMoney, quantity));
             return;
         }
 
@@ -1893,7 +1890,7 @@ public class CommandScript : Script
     {
         if (player.IsActionsBlocked())
         {
-            player.SendMessage(MessageType.Error, Globalization.ACTIONS_BLOCKED_MESSAGE);
+            player.SendMessage(MessageType.Error, Resources.YouCanNotDoThisBecauseYouAreHandcuffedInjuredOrBeingCarried);
             return;
         }
 
@@ -1916,7 +1913,7 @@ public class CommandScript : Script
     {
         if (player.IsActionsBlocked())
         {
-            player.SendMessage(MessageType.Error, Globalization.ACTIONS_BLOCKED_MESSAGE);
+            player.SendMessage(MessageType.Error, Resources.YouCanNotDoThisBecauseYouAreHandcuffedInjuredOrBeingCarried);
             return;
         }
 
@@ -1983,7 +1980,7 @@ public class CommandScript : Script
 
         if (!player.CheckIfTargetIsCloseIC(target, Constants.RP_DISTANCE))
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_CLOSE_TO_THE_PLAYER);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotCloseToThePlayer);
             return;
         }
 
@@ -2037,7 +2034,7 @@ public class CommandScript : Script
     {
         if (!player.ValidPed)
         {
-            player.SendMessage(MessageType.Error, Globalization.INVALID_SKIN_MESSAGE);
+            player.SendMessage(MessageType.Error, Resources.YouDontHaveAValidSkin);
             return;
         }
 

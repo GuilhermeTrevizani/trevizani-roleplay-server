@@ -1,6 +1,4 @@
 ﻿using GTANetworkAPI;
-using TrevizaniRoleplay.Domain.Entities;
-using TrevizaniRoleplay.Domain.Enums;
 using TrevizaniRoleplay.Server.Extensions;
 using TrevizaniRoleplay.Server.Factories;
 using TrevizaniRoleplay.Server.Models;
@@ -14,7 +12,7 @@ public class StaffFactionStorageScript : Script
     {
         if (!player.StaffFlags.Contains(StaffFlag.FactionsStorages))
         {
-            player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -29,7 +27,7 @@ public class StaffFactionStorageScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (!player.StaffFlags.Contains(StaffFlag.FactionsStorages))
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -37,7 +35,7 @@ public class StaffFactionStorageScript : Script
             var factionStorage = Global.FactionsStorages.FirstOrDefault(x => x.Id == id);
             if (factionStorage is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -64,7 +62,7 @@ public class StaffFactionStorageScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (!player.StaffFlags.Contains(StaffFlag.FactionsStorages))
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -99,7 +97,7 @@ public class StaffFactionStorageScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (!player.StaffFlags.Contains(StaffFlag.FactionsStorages))
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -122,7 +120,7 @@ public class StaffFactionStorageScript : Script
                 factionStorage = Global.FactionsStorages.FirstOrDefault(x => x.Id == id);
                 if (factionStorage == null)
                 {
-                    player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                    player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                     return;
                 }
 
@@ -160,7 +158,7 @@ public class StaffFactionStorageScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (!player.StaffFlags.Contains(StaffFlag.FactionsStorages))
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -182,7 +180,7 @@ public class StaffFactionStorageScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (!player.StaffFlags.Contains(StaffFlag.FactionsStorages))
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -218,7 +216,7 @@ public class StaffFactionStorageScript : Script
                 factionStorageItem = Global.FactionsStoragesItems.FirstOrDefault(x => x.Id == factionStorageItemId);
                 if (factionStorageItem is null)
                 {
-                    player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                    player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                     return;
                 }
             }
@@ -253,7 +251,7 @@ public class StaffFactionStorageScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (!player.StaffFlags.Contains(StaffFlag.FactionsStorages))
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -261,7 +259,7 @@ public class StaffFactionStorageScript : Script
             var factionStorageItem = Global.FactionsStoragesItems.FirstOrDefault(x => x.Id == id);
             if (factionStorageItem is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 

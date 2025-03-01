@@ -188,17 +188,6 @@ public class Vehicle : BaseEntity
         InsuranceDate = insuranceDate;
     }
 
-    public string GetInsuranceInfo()
-    {
-        var insurance = Globalization.NO;
-        if (ExemptInsurance)
-            insurance = Globalization.EXEMPT;
-        else if (InsuranceDate > DateTime.Now)
-            insurance = $"{Globalization.UNTIL} {InsuranceDate}";
-
-        return insurance;
-    }
-
     public void SetNewPlate(string newPlate)
     {
         NewPlate = newPlate;

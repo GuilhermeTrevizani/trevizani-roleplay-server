@@ -1,9 +1,7 @@
 ﻿using GTANetworkAPI;
 using Microsoft.EntityFrameworkCore;
 using TrevizaniRoleplay.Core.Extensions;
-using TrevizaniRoleplay.Core.Extesions;
-using TrevizaniRoleplay.Domain.Entities;
-using TrevizaniRoleplay.Domain.Enums;
+using TrevizaniRoleplay.Core.Models.Server;
 using TrevizaniRoleplay.Server.Extensions;
 using TrevizaniRoleplay.Server.Factories;
 using TrevizaniRoleplay.Server.Models;
@@ -76,7 +74,7 @@ public class MDCScript : Script
                 .Select(x => new
                 {
                     Value = x,
-                    Label = x.GetDisplay(),
+                    Label = x.ToString(),
                 })
                 .OrderBy(x => x.Label)
             );
@@ -344,18 +342,18 @@ public class MDCScript : Script
             string GetDriverLicenseText()
             {
                 if (character.PoliceOfficerBlockedDriverLicenseCharacterId.HasValue)
-                    return string.Format(Globalization.REVOKED_BY, character.PoliceOfficerBlockedDriverLicenseCharacter!.Name!.ToUpper());
+                    return string.Format(Resources.RevokedBy, character.PoliceOfficerBlockedDriverLicenseCharacter!.Name!.ToUpper());
 
                 if (character.DriverLicenseBlockedDate?.Date >= DateTime.Now.Date)
-                    return Globalization.SUSPENDED;
+                    return Resources.Suspended;
 
                 if (!character.DriverLicenseValidDate.HasValue)
-                    return Globalization.DOES_NOT_HAVE;
+                    return Resources.DoesNotHave;
 
                 if (character.DriverLicenseValidDate.Value.Date < DateTime.Now.Date)
-                    return Globalization.EXPIRED;
+                    return Resources.Expired;
 
-                return Globalization.VALID;
+                return Resources.Valid;
             }
 
             string GetWeaponLicenseColor()
@@ -369,14 +367,14 @@ public class MDCScript : Script
                 var text = string.Empty;
 
                 if (!character.WeaponLicenseValidDate.HasValue)
-                    text = Globalization.DOES_NOT_HAVE;
+                    text = Resources.DoesNotHave;
                 else if (character.WeaponLicenseValidDate.Value.Date < DateTime.Now.Date)
-                    text = Globalization.EXPIRED;
+                    text = Resources.Expired;
                 else
-                    text = Globalization.VALID;
+                    text = Resources.Valid;
 
                 if (character.PoliceOfficerWeaponLicenseCharacterId.HasValue)
-                    text += $" ({character.WeaponLicenseType.GetDisplay()}) (POR {character.PoliceOfficerWeaponLicenseCharacter!.Name})";
+                    text += $" ({character.WeaponLicenseType}) (POR {character.PoliceOfficerWeaponLicenseCharacter!.Name})";
 
                 return text.ToUpper();
             }
@@ -389,7 +387,7 @@ public class MDCScript : Script
                 Sex = character.Sex.GetDescription(),
                 Job = job,
                 DriverLicenseColor = GetDriverLicenseColor(),
-                DriverLicenseText = GetDriverLicenseText(),
+                DriverLicenseText = GetDriverLicenseText().ToUpper(),
                 APB = apb is null ? null : new
                 {
                     apb.Id,
@@ -403,7 +401,7 @@ public class MDCScript : Script
                 Jails = jails,
                 Confiscations = confiscations,
                 WeaponLicenseColor = GetWeaponLicenseColor(),
-                WeaponLicenseText = GetWeaponLicenseText(),
+                WeaponLicenseText = GetWeaponLicenseText().ToUpper(),
                 CanManageWeaponLicense = player.FactionFlags.Contains(FactionFlag.WeaponLicense),
             };
 
@@ -456,7 +454,7 @@ public class MDCScript : Script
 
             var owner = "N/A";
             if (vehicle.CharacterId.HasValue)
-                owner = vehicle.Sold ? Globalization.DEALERSHIP : vehicle.Character!.Name;
+                owner = vehicle.Sold ? Resources.Dealership : vehicle.Character!.Name;
             if (vehicle.FactionId.HasValue)
                 owner = vehicle.Faction!.Name;
 
@@ -625,7 +623,7 @@ public class MDCScript : Script
             var wanted = await context.Wanted.FirstOrDefaultAsync(x => x.Id == id);
             if (wanted is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -671,7 +669,7 @@ public class MDCScript : Script
             var emergencyCall = Global.EmergencyCalls.FirstOrDefault(x => x.Id == id);
             if (emergencyCall is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -701,7 +699,7 @@ public class MDCScript : Script
             var character = await context.Characters.FirstOrDefaultAsync(x => x.Id == id);
             if (character is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -791,7 +789,7 @@ public class MDCScript : Script
             var character = await context.Characters.FirstOrDefaultAsync(x => x.Id == idString.ToGuid());
             if (character is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -914,7 +912,7 @@ public class MDCScript : Script
             var factionUnit = Global.FactionsUnits.FirstOrDefault(x => x.Id == id);
             if (factionUnit is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -973,7 +971,7 @@ public class MDCScript : Script
             var seizedVehicle = await context.SeizedVehicles.FirstOrDefaultAsync(x => x.Id == id);
             if (seizedVehicle is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -1012,7 +1010,7 @@ public class MDCScript : Script
             var fine = await context.Fines.FirstOrDefaultAsync(x => x.Id == id);
             if (fine is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -1051,7 +1049,7 @@ public class MDCScript : Script
             var jail = await context.Jails.FirstOrDefaultAsync(x => x.Id == id);
             if (jail is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -1090,7 +1088,7 @@ public class MDCScript : Script
             var confiscation = await context.Confiscations.FirstOrDefaultAsync(x => x.Id == id);
             if (confiscation is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -1160,7 +1158,7 @@ public class MDCScript : Script
             var confiscation = await context.Confiscations.FirstOrDefaultAsync(x => x.Id == id && x.FactionId == player.Character.FactionId);
             if (confiscation is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -1201,7 +1199,7 @@ public class MDCScript : Script
             var target = Global.SpawnedPlayers.FirstOrDefault(x => x.Character.Id == idString.ToGuid());
             if (target is null || !player.CheckIfTargetIsCloseIC(target, Constants.RP_DISTANCE))
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_CLOSE_TO_THE_PLAYER);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotCloseToThePlayer);
                 return;
             }
 
@@ -1278,7 +1276,7 @@ public class MDCScript : Script
                     if (item.Type == ForensicTestItemType.Blood)
                     {
                         var originExtra = Functions.Deserialize<BloodSampleItem>(item.OriginConfiscationItem!.Extra!);
-                        result += $" de tipo sanguíneo {originExtra.BloodType.GetDisplay()}";
+                        result += $" de tipo sanguíneo {originExtra.BloodType.GetDescription()}";
 
                         if (item.TargetConfiscationItemId.HasValue)
                         {
@@ -1369,7 +1367,7 @@ public class MDCScript : Script
             var character = await context.Characters.FirstOrDefaultAsync(x => x.Id == id);
             if (character is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -1414,7 +1412,7 @@ public class MDCScript : Script
             var character = await context.Characters.FirstOrDefaultAsync(x => x.Id == id);
             if (character is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 

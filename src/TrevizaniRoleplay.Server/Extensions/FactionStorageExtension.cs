@@ -1,5 +1,4 @@
 ﻿using GTANetworkAPI;
-using TrevizaniRoleplay.Domain.Entities;
 
 namespace TrevizaniRoleplay.Server.Extensions;
 

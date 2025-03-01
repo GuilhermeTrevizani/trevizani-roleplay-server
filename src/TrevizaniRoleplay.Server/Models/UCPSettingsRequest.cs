@@ -1,6 +1,4 @@
-﻿using TrevizaniRoleplay.Domain.Enums;
-
-namespace TrevizaniRoleplay.Server.Models;
+﻿namespace TrevizaniRoleplay.Server.Models;
 
 public record UCPSettingsRequest(bool TimeStampToggle, bool AnnouncementToggle, bool PMToggle,
     bool FactionChatToggle, bool StaffChatToggle, int ChatFontType, int ChatLines, int ChatFontSize,

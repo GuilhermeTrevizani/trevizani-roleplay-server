@@ -2,8 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using System.Text.RegularExpressions;
 using TrevizaniRoleplay.Core.Extensions;
-using TrevizaniRoleplay.Domain.Entities;
-using TrevizaniRoleplay.Domain.Enums;
 using TrevizaniRoleplay.Server.Extensions;
 using TrevizaniRoleplay.Server.Models;
 
@@ -655,7 +653,7 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
             return;
         }
 
-        if (Global.Parameter.WhoCanLogin == WhoCanLogin.OnlyStaffOrPremiumPoints
+        if (Global.Parameter.WhoCanLogin == WhoCanLogin.OnlyStaffOrUsersWithPremiumPoints
             && User.Staff < UserStaff.ServerSupport && User.PremiumPoints == 0)
         {
             SendNotification(NotificationType.Error, "Apenas staff ou usuários que possuam LS Points podem logar no momento.");
@@ -810,7 +808,7 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
     {
         if (Character.Wound >= CharacterWound.PK)
         {
-            SendMessage(MessageType.Error, Globalization.PK_MESSAGE);
+            SendMessage(MessageType.Error, Resources.YouDiedAndLostYourMemory);
 
             if (Character.Wound == CharacterWound.CanHospitalCK)
             {
@@ -833,7 +831,7 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
                     return;
 
                 if (Character.Wound < CharacterWound.PK)
-                    SendMessage(MessageType.Error, Globalization.PK_MESSAGE);
+                    SendMessage(MessageType.Error, Resources.YouDiedAndLostYourMemory);
                 Character.SetWound(CharacterWound.CanHospitalCK);
                 SetSharedDataEx(Constants.PLAYER_META_DATA_INJURED, (int)Character.Wound);
                 SendMessage(MessageType.Error, "Digite /aceitarhospital para receber os cuidados dos médicos e ser levado ao hospital.");
@@ -1039,7 +1037,7 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
             && type != MessageCategory.NormalIC
             && type != MessageCategory.OOC)
         {
-            SendMessage(MessageType.Error, Globalization.SERIOUSLY_INJURED_MESSAGE);
+            SendMessage(MessageType.Error, Resources.YouCanNotExecuteThisCommandBecauseYouAreSeriouslyInjured);
             return;
         }
 
@@ -1508,7 +1506,7 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
                     x.LastAccessDate,
                     ConnectedTime = Convert.ToInt32(x.ConnectedTime / 60),
                     Job = x.Job.GetDescription(),
-                    Faction = x.Faction is not null ? x.Faction.Name : Globalization.NONE,
+                    Faction = x.Faction is not null ? x.Faction.Name : Resources.None,
                 })),
                 User.CharacterSlots);
     }
@@ -1876,7 +1874,7 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
     {
         if (IsActionsBlocked())
         {
-            SendMessage(MessageType.Error, Globalization.ACTIONS_BLOCKED_MESSAGE);
+            SendMessage(MessageType.Error, Resources.YouCanNotDoThisBecauseYouAreHandcuffedInjuredOrBeingCarried);
             return false;
         }
 
@@ -2008,7 +2006,7 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
 
             if (Character.Wound != CharacterWound.None)
             {
-                SendMessage(MessageType.Error, Globalization.SERIOUSLY_INJURED_MESSAGE);
+                SendMessage(MessageType.Error, Resources.YouCanNotExecuteThisCommandBecauseYouAreSeriouslyInjured);
                 return;
             }
 
@@ -2182,19 +2180,19 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
         if (Contacts.Count == 0)
         {
             var phoneContactEmergency = new PhoneContact();
-            phoneContactEmergency.Create(Character.Cellphone, Constants.EMERGENCY_NUMBER, Globalization.EMERGENCY_CENTER);
+            phoneContactEmergency.Create(Character.Cellphone, Constants.EMERGENCY_NUMBER, Resources.EmergencyCenter);
             Contacts.Add(phoneContactEmergency);
 
             var phoneContactMechanic = new PhoneContact();
-            phoneContactMechanic.Create(Character.Cellphone, Constants.MECHANIC_NUMBER, Globalization.MECHANICS_CENTER);
+            phoneContactMechanic.Create(Character.Cellphone, Constants.MECHANIC_NUMBER, Resources.MechanicsCenter);
             Contacts.Add(phoneContactMechanic);
 
             var phoneContactTaxi = new PhoneContact();
-            phoneContactTaxi.Create(Character.Cellphone, Constants.TAXI_NUMBER, Globalization.TAXI_DRIVERS_CENTER);
+            phoneContactTaxi.Create(Character.Cellphone, Constants.TAXI_NUMBER, Resources.TaxiDriversCenter);
             Contacts.Add(phoneContactTaxi);
 
             var phoneContactInsurance = new PhoneContact();
-            phoneContactInsurance.Create(Character.Cellphone, Constants.INSURANCE_NUMBER, Globalization.INSURANCE);
+            phoneContactInsurance.Create(Character.Cellphone, Constants.INSURANCE_NUMBER, Resources.Insurance);
             Contacts.Add(phoneContactInsurance);
 
             await context.PhonesContacts.AddRangeAsync(Contacts);

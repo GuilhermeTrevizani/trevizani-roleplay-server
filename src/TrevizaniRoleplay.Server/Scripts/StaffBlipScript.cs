@@ -1,6 +1,4 @@
 ﻿using GTANetworkAPI;
-using TrevizaniRoleplay.Domain.Entities;
-using TrevizaniRoleplay.Domain.Enums;
 using TrevizaniRoleplay.Server.Extensions;
 using TrevizaniRoleplay.Server.Factories;
 using TrevizaniRoleplay.Server.Models;
@@ -14,7 +12,7 @@ public class StaffBlipScript : Script
     {
         if (!player.StaffFlags.Contains(StaffFlag.Blips))
         {
-            player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -31,7 +29,7 @@ public class StaffBlipScript : Script
             var blip = Global.Blips.FirstOrDefault(x => x.Id == id);
             if (blip is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -51,7 +49,7 @@ public class StaffBlipScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (!player.StaffFlags.Contains(StaffFlag.Blips))
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -86,7 +84,7 @@ public class StaffBlipScript : Script
                 blip = Global.Blips.FirstOrDefault(x => x.Id == id);
                 if (blip == null)
                 {
-                    player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                    player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                     return;
                 }
 
@@ -124,7 +122,7 @@ public class StaffBlipScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (!player.StaffFlags.Contains(StaffFlag.Blips))
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 

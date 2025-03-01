@@ -1,6 +1,4 @@
-﻿using TrevizaniRoleplay.Domain.Entities;
-
-namespace TrevizaniRoleplay.Server.Models;
+﻿namespace TrevizaniRoleplay.Server.Models;
 
 public class Outfit
 {

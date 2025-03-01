@@ -1,8 +1,6 @@
 ﻿using Discord.WebSocket;
 using GTANetworkAPI;
 using Microsoft.EntityFrameworkCore;
-using TrevizaniRoleplay.Domain.Entities;
-using TrevizaniRoleplay.Domain.Enums;
 using TrevizaniRoleplay.Server.Extensions;
 using TrevizaniRoleplay.Server.Factories;
 using TrevizaniRoleplay.Server.Models;
@@ -16,13 +14,13 @@ public class CellphoneScript : Script
     {
         if (player.Character.Cellphone == 0)
         {
-            player.SendMessage(MessageType.Error, Globalization.UNEQUIPPED_CELPPHONE_ERROR_MESSAGE);
+            player.SendMessage(MessageType.Error, Resources.YouDontHaveAnEquippedCellphone);
             return;
         }
 
         if (player.IsActionsBlocked())
         {
-            player.SendMessage(MessageType.Error, Globalization.ACTIONS_BLOCKED_MESSAGE);
+            player.SendMessage(MessageType.Error, Resources.YouCanNotDoThisBecauseYouAreHandcuffedInjuredOrBeingCarried);
             return;
         }
 
@@ -83,13 +81,13 @@ public class CellphoneScript : Script
 
         if (player.Character.Cellphone == 0)
         {
-            player.SendMessage(MessageType.Error, Globalization.UNEQUIPPED_CELPPHONE_ERROR_MESSAGE);
+            player.SendMessage(MessageType.Error, Resources.YouDontHaveAnEquippedCellphone);
             return;
         }
 
         if (player.IsActionsBlocked())
         {
-            player.SendMessage(MessageType.Error, Globalization.ACTIONS_BLOCKED_MESSAGE);
+            player.SendMessage(MessageType.Error, Resources.YouCanNotDoThisBecauseYouAreHandcuffedInjuredOrBeingCarried);
             return;
         }
 
@@ -185,13 +183,13 @@ public class CellphoneScript : Script
     {
         if (player.Character.Cellphone == 0)
         {
-            player.SendMessage(MessageType.Error, Globalization.UNEQUIPPED_CELPPHONE_ERROR_MESSAGE);
+            player.SendMessage(MessageType.Error, Resources.YouDontHaveAnEquippedCellphone);
             return;
         }
 
         if (player.IsActionsBlocked())
         {
-            player.SendMessage(MessageType.Error, Globalization.ACTIONS_BLOCKED_MESSAGE);
+            player.SendMessage(MessageType.Error, Resources.YouCanNotDoThisBecauseYouAreHandcuffedInjuredOrBeingCarried);
             return;
         }
 
@@ -232,13 +230,13 @@ public class CellphoneScript : Script
     {
         if (player.Character.Cellphone == 0)
         {
-            player.SendMessage(MessageType.Error, Globalization.UNEQUIPPED_CELPPHONE_ERROR_MESSAGE);
+            player.SendMessage(MessageType.Error, Resources.YouDontHaveAnEquippedCellphone);
             return;
         }
 
         if (player.IsActionsBlocked())
         {
-            player.SendMessage(MessageType.Error, Globalization.ACTIONS_BLOCKED_MESSAGE);
+            player.SendMessage(MessageType.Error, Resources.YouCanNotDoThisBecauseYouAreHandcuffedInjuredOrBeingCarried);
             return;
         }
 
@@ -293,13 +291,13 @@ public class CellphoneScript : Script
     {
         if (player.Character.Cellphone == 0)
         {
-            player.SendMessage(MessageType.Error, Globalization.UNEQUIPPED_CELPPHONE_ERROR_MESSAGE);
+            player.SendMessage(MessageType.Error, Resources.YouDontHaveAnEquippedCellphone);
             return;
         }
 
         if (player.IsActionsBlocked())
         {
-            player.SendMessage(MessageType.Error, Globalization.ACTIONS_BLOCKED_MESSAGE);
+            player.SendMessage(MessageType.Error, Resources.YouCanNotDoThisBecauseYouAreHandcuffedInjuredOrBeingCarried);
             return;
         }
 
@@ -317,7 +315,7 @@ public class CellphoneScript : Script
 
         if (player.Money < Global.Parameter.AnnouncementValue)
         {
-            player.SendMessage(MessageType.Error, string.Format(Globalization.INSUFFICIENT_MONEY_ERROR_MESSAGE, Global.Parameter.AnnouncementValue));
+            player.SendMessage(MessageType.Error, string.Format(Resources.YouDontHaveEnoughMoney, Global.Parameter.AnnouncementValue));
             return;
         }
 
@@ -431,13 +429,13 @@ public class CellphoneScript : Script
     {
         if (player.Character.Cellphone == 0)
         {
-            player.SendMessage(MessageType.Error, Globalization.UNEQUIPPED_CELPPHONE_ERROR_MESSAGE);
+            player.SendMessage(MessageType.Error, Resources.YouDontHaveAnEquippedCellphone);
             return;
         }
 
         if (player.IsActionsBlocked())
         {
-            player.SendMessage(MessageType.Error, Globalization.ACTIONS_BLOCKED_MESSAGE);
+            player.SendMessage(MessageType.Error, Resources.YouCanNotDoThisBecauseYouAreHandcuffedInjuredOrBeingCarried);
             return;
         }
 
@@ -485,7 +483,7 @@ public class CellphoneScript : Script
             player.PhoneCall.Create(player.Character.Cellphone, cellphone);
             player.PhoneCall.SetType(PhoneCallType.Answered);
             player.PhoneAnswerCall(player.PhoneCall.Number);
-            player.SendCellphoneCallMessage(player.GetCellphoneContactName(cellphone), $"{Globalization.EMERGENCY_CENTER}, deseja falar com polícia, bombeiros ou ambos?");
+            player.SendCellphoneCallMessage(player.GetCellphoneContactName(cellphone), $"{Resources.EmergencyCenter}, deseja falar com polícia, bombeiros ou ambos?");
             return;
         }
 
@@ -503,7 +501,7 @@ public class CellphoneScript : Script
                 return;
             }
 
-            player.SendCellphoneCallMessage(player.GetCellphoneContactName(cellphone), $"{Globalization.TAXI_DRIVERS_CENTER}, para onde deseja ir?");
+            player.SendCellphoneCallMessage(player.GetCellphoneContactName(cellphone), $"{Resources.TaxiDriversCenter}, para onde deseja ir?");
             return;
         }
 
@@ -521,7 +519,7 @@ public class CellphoneScript : Script
                 return;
             }
 
-            player.SendCellphoneCallMessage(player.GetCellphoneContactName(cellphone), $"{Globalization.MECHANICS_CENTER}, como podemos ajudar?");
+            player.SendCellphoneCallMessage(player.GetCellphoneContactName(cellphone), $"{Resources.MechanicsCenter}, como podemos ajudar?");
             return;
         }
 
@@ -537,7 +535,7 @@ public class CellphoneScript : Script
             var vehiclePrice = Functions.GetVehiclePrice(vehicle.VehicleDB.Model);
             if (vehiclePrice is null)
             {
-                player.SendMessage(MessageType.Error, Globalization.VEHICLE_PRICE_NOT_SET);
+                player.SendMessage(MessageType.Error, Resources.VehiclePriceNotConfigured);
                 return;
             }
 
@@ -549,7 +547,7 @@ public class CellphoneScript : Script
             var insuranceDayValue = Convert.ToInt32(vehiclePrice.Value.Item1 * (Global.Parameter.VehicleInsurancePercentage / 100f));
 
             player.SendCellphoneCallMessage(player.GetCellphoneContactName(cellphone),
-                $"{Globalization.INSURANCE}, quantos dias de seguro veicular você deseja contratar? O valor por dia é ${insuranceDayValue:N0}.");
+                $"{Resources.Insurance}, quantos dias de seguro veicular você deseja contratar? O valor por dia é ${insuranceDayValue:N0}.");
             return;
         }
 
@@ -651,13 +649,13 @@ public class CellphoneScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (player.Character.Cellphone == 0)
             {
-                player.SendMessage(MessageType.Error, Globalization.UNEQUIPPED_CELPPHONE_ERROR_MESSAGE);
+                player.SendMessage(MessageType.Error, Resources.YouDontHaveAnEquippedCellphone);
                 return;
             }
 
             if (player.IsActionsBlocked())
             {
-                player.SendMessage(MessageType.Error, Globalization.ACTIONS_BLOCKED_MESSAGE);
+                player.SendMessage(MessageType.Error, Resources.YouCanNotDoThisBecauseYouAreHandcuffedInjuredOrBeingCarried);
                 return;
             }
 
@@ -773,13 +771,13 @@ public class CellphoneScript : Script
     {
         if (player.Character.Cellphone == 0)
         {
-            player.SendMessage(MessageType.Error, Globalization.UNEQUIPPED_CELPPHONE_ERROR_MESSAGE);
+            player.SendMessage(MessageType.Error, Resources.YouDontHaveAnEquippedCellphone);
             return;
         }
 
         if (player.IsActionsBlocked())
         {
-            player.SendMessage(MessageType.Error, Globalization.ACTIONS_BLOCKED_MESSAGE);
+            player.SendMessage(MessageType.Error, Resources.YouCanNotDoThisBecauseYouAreHandcuffedInjuredOrBeingCarried);
             return;
         }
 
@@ -805,13 +803,13 @@ public class CellphoneScript : Script
     {
         if (player.Character.Cellphone == 0)
         {
-            player.SendMessage(MessageType.Error, Globalization.UNEQUIPPED_CELPPHONE_ERROR_MESSAGE);
+            player.SendMessage(MessageType.Error, Resources.YouDontHaveAnEquippedCellphone);
             return;
         }
 
         if (player.IsActionsBlocked())
         {
-            player.SendMessage(MessageType.Error, Globalization.ACTIONS_BLOCKED_MESSAGE);
+            player.SendMessage(MessageType.Error, Resources.YouCanNotDoThisBecauseYouAreHandcuffedInjuredOrBeingCarried);
             return;
         }
 
@@ -847,14 +845,14 @@ public class CellphoneScript : Script
             if (player.Character.Cellphone == 0)
             {
                 player.EndLoading();
-                player.SendMessage(MessageType.Error, Globalization.UNEQUIPPED_CELPPHONE_ERROR_MESSAGE);
+                player.SendMessage(MessageType.Error, Resources.YouDontHaveAnEquippedCellphone);
                 return;
             }
 
             if (player.IsActionsBlocked())
             {
                 player.EndLoading();
-                player.SendMessage(MessageType.Error, Globalization.ACTIONS_BLOCKED_MESSAGE);
+                player.SendMessage(MessageType.Error, Resources.YouCanNotDoThisBecauseYouAreHandcuffedInjuredOrBeingCarried);
                 return;
             }
 
@@ -942,14 +940,14 @@ public class CellphoneScript : Script
             if (player.Character.Cellphone == 0)
             {
                 player.EndLoading();
-                player.SendMessage(MessageType.Error, Globalization.UNEQUIPPED_CELPPHONE_ERROR_MESSAGE);
+                player.SendMessage(MessageType.Error, Resources.YouDontHaveAnEquippedCellphone);
                 return;
             }
 
             if (player.IsActionsBlocked())
             {
                 player.EndLoading();
-                player.SendMessage(MessageType.Error, Globalization.ACTIONS_BLOCKED_MESSAGE);
+                player.SendMessage(MessageType.Error, Resources.YouCanNotDoThisBecauseYouAreHandcuffedInjuredOrBeingCarried);
                 return;
             }
 
@@ -964,7 +962,7 @@ public class CellphoneScript : Script
             if (phoneGroup is null)
             {
                 player.EndLoading();
-                player.SendMessage(MessageType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendMessage(MessageType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -1011,14 +1009,14 @@ public class CellphoneScript : Script
             if (player.Character.Cellphone == 0)
             {
                 player.EndLoading();
-                player.SendMessage(MessageType.Error, Globalization.UNEQUIPPED_CELPPHONE_ERROR_MESSAGE);
+                player.SendMessage(MessageType.Error, Resources.YouDontHaveAnEquippedCellphone);
                 return;
             }
 
             if (player.IsActionsBlocked())
             {
                 player.EndLoading();
-                player.SendMessage(MessageType.Error, Globalization.ACTIONS_BLOCKED_MESSAGE);
+                player.SendMessage(MessageType.Error, Resources.YouCanNotDoThisBecauseYouAreHandcuffedInjuredOrBeingCarried);
                 return;
             }
 
@@ -1033,7 +1031,7 @@ public class CellphoneScript : Script
             if (phoneGroup is null)
             {
                 player.EndLoading();
-                player.SendMessage(MessageType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendMessage(MessageType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -1117,14 +1115,14 @@ public class CellphoneScript : Script
             if (player.Character.Cellphone == 0)
             {
                 player.EndLoading();
-                player.SendMessage(MessageType.Error, Globalization.UNEQUIPPED_CELPPHONE_ERROR_MESSAGE);
+                player.SendMessage(MessageType.Error, Resources.YouDontHaveAnEquippedCellphone);
                 return;
             }
 
             if (player.IsActionsBlocked())
             {
                 player.EndLoading();
-                player.SendMessage(MessageType.Error, Globalization.ACTIONS_BLOCKED_MESSAGE);
+                player.SendMessage(MessageType.Error, Resources.YouCanNotDoThisBecauseYouAreHandcuffedInjuredOrBeingCarried);
                 return;
             }
 
@@ -1139,7 +1137,7 @@ public class CellphoneScript : Script
             if (phoneGroup is null)
             {
                 player.EndLoading();
-                player.SendMessage(MessageType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendMessage(MessageType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -1203,13 +1201,13 @@ public class CellphoneScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (player.Character.Cellphone == 0)
             {
-                player.SendMessage(MessageType.Error, Globalization.UNEQUIPPED_CELPPHONE_ERROR_MESSAGE);
+                player.SendMessage(MessageType.Error, Resources.YouDontHaveAnEquippedCellphone);
                 return;
             }
 
             if (player.IsActionsBlocked())
             {
-                player.SendMessage(MessageType.Error, Globalization.ACTIONS_BLOCKED_MESSAGE);
+                player.SendMessage(MessageType.Error, Resources.YouCanNotDoThisBecauseYouAreHandcuffedInjuredOrBeingCarried);
                 return;
             }
 
@@ -1223,7 +1221,7 @@ public class CellphoneScript : Script
             if (phoneGroup is null)
             {
                 player.EndLoading();
-                player.SendMessage(MessageType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendMessage(MessageType.Error, Resources.RecordNotFound);
                 return;
             }
 

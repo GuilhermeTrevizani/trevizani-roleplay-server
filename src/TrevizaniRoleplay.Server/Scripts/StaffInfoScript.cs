@@ -1,7 +1,5 @@
 ﻿using GTANetworkAPI;
 using Microsoft.EntityFrameworkCore;
-using TrevizaniRoleplay.Domain.Entities;
-using TrevizaniRoleplay.Domain.Enums;
 using TrevizaniRoleplay.Server.Extensions;
 using TrevizaniRoleplay.Server.Factories;
 using TrevizaniRoleplay.Server.Models;
@@ -15,7 +13,7 @@ public class StaffInfoScript : Script
     {
         if (player.User.Staff < UserStaff.JuniorServerAdmin)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -35,7 +33,7 @@ public class StaffInfoScript : Script
 
             if (player.User.Staff < UserStaff.JuniorServerAdmin)
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -60,7 +58,7 @@ public class StaffInfoScript : Script
 
             if (player.User.Staff < UserStaff.JuniorServerAdmin)
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 

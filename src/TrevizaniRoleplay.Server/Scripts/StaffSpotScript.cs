@@ -1,7 +1,5 @@
 ﻿using GTANetworkAPI;
-using TrevizaniRoleplay.Core.Extesions;
-using TrevizaniRoleplay.Domain.Entities;
-using TrevizaniRoleplay.Domain.Enums;
+using TrevizaniRoleplay.Core.Extensions;
 using TrevizaniRoleplay.Server.Extensions;
 using TrevizaniRoleplay.Server.Factories;
 using TrevizaniRoleplay.Server.Models;
@@ -15,7 +13,7 @@ public class StaffSpotScript : Script
     {
         if (!player.StaffFlags.Contains(StaffFlag.Spots))
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -24,7 +22,7 @@ public class StaffSpotScript : Script
             .Select(x => new
             {
                 Value = x,
-                Label = x.GetDisplay(),
+                Label = x.GetDescription(),
             })
             .OrderBy(x => x.Label)
         );
@@ -42,7 +40,7 @@ public class StaffSpotScript : Script
             var spot = Global.Spots.FirstOrDefault(x => x.Id == id);
             if (spot is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -68,7 +66,7 @@ public class StaffSpotScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (!player.StaffFlags.Contains(StaffFlag.Spots))
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -90,7 +88,7 @@ public class StaffSpotScript : Script
                 spot = Global.Spots.FirstOrDefault(x => x.Id == id);
                 if (spot is null)
                 {
-                    player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                    player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                     return;
                 }
 
@@ -125,7 +123,7 @@ public class StaffSpotScript : Script
     {
         if (!player.StaffFlags.Contains(StaffFlag.Spots))
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -161,7 +159,7 @@ public class StaffSpotScript : Script
             {
                 x.Id,
                 x.Type,
-                TypeDisplay = x.Type.GetDisplay(),
+                TypeDisplay = x.Type.GetDescription(),
                 x.PosX,
                 x.PosY,
                 x.PosZ,

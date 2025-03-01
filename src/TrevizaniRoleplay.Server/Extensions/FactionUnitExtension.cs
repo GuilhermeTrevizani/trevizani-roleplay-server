@@ -1,6 +1,4 @@
-﻿using TrevizaniRoleplay.Domain.Entities;
-
-namespace TrevizaniRoleplay.Server.Extensions;
+﻿namespace TrevizaniRoleplay.Server.Extensions;
 
 public static class FactionUnitExtension
 {

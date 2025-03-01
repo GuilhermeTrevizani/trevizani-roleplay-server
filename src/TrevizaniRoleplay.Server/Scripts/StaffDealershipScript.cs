@@ -1,6 +1,4 @@
 ﻿using GTANetworkAPI;
-using TrevizaniRoleplay.Domain.Entities;
-using TrevizaniRoleplay.Domain.Enums;
 using TrevizaniRoleplay.Server.Extensions;
 using TrevizaniRoleplay.Server.Factories;
 using TrevizaniRoleplay.Server.Models;
@@ -14,7 +12,7 @@ public class StaffDealershipScript : Script
     {
         if (player.User.Staff < UserStaff.ServerManager)
         {
-            player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -29,7 +27,7 @@ public class StaffDealershipScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (player.User.Staff < UserStaff.ServerManager)
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -37,7 +35,7 @@ public class StaffDealershipScript : Script
             var dealership = Global.Dealerships.FirstOrDefault(x => x.Id == id);
             if (dealership is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -57,7 +55,7 @@ public class StaffDealershipScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (player.User.Staff < UserStaff.ServerManager)
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -88,7 +86,7 @@ public class StaffDealershipScript : Script
                 dealership = Global.Dealerships.FirstOrDefault(x => x.Id == id);
                 if (dealership is null)
                 {
-                    player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                    player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                     return;
                 }
 
@@ -129,7 +127,7 @@ public class StaffDealershipScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (player.User.Staff < UserStaff.ServerManager)
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -193,7 +191,7 @@ public class StaffDealershipScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (player.User.Staff < UserStaff.ServerManager)
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -214,7 +212,7 @@ public class StaffDealershipScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (player.User.Staff < UserStaff.ServerManager)
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -255,7 +253,7 @@ public class StaffDealershipScript : Script
                 dealershipVehicle = Global.DealershipsVehicles.FirstOrDefault(x => x.Id == dealershipVehicleId);
                 if (dealershipVehicle is null)
                 {
-                    player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                    player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                     return;
                 }
 
@@ -291,7 +289,7 @@ public class StaffDealershipScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (player.User.Staff < UserStaff.ServerManager)
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 

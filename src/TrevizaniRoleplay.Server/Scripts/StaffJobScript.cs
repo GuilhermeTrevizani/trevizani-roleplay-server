@@ -1,7 +1,5 @@
 ﻿using GTANetworkAPI;
 using TrevizaniRoleplay.Core.Extensions;
-using TrevizaniRoleplay.Domain.Entities;
-using TrevizaniRoleplay.Domain.Enums;
 using TrevizaniRoleplay.Server.Extensions;
 using TrevizaniRoleplay.Server.Factories;
 using TrevizaniRoleplay.Server.Models;
@@ -15,7 +13,7 @@ public class StaffJobScript : Script
     {
         if (!player.StaffFlags.Contains(StaffFlag.Jobs))
         {
-            player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -30,7 +28,7 @@ public class StaffJobScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (!player.StaffFlags.Contains(StaffFlag.Jobs))
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -76,7 +74,7 @@ public class StaffJobScript : Script
             var job = Global.Jobs.FirstOrDefault(x => x.Id == request.Id);
             if (job is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 

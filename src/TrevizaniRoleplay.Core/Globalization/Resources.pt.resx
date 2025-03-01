@@ -120,6 +120,9 @@
   <data name="Animations" xml:space="preserve">
     <value>Animações</value>
   </data>
+  <data name="Barriers" xml:space="preserve">
+    <value>Barreiras</value>
+  </data>
   <data name="Blips" xml:space="preserve">
     <value>Blips</value>
   </data>
@@ -138,14 +141,23 @@
   <data name="CrackDens" xml:space="preserve">
     <value>Bocas de Fumo</value>
   </data>
+  <data name="Dealership" xml:space="preserve">
+    <value>Concessionária</value>
+  </data>
   <data name="Doors" xml:space="preserve">
     <value>Portas</value>
   </data>
   <data name="Drugs" xml:space="preserve">
     <value>Drogas</value>
   </data>
+  <data name="EmergencyCenter" xml:space="preserve">
+    <value>Central de Emergência</value>
+  </data>
   <data name="Events" xml:space="preserve">
     <value>Eventos</value>
+  </data>
+  <data name="Exempt" xml:space="preserve">
+    <value>Isento</value>
   </data>
   <data name="Faction" xml:space="preserve">
     <value>Facção</value>
@@ -155,6 +167,9 @@
   </data>
   <data name="FactionsStorages" xml:space="preserve">
     <value>Armazenamentos de Facções</value>
+  </data>
+  <data name="ForensicLaboratory" xml:space="preserve">
+    <value>Laboratório Forense</value>
   </data>
   <data name="Frisk" xml:space="preserve">
     <value>Revista</value>
@@ -168,6 +183,12 @@
   <data name="GiveItem" xml:space="preserve">
     <value>Dar Item</value>
   </data>
+  <data name="Hot" xml:space="preserve">
+    <value>Quente</value>
+  </data>
+  <data name="Insurance" xml:space="preserve">
+    <value>Seguradora</value>
+  </data>
   <data name="Items" xml:space="preserve">
     <value>Itens</value>
   </data>
@@ -180,20 +201,44 @@
   <data name="Mechanic" xml:space="preserve">
     <value>Mecânico</value>
   </data>
+  <data name="MechanicsCenter" xml:space="preserve">
+    <value>Central de Mecânicos</value>
+  </data>
+  <data name="Morgue" xml:space="preserve">
+    <value>Necrotério</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Não</value>
+  </data>
+  <data name="None" xml:space="preserve">
+    <value>Nenhum</value>
+  </data>
+  <data name="PressYToInteract" xml:space="preserve">
+    <value>Pressione Y para interagir.</value>
+  </data>
   <data name="Properties" xml:space="preserve">
     <value>Propriedades</value>
+  </data>
+  <data name="PropertyHasBeenStolen" xml:space="preserve">
+    <value>Propriedade foi roubada.</value>
   </data>
   <data name="PropertySell" xml:space="preserve">
     <value>Venda de Propriedade</value>
   </data>
+  <data name="RecordNotFound" xml:space="preserve">
+    <value>Registro não encontrado.</value>
+  </data>
   <data name="Spots" xml:space="preserve">
     <value>Pontos</value>
+  </data>
+  <data name="Expired" xml:space="preserve">
+    <value>Expirada</value>
   </data>
   <data name="TaxiDriver" xml:space="preserve">
     <value>Taxista</value>
   </data>
-  <data name="Trucker" xml:space="preserve">
-    <value>Caminhoneiro</value>
+  <data name="TaxiDriversCenter" xml:space="preserve">
+    <value>Central de Taxistas</value>
   </data>
   <data name="TruckerLocations" xml:space="preserve">
     <value>Localizações de Caminhoneiro</value>
@@ -201,8 +246,17 @@
   <data name="Unemployed" xml:space="preserve">
     <value>Desempregado</value>
   </data>
+  <data name="Until" xml:space="preserve">
+    <value>Até</value>
+  </data>
+  <data name="Valid" xml:space="preserve">
+    <value>Válida</value>
+  </data>
   <data name="VehicleMaintenance" xml:space="preserve">
     <value>Manutenção de Veículos</value>
+  </data>
+  <data name="VehiclePriceNotConfigured" xml:space="preserve">
+    <value>Preço do veículo não configurado. Por favor, reporte o bug.</value>
   </data>
   <data name="Vehicles" xml:space="preserve">
     <value>Veículos</value>
@@ -215,5 +269,725 @@
   </data>
   <data name="Woman" xml:space="preserve">
     <value>Mulher</value>
+  </data>
+  <data name="YouAreNotAuthorizedToUseThisCommand" xml:space="preserve">
+    <value>Você não possui autorização para usar esse comando.</value>
+  </data>
+  <data name="YouAreNotCloseToThePlayer" xml:space="preserve">
+    <value>Você não está próximo do jogador.</value>
+  </data>
+  <data name="YouAreNotInAVehicle" xml:space="preserve">
+    <value>Você não está em um veículo.</value>
+  </data>
+  <data name="YouAreNotOnAdministrativeDuty" xml:space="preserve">
+    <value>Você não está em serviço administrativo.</value>
+  </data>
+  <data name="YouAreNotTheDriverOfTheVehicle" xml:space="preserve">
+    <value>Você não é o motorista do veículo.</value>
+  </data>
+  <data name="YouAreNotTheOwnerOfTheVehicle" xml:space="preserve">
+    <value>Você não é o proprietário do veículo.</value>
+  </data>
+  <data name="YouCanNotDoThisBecauseYouAreHandcuffedInjuredOrBeingCarried" xml:space="preserve">
+    <value>Você não pode fazer isso pois está algemado, ferido ou sendo carregado.</value>
+  </data>
+  <data name="YouCanNotExecuteThisCommandBecauseYouAreSeriouslyInjured" xml:space="preserve">
+    <value>Você não pode executar esse comando pois está gravemente ferido.</value>
+  </data>
+  <data name="YouDiedAndLostYourMemory" xml:space="preserve">
+    <value>Você morreu e perdeu a memória.</value>
+  </data>
+  <data name="YouDoNotHaveAccessToTheVehicle" xml:space="preserve">
+    <value>Você não possui acesso ao veículo.</value>
+  </data>
+  <data name="YouDontHaveAnEquippedCellphone" xml:space="preserve">
+    <value>Você não possui um celular equipado.</value>
+  </data>
+  <data name="YouDontHaveAValidSkin" xml:space="preserve">
+    <value>Você não está com uma skin válida.</value>
+  </data>
+  <data name="YouDontHaveEnoughInYourBankAccount" xml:space="preserve">
+    <value>Você não possui saldo suficiente na sua conta bancária (${0:N0}).</value>
+  </data>
+  <data name="YouDontHaveEnoughMoney" xml:space="preserve">
+    <value>Você não possui dinheiro suficiente (${0:N0}).</value>
+  </data>
+  <data name="RevokedBy" xml:space="preserve">
+    <value>Revogada por {0}</value>
+  </data>
+  <data name="DoesNotHave" xml:space="preserve">
+    <value>Não possui</value>
+  </data>
+  <data name="Suspended" xml:space="preserve">
+    <value>Suspensa</value>
+  </data>
+  <data name="PremiumBronze" xml:space="preserve">
+    <value>Premium Bronze (30 dias)</value>
+  </data>
+  <data name="PremiumSilver" xml:space="preserve">
+    <value>Premium Prata (30 dias)</value>
+  </data>
+  <data name="PremiumGold" xml:space="preserve">
+    <value>Premium Ouro (30 dias)</value>
+  </data>
+  <data name="NameChange" xml:space="preserve">
+    <value>Mudança de Nome</value>
+  </data>
+  <data name="PlateChange" xml:space="preserve">
+    <value>Mudança de Placa</value>
+  </data>
+  <data name="NumberChange" xml:space="preserve">
+    <value>Mudança de Número</value>
+  </data>
+  <data name="CharacterSlot" xml:space="preserve">
+    <value>Slot de Personagem</value>
+  </data>
+  <data name="Outfits10" xml:space="preserve">
+    <value>Outfits (10)</value>
+  </data>
+  <data name="InternalFurnitures50" xml:space="preserve">
+    <value>Mobílias Internas (50)</value>
+  </data>
+  <data name="InternalFurnitures500" xml:space="preserve">
+    <value>Mobílias Internas (500)</value>
+  </data>
+  <data name="Money" xml:space="preserve">
+    <value>Dinheiro</value>
+  </data>
+  <data name="YouAreNotOnYourOwnProperty" xml:space="preserve">
+    <value>Você não está dentro de uma propriedade sua.</value>
+  </data>
+  <data name="ProtectionLevel1" xml:space="preserve">
+    <value>Nível de Proteção 1</value>
+  </data>
+  <data name="ProtectionLevel2" xml:space="preserve">
+    <value>Nível de Proteção 2</value>
+  </data>
+  <data name="ProtectionLevel3" xml:space="preserve">
+    <value>Nível de Proteção 3</value>
+  </data>
+  <data name="VehiclePart" xml:space="preserve">
+    <value>Parte de Veículo</value>
+  </data>
+  <data name="VehicleKey" xml:space="preserve">
+    <value>Chave de Veículo</value>
+  </data>
+  <data name="PropertyKey" xml:space="preserve">
+    <value>Chave de Propriedade</value>
+  </data>
+  <data name="BloodSample" xml:space="preserve">
+    <value>Amostra de Sangue</value>
+  </data>
+  <data name="PistolAmmo" xml:space="preserve">
+    <value>Munição Pistola</value>
+  </data>
+  <data name="ShotgunAmmo" xml:space="preserve">
+    <value>Munição Escopeta</value>
+  </data>
+  <data name="AssaultRifleAmmo" xml:space="preserve">
+    <value>Munição Fuzil de Assalto</value>
+  </data>
+  <data name="LightMachineGunAmmo" xml:space="preserve">
+    <value>Munição LMG</value>
+  </data>
+  <data name="SniperRifleAmmo" xml:space="preserve">
+    <value>Munição Sniper</value>
+  </data>
+  <data name="SubMachineGunAmmo" xml:space="preserve">
+    <value>Munição SMG</value>
+  </data>
+  <data name="PistolBulletShell" xml:space="preserve">
+    <value>Cápsula Pistola</value>
+  </data>
+  <data name="ShotgunBulletShell" xml:space="preserve">
+    <value>Cápsula Escopeta</value>
+  </data>
+  <data name="AssaultRifleBulletShell" xml:space="preserve">
+    <value>Cápsula Fuzil de Assalto</value>
+  </data>
+  <data name="LightMachineGunBulletShell" xml:space="preserve">
+    <value>Cápsula LMG</value>
+  </data>
+  <data name="SniperRifleBulletShell" xml:space="preserve">
+    <value>Cápsula Sniper</value>
+  </data>
+  <data name="SubMachineGunBulletShell" xml:space="preserve">
+    <value>Cápsula SMG</value>
+  </data>
+  <data name="APositive" xml:space="preserve">
+    <value>A+</value>
+  </data>
+  <data name="ANegative" xml:space="preserve">
+    <value>A-</value>
+  </data>
+  <data name="ONegative" xml:space="preserve">
+    <value>O-</value>
+  </data>
+  <data name="OPositive" xml:space="preserve">
+    <value>O+</value>
+  </data>
+  <data name="BNegative" xml:space="preserve">
+    <value>B-</value>
+  </data>
+  <data name="BPositive" xml:space="preserve">
+    <value>B+</value>
+  </data>
+  <data name="ABPositive" xml:space="preserve">
+    <value>AB+</value>
+  </data>
+  <data name="ABNegative" xml:space="preserve">
+    <value>AB-</value>
+  </data>
+  <data name="InviteEmployee" xml:space="preserve">
+    <value>Convidar Funcionário</value>
+  </data>
+  <data name="EditEmployee" xml:space="preserve">
+    <value>Editar Funcionário</value>
+  </data>
+  <data name="RemoveEmployee" xml:space="preserve">
+    <value>Remover Funcionário</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Abrir</value>
+  </data>
+  <data name="ManageItems" xml:space="preserve">
+    <value>Gerenciar Itens</value>
+  </data>
+  <data name="Safe" xml:space="preserve">
+    <value>Cofre</value>
+  </data>
+  <data name="ConvenienceStore" xml:space="preserve">
+    <value>Loja de Conveniência</value>
+  </data>
+  <data name="MechanicWorkshop" xml:space="preserve">
+    <value>Mecânica</value>
+  </data>
+  <data name="Other" xml:space="preserve">
+    <value>Outro</value>
+  </data>
+  <data name="Fishmonger" xml:space="preserve">
+    <value>Peixaria</value>
+  </data>
+  <data name="WeaponStore" xml:space="preserve">
+    <value>Loja de Armas</value>
+  </data>
+  <data name="Police" xml:space="preserve">
+    <value>Polícia</value>
+  </data>
+  <data name="Firefighter" xml:space="preserve">
+    <value>Bombeiros</value>
+  </data>
+  <data name="PoliceAndFirefighter" xml:space="preserve">
+    <value>Polícia e Bombeiros</value>
+  </data>
+  <data name="Criminal" xml:space="preserve">
+    <value>Criminal</value>
+  </data>
+  <data name="Media" xml:space="preserve">
+    <value>Mídia</value>
+  </data>
+  <data name="Civil" xml:space="preserve">
+    <value>Civil</value>
+  </data>
+  <data name="Judiciary" xml:space="preserve">
+    <value>Judiciário</value>
+  </data>
+  <data name="Government" xml:space="preserve">
+    <value>Governo</value>
+  </data>
+  <data name="Blood" xml:space="preserve">
+    <value>Sangue</value>
+  </data>
+  <data name="BulletShell" xml:space="preserve">
+    <value>Cápsula</value>
+  </data>
+  <data name="Weapon" xml:space="preserve">
+    <value>Arma</value>
+  </data>
+  <data name="Boombox" xml:space="preserve">
+    <value>Boombox</value>
+  </data>
+  <data name="WalkieTalkie" xml:space="preserve">
+    <value>Rádio Comunicador</value>
+  </data>
+  <data name="Cellphone" xml:space="preserve">
+    <value>Celular</value>
+  </data>
+  <data name="Drug" xml:space="preserve">
+    <value>Droga</value>
+  </data>
+  <data name="Microphone" xml:space="preserve">
+    <value>Microfone</value>
+  </data>
+  <data name="PickLock" xml:space="preserve">
+    <value>Gazua</value>
+  </data>
+  <data name="Display" xml:space="preserve">
+    <value>Exibição</value>
+  </data>
+  <data name="FishingRod" xml:space="preserve">
+    <value>Vara de Pesca</value>
+  </data>
+  <data name="Food" xml:space="preserve">
+    <value>Comida</value>
+  </data>
+  <data name="WeaponComponent" xml:space="preserve">
+    <value>Componente de Arma</value>
+  </data>
+  <data name="Bandage" xml:space="preserve">
+    <value>Bandagem</value>
+  </data>
+  <data name="Bronze" xml:space="preserve">
+    <value>Bronze</value>
+  </data>
+  <data name="Silver" xml:space="preserve">
+    <value>Prata</value>
+  </data>
+  <data name="Gold" xml:space="preserve">
+    <value>Ouro</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>Todos</value>
+  </data>
+  <data name="OnlyStaff" xml:space="preserve">
+    <value>Apenas staff</value>
+  </data>
+  <data name="OnlyStaffOrUsersWithPremiumPoints" xml:space="preserve">
+    <value>Apenas staff ou usuários com Premium Points</value>
+  </data>
+  <data name="OnlyIndividuals" xml:space="preserve">
+    <value>Apenas individuais</value>
+  </data>
+  <data name="Kick" xml:space="preserve">
+    <value>Kick</value>
+  </data>
+  <data name="Ban" xml:space="preserve">
+    <value>Ban</value>
+  </data>
+  <data name="Warn" xml:space="preserve">
+    <value>Aviso</value>
+  </data>
+  <data name="Ajail" xml:space="preserve">
+    <value>Ajail</value>
+  </data>
+  <data name="JuniorServerAdmin" xml:space="preserve">
+    <value>Junior Server Admin</value>
+  </data>
+  <data name="ServerAdminI" xml:space="preserve">
+    <value>Server Admin I</value>
+  </data>
+  <data name="ServerAdminII" xml:space="preserve">
+    <value>Server Admin II</value>
+  </data>
+  <data name="SeniorServerAdmin" xml:space="preserve">
+    <value>Senior Server Admin</value>
+  </data>
+  <data name="LeadServerAdmin" xml:space="preserve">
+    <value>Lead Server Admin</value>
+  </data>
+  <data name="ServerManager" xml:space="preserve">
+    <value>Server Manager</value>
+  </data>
+  <data name="HeadServerDeveloper" xml:space="preserve">
+    <value>Head Server Developer</value>
+  </data>
+  <data name="InviteMember" xml:space="preserve">
+    <value>Convidar Membro</value>
+  </data>
+  <data name="EditMember" xml:space="preserve">
+    <value>Editar Membro</value>
+  </data>
+  <data name="RemoveMember" xml:space="preserve">
+    <value>Remover Membro</value>
+  </data>
+  <data name="BlockChat" xml:space="preserve">
+    <value>Bloquear Chat</value>
+  </data>
+  <data name="GovernmentAdvertisement" xml:space="preserve">
+    <value>Anúncio Governamental</value>
+  </data>
+  <data name="HQ" xml:space="preserve">
+    <value>HQ</value>
+  </data>
+  <data name="Storage" xml:space="preserve">
+    <value>Armazenamento</value>
+  </data>
+  <data name="RemoveAllBarriers" xml:space="preserve">
+    <value>Remover Todas Barreiras</value>
+  </data>
+  <data name="Uniform" xml:space="preserve">
+    <value>Uniforme</value>
+  </data>
+  <data name="SWAT" xml:space="preserve">
+    <value>SWAT</value>
+  </data>
+  <data name="UPR" xml:space="preserve">
+    <value>UPR</value>
+  </data>
+  <data name="WeaponLicense" xml:space="preserve">
+    <value>Licença de Arma</value>
+  </data>
+  <data name="FireManager" xml:space="preserve">
+    <value>Gerenciar Incêndios</value>
+  </data>
+  <data name="RespawnVehicles" xml:space="preserve">
+    <value>Respawnar Veículos</value>
+  </data>
+  <data name="ManageVehicles" xml:space="preserve">
+    <value>Gerenciar Veículos</value>
+  </data>
+  <data name="CloseUnit" xml:space="preserve">
+    <value>Encerrar Unidade</value>
+  </data>
+  <data name="Bank" xml:space="preserve">
+    <value>Banco</value>
+  </data>
+  <data name="ClothesStore" xml:space="preserve">
+    <value>Loja de Roupas</value>
+  </data>
+  <data name="FactionVehicleSpawn" xml:space="preserve">
+    <value>Spawn de Veículos de Facção</value>
+  </data>
+  <data name="VehicleSeizure" xml:space="preserve">
+    <value>Apreensão de Veículos</value>
+  </data>
+  <data name="VehicleRelease" xml:space="preserve">
+    <value>Liberação de Veículos</value>
+  </data>
+  <data name="BarberShop" xml:space="preserve">
+    <value>Barbearia</value>
+  </data>
+  <data name="DMV" xml:space="preserve">
+    <value>DMV</value>
+  </data>
+  <data name="HealMe" xml:space="preserve">
+    <value>Me Curar</value>
+  </data>
+  <data name="TattooShop" xml:space="preserve">
+    <value>Estúdio de Tatuagens</value>
+  </data>
+  <data name="VehicleDismantling" xml:space="preserve">
+    <value>Desmanche de Veículos</value>
+  </data>
+  <data name="PlasticSurgery" xml:space="preserve">
+    <value>Cirurgia Plástica</value>
+  </data>
+  <data name="Staff" xml:space="preserve">
+    <value>Staff</value>
+  </data>
+  <data name="FactionChat" xml:space="preserve">
+    <value>Chat de Facção</value>
+  </data>
+  <data name="Exit" xml:space="preserve">
+    <value>Saída</value>
+  </data>
+  <data name="Entrance" xml:space="preserve">
+    <value>Entrada</value>
+  </data>
+  <data name="Sell" xml:space="preserve">
+    <value>Venda</value>
+  </data>
+  <data name="Death" xml:space="preserve">
+    <value>Morte</value>
+  </data>
+  <data name="CharacterDelete" xml:space="preserve">
+    <value>Exclusão de Personagem</value>
+  </data>
+  <data name="Advertisement" xml:space="preserve">
+    <value>Anúncio</value>
+  </data>
+  <data name="DeliverItem" xml:space="preserve">
+    <value>Entregar Item</value>
+  </data>
+  <data name="DropItem" xml:space="preserve">
+    <value>Dropar Item</value>
+  </data>
+  <data name="GetGroundItem" xml:space="preserve">
+    <value>Pegar Item Chão</value>
+  </data>
+  <data name="StealItem" xml:space="preserve">
+    <value>Roubar Item</value>
+  </data>
+  <data name="Smuggler" xml:space="preserve">
+    <value>Contrabandista</value>
+  </data>
+  <data name="PutPropertyItem" xml:space="preserve">
+    <value>Colocar Item Propriedade</value>
+  </data>
+  <data name="GetPropertyItem" xml:space="preserve">
+    <value>Pegar Item Propriedade</value>
+  </data>
+  <data name="PutVehicleItem" xml:space="preserve">
+    <value>Colocar Item Veículo</value>
+  </data>
+  <data name="GetVehicleItem" xml:space="preserve">
+    <value>Pegar Item Veículo</value>
+  </data>
+  <data name="FactionVehicleRepair" xml:space="preserve">
+    <value>Reparar Veículo de Facção</value>
+  </data>
+  <data name="PlayerVehicleRepair" xml:space="preserve">
+    <value>Conserto de Veículo Jogador</value>
+  </data>
+  <data name="SpawnVehicle" xml:space="preserve">
+    <value>Spawnar Veículo</value>
+  </data>
+  <data name="ParkVehicle" xml:space="preserve">
+    <value>Estacionar Veículo</value>
+  </data>
+  <data name="PrivateMessages" xml:space="preserve">
+    <value>Mensagens Privadas</value>
+  </data>
+  <data name="VehicleDestruction" xml:space="preserve">
+    <value>Destruição de Veículo</value>
+  </data>
+  <data name="Mask" xml:space="preserve">
+    <value>Máscara</value>
+  </data>
+  <data name="LockBreak" xml:space="preserve">
+    <value>Quebrar Trava</value>
+  </data>
+  <data name="HotWire" xml:space="preserve">
+    <value>Ligação Direta</value>
+  </data>
+  <data name="Dismantling" xml:space="preserve">
+    <value>Desmanche</value>
+  </data>
+  <data name="StealProperty" xml:space="preserve">
+    <value>Roubar Propriedade</value>
+  </data>
+  <data name="Hack" xml:space="preserve">
+    <value>Hack</value>
+  </data>
+  <data name="Breakin" xml:space="preserve">
+    <value>Arrombamento</value>
+  </data>
+  <data name="ViewCrackDenSales" xml:space="preserve">
+    <value>Visualizar Vendas Boca de Fumo</value>
+  </data>
+  <data name="EditPropertyFurniture" xml:space="preserve">
+    <value>Editar Mobília Propriedade</value>
+  </data>
+  <data name="GlobalOOCChat" xml:space="preserve">
+    <value>Chat OOC Global</value>
+  </data>
+  <data name="StaffChat" xml:space="preserve">
+    <value>Chat da Staff</value>
+  </data>
+  <data name="PutInVehicle" xml:space="preserve">
+    <value>Colocar no Veículo</value>
+  </data>
+  <data name="RemoveFromVehicle" xml:space="preserve">
+    <value>Retirar do Veículo</value>
+  </data>
+  <data name="CompanyAdvertisement" xml:space="preserve">
+    <value>Anúncio de Empresa</value>
+  </data>
+  <data name="MechanicTunning" xml:space="preserve">
+    <value>Tuning de Mecânicos</value>
+  </data>
+  <data name="Job" xml:space="preserve">
+    <value>Emprego</value>
+  </data>
+  <data name="Info" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="ViewLogs" xml:space="preserve">
+    <value>Visualizar Logs</value>
+  </data>
+  <data name="OOCChat" xml:space="preserve">
+    <value>Chat OOC</value>
+  </data>
+  <data name="General" xml:space="preserve">
+    <value>Geral</value>
+  </data>
+  <data name="Attributes" xml:space="preserve">
+    <value>Atributos</value>
+  </data>
+  <data name="ICChat" xml:space="preserve">
+    <value>Chat IC</value>
+  </data>
+  <data name="Donate" xml:space="preserve">
+    <value>Doação</value>
+  </data>
+  <data name="Buy" xml:space="preserve">
+    <value>Comprar</value>
+  </data>
+  <data name="Fix" xml:space="preserve">
+    <value>Conserto</value>
+  </data>
+  <data name="DoubleIdentity" xml:space="preserve">
+    <value>DuplaIdentidade</value>
+  </data>
+  <data name="UseItem" xml:space="preserve">
+    <value>Usar Item</value>
+  </data>
+  <data name="GetBodyItem" xml:space="preserve">
+    <value>Pegar Item Corpo</value>
+  </data>
+  <data name="Premium" xml:space="preserve">
+    <value>Premium</value>
+  </data>
+  <data name="SellPropertyFurniture" xml:space="preserve">
+    <value>Vender Mobília Propriedade</value>
+  </data>
+  <data name="Spoilers" xml:space="preserve">
+    <value>Aerofólios</value>
+  </data>
+  <data name="FrontBumper" xml:space="preserve">
+    <value>Para-choque Dianteiro</value>
+  </data>
+  <data name="RearBumper" xml:space="preserve">
+    <value>Para-choque Traseiro</value>
+  </data>
+  <data name="SideSkirt" xml:space="preserve">
+    <value>Saia Lateral</value>
+  </data>
+  <data name="Exhaust" xml:space="preserve">
+    <value>Escapamento</value>
+  </data>
+  <data name="Frame" xml:space="preserve">
+    <value>Quadro</value>
+  </data>
+  <data name="Hood" xml:space="preserve">
+    <value>Capô</value>
+  </data>
+  <data name="Grille" xml:space="preserve">
+    <value>Grade</value>
+  </data>
+  <data name="Fender" xml:space="preserve">
+    <value>Paralama</value>
+  </data>
+  <data name="RightFender" xml:space="preserve">
+    <value>Paralama Direito</value>
+  </data>
+  <data name="Roof" xml:space="preserve">
+    <value>Teto</value>
+  </data>
+  <data name="Engine" xml:space="preserve">
+    <value>Motor</value>
+  </data>
+  <data name="Brakes" xml:space="preserve">
+    <value>Freios</value>
+  </data>
+  <data name="Suspension" xml:space="preserve">
+    <value>Suspensão</value>
+  </data>
+  <data name="Transmission" xml:space="preserve">
+    <value>Transmissão</value>
+  </data>
+  <data name="Horns" xml:space="preserve">
+    <value>Buzina</value>
+  </data>
+  <data name="Armor" xml:space="preserve">
+    <value>Blindagem</value>
+  </data>
+  <data name="Turbo" xml:space="preserve">
+    <value>Turbo</value>
+  </data>
+  <data name="Xenon" xml:space="preserve">
+    <value>Xenon</value>
+  </data>
+  <data name="PlateHolders" xml:space="preserve">
+    <value>Suporte de Placa</value>
+  </data>
+  <data name="Ornaments" xml:space="preserve">
+    <value>Enfeites</value>
+  </data>
+  <data name="DialDesign" xml:space="preserve">
+    <value>Desenho do Velocímetro</value>
+  </data>
+  <data name="DoorSpeakers" xml:space="preserve">
+    <value>Altofalantes das Portas</value>
+  </data>
+  <data name="Seats" xml:space="preserve">
+    <value>Assentos</value>
+  </data>
+  <data name="SteeringWheel" xml:space="preserve">
+    <value>Volante</value>
+  </data>
+  <data name="ShiftLever" xml:space="preserve">
+    <value>Câmbio</value>
+  </data>
+  <data name="Plate" xml:space="preserve">
+    <value>Placa</value>
+  </data>
+  <data name="Speakers" xml:space="preserve">
+    <value>Altofalantes</value>
+  </data>
+  <data name="Trunk" xml:space="preserve">
+    <value>Porta-malas</value>
+  </data>
+  <data name="Hydraulics" xml:space="preserve">
+    <value>Hidráulica</value>
+  </data>
+  <data name="EngineBlock" xml:space="preserve">
+    <value>Bloco do Motor</value>
+  </data>
+  <data name="AirFilter" xml:space="preserve">
+    <value>Filtro de Ar</value>
+  </data>
+  <data name="Struts" xml:space="preserve">
+    <value>Suporte</value>
+  </data>
+  <data name="ArchCover" xml:space="preserve">
+    <value>Cobertura do Arco</value>
+  </data>
+  <data name="Aerials" xml:space="preserve">
+    <value>Antenas</value>
+  </data>
+  <data name="Trim" xml:space="preserve">
+    <value>Acabamento</value>
+  </data>
+  <data name="Tank" xml:space="preserve">
+    <value>Tanque</value>
+  </data>
+  <data name="DoorsTrim" xml:space="preserve">
+    <value>Acabamento da Porta</value>
+  </data>
+  <data name="Enveloping" xml:space="preserve">
+    <value>Envelopamento</value>
+  </data>
+  <data name="PrimaryColor" xml:space="preserve">
+    <value>Cor Primária</value>
+  </data>
+  <data name="SecondaryColor" xml:space="preserve">
+    <value>Cor Secundária</value>
+  </data>
+  <data name="WindowTint" xml:space="preserve">
+    <value>Cor da Janela</value>
+  </data>
+  <data name="DashboardColor" xml:space="preserve">
+    <value>Cor do Painel</value>
+  </data>
+  <data name="TrimColor" xml:space="preserve">
+    <value>Cor do Acabamento</value>
+  </data>
+  <data name="Drift" xml:space="preserve">
+    <value>Drift</value>
+  </data>
+  <data name="Extra" xml:space="preserve">
+    <value>Extra</value>
+  </data>
+  <data name="Livery" xml:space="preserve">
+    <value>Livery</value>
+  </data>
+  <data name="XMR" xml:space="preserve">
+    <value>XMR</value>
+  </data>
+  <data name="ProtectionLevel" xml:space="preserve">
+    <value>Nível de Proteção</value>
+  </data>
+  <data name="TireSmokeColor" xml:space="preserve">
+    <value>Cor da Fumaça do Pneu</value>
+  </data>
+  <data name="Insufilm" xml:space="preserve">
+    <value>Insufilm</value>
+  </data>
+  <data name="XenonColor" xml:space="preserve">
+    <value>Cor do Xenon</value>
+  </data>
+  <data name="Trucker" xml:space="preserve">
+    <value>Caminhoneiro</value>
   </data>
 </root>

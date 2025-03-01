@@ -1,9 +1,8 @@
 ﻿using GTANetworkAPI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using TrevizaniRoleplay.Core.Extesions;
-using TrevizaniRoleplay.Domain.Entities;
-using TrevizaniRoleplay.Domain.Enums;
+using TrevizaniRoleplay.Core.Extensions;
+using TrevizaniRoleplay.Core.Models.Server;
 using TrevizaniRoleplay.Server.Extensions;
 using TrevizaniRoleplay.Server.Factories;
 using TrevizaniRoleplay.Server.Models;
@@ -17,7 +16,7 @@ public class VehicleScript : Script
     {
         if (player.Vehicle is not MyVehicle vehicle || vehicle.Driver != player)
         {
-            player.SendMessage(MessageType.Error, Globalization.VEHICLE_DRIVER_ERROR_MESSAGE);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotTheDriverOfTheVehicle);
             return;
         }
 
@@ -63,7 +62,7 @@ public class VehicleScript : Script
             return;
         }
 
-        player.SendMessage(MessageType.Error, Globalization.VEHICLE_ACCESS_ERROR_MESSAGE);
+        player.SendMessage(MessageType.Error, Resources.YouDoNotHaveAccessToTheVehicle);
     }
 
     [Command("vlista")]
@@ -115,7 +114,7 @@ public class VehicleScript : Script
 
         if (!player.CheckIfTargetIsCloseIC(target, Constants.RP_DISTANCE))
         {
-            player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_CLOSE_TO_THE_PLAYER);
+            player.SendNotification(NotificationType.Error, Resources.YouAreNotCloseToThePlayer);
             return;
         }
 
@@ -125,7 +124,7 @@ public class VehicleScript : Script
             return;
         }
 
-        var restriction = Functions.CheckVIPVehicle(vehicle.VehicleDB.Model);
+        var restriction = Functions.CheckPremiumVehicle(vehicle.VehicleDB.Model);
         if (restriction != UserPremium.None && restriction > target.GetCurrentPremium())
         {
             player.SendMessage(MessageType.Error, $"O veículo é restrito para VIP {restriction}.");
@@ -165,11 +164,11 @@ public class VehicleScript : Script
 
         if (!player.CheckIfTargetIsCloseIC(target, Constants.RP_DISTANCE))
         {
-            player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_CLOSE_TO_THE_PLAYER);
+            player.SendNotification(NotificationType.Error, Resources.YouAreNotCloseToThePlayer);
             return;
         }
 
-        var restriction = Functions.CheckVIPVehicle(vehicle.VehicleDB.Model);
+        var restriction = Functions.CheckPremiumVehicle(vehicle.VehicleDB.Model);
         if (restriction != UserPremium.None && restriction > target.GetCurrentPremium())
         {
             player.SendMessage(MessageType.Error, $"O veículo é restrito para VIP {restriction}.");
@@ -214,7 +213,7 @@ public class VehicleScript : Script
             var vehicle = await context.Vehicles.FirstOrDefaultAsync(x => x.CharacterId == player.Character.Id && x.Id == id);
             if (vehicle is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.VEHICLE_OWNER_ERROR_MESSAGE);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotTheOwnerOfTheVehicle);
                 return;
             }
 
@@ -226,7 +225,7 @@ public class VehicleScript : Script
 
             if (player.Money < vehicle.SeizedValue)
             {
-                player.SendNotification(NotificationType.Error, string.Format(Globalization.INSUFFICIENT_MONEY_ERROR_MESSAGE, vehicle.SeizedValue));
+                player.SendNotification(NotificationType.Error, string.Format(Resources.YouDontHaveEnoughMoney, vehicle.SeizedValue));
                 return;
             }
 
@@ -361,7 +360,7 @@ public class VehicleScript : Script
 
             if (vehicle.VehicleDB.FactionId.HasValue && vehicle.VehicleDB.FactionId != player.Character.FactionId)
             {
-                player.SendMessage(MessageType.Error, Globalization.VEHICLE_ACCESS_ERROR_MESSAGE);
+                player.SendMessage(MessageType.Error, Resources.YouDoNotHaveAccessToTheVehicle);
                 return;
             }
 
@@ -431,7 +430,7 @@ public class VehicleScript : Script
             var vehicle = await context.Vehicles.FirstOrDefaultAsync(x => x.CharacterId == player.Character.Id && x.Id == id);
             if (vehicle is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.VEHICLE_OWNER_ERROR_MESSAGE);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotTheOwnerOfTheVehicle);
                 return;
             }
 
@@ -472,14 +471,14 @@ public class VehicleScript : Script
             var veh = await context.Vehicles.FirstOrDefaultAsync(x => x.CharacterId == player.Character.Id && x.Id == id && !x.Sold);
             if (veh is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.VEHICLE_OWNER_ERROR_MESSAGE);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotTheOwnerOfTheVehicle);
                 return;
             }
 
             var price = Functions.GetVehicleSellPrice(veh.Model);
             if (price is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.VEHICLE_PRICE_NOT_SET);
+                player.SendNotification(NotificationType.Error, Resources.VehiclePriceNotConfigured);
                 return;
             }
 
@@ -553,13 +552,13 @@ public class VehicleScript : Script
 
         if (player.Vehicle is not MyVehicle veh || veh.Driver != player)
         {
-            player.SendMessage(MessageType.Error, Globalization.VEHICLE_DRIVER_ERROR_MESSAGE);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotTheDriverOfTheVehicle);
             return;
         }
 
         if (!veh.CanAccess(player))
         {
-            player.SendMessage(MessageType.Error, Globalization.VEHICLE_ACCESS_ERROR_MESSAGE);
+            player.SendMessage(MessageType.Error, Resources.YouDoNotHaveAccessToTheVehicle);
             return;
         }
 
@@ -579,7 +578,7 @@ public class VehicleScript : Script
     {
         if (player.Vehicle is not MyVehicle vehicle)
         {
-            player.SendMessage(MessageType.Error, Globalization.NOT_INSIDE_VEHICLE_MESSAGE);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotInAVehicle);
             return;
         }
 
@@ -689,19 +688,19 @@ public class VehicleScript : Script
     {
         if (player.Vehicle is not MyVehicle veh || veh.Driver != player)
         {
-            player.SendMessage(MessageType.Error, Globalization.VEHICLE_DRIVER_ERROR_MESSAGE);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotTheDriverOfTheVehicle);
             return;
         }
 
         if (veh.VehicleDB.CharacterId != player.Character.Id)
         {
-            player.SendMessage(MessageType.Error, Globalization.VEHICLE_OWNER_ERROR_MESSAGE);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotTheOwnerOfTheVehicle);
             return;
         }
 
         if (player.Money < Global.Parameter.LockValue)
         {
-            player.SendMessage(MessageType.Error, string.Format(Globalization.INSUFFICIENT_MONEY_ERROR_MESSAGE, Global.Parameter.LockValue));
+            player.SendMessage(MessageType.Error, string.Format(Resources.YouDontHaveEnoughMoney, Global.Parameter.LockValue));
             return;
         }
 
@@ -720,19 +719,19 @@ public class VehicleScript : Script
     {
         if (player.Vehicle is not MyVehicle veh || veh.Driver != player)
         {
-            player.SendMessage(MessageType.Error, Globalization.VEHICLE_DRIVER_ERROR_MESSAGE);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotTheDriverOfTheVehicle);
             return;
         }
 
         if (veh.VehicleDB.CharacterId != player.Character.Id)
         {
-            player.SendMessage(MessageType.Error, Globalization.VEHICLE_OWNER_ERROR_MESSAGE);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotTheOwnerOfTheVehicle);
             return;
         }
 
         if (player.Money < Global.Parameter.KeyValue)
         {
-            player.SendMessage(MessageType.Error, string.Format(Globalization.INSUFFICIENT_MONEY_ERROR_MESSAGE, Global.Parameter.KeyValue));
+            player.SendMessage(MessageType.Error, string.Format(Resources.YouDontHaveEnoughMoney, Global.Parameter.KeyValue));
             return;
         }
 
@@ -837,7 +836,7 @@ public class VehicleScript : Script
     {
         if (player.Vehicle is not MyVehicle vehicle)
         {
-            player.SendMessage(MessageType.Error, Globalization.NOT_INSIDE_VEHICLE_MESSAGE);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotInAVehicle);
             return;
         }
 
@@ -963,7 +962,7 @@ public class VehicleScript : Script
 
                 if (property.RobberyValue > 0)
                 {
-                    player.SendMessage(MessageType.Error, Globalization.ROBBED_PROPERTY_ERROR_MESSAGE);
+                    player.SendMessage(MessageType.Error, Resources.PropertyHasBeenStolen);
                     return;
                 }
 
@@ -983,7 +982,7 @@ public class VehicleScript : Script
                     player.SendMessageToNearbyPlayers("quebra a gazua.", MessageCategory.Ame);
                 }
 
-                await player.WriteLog(LogType.BreakIn, $"{property.FormatedAddress} ({property.Number}) {(success ? "SUCESSO" : "FALHA")}", null);
+                await player.WriteLog(LogType.Breakin, $"{property.FormatedAddress} ({property.Number}) {(success ? "SUCESSO" : "FALHA")}", null);
             }
         }
         catch (Exception ex)
@@ -1013,7 +1012,7 @@ public class VehicleScript : Script
 
         if (player.Vehicle is not MyVehicle veh || veh.Driver != player)
         {
-            player.SendMessage(MessageType.Error, Globalization.VEHICLE_DRIVER_ERROR_MESSAGE);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotTheDriverOfTheVehicle);
             return;
         }
 
@@ -1027,7 +1026,7 @@ public class VehicleScript : Script
         var vehiclePrice = Functions.GetVehiclePrice(veh.VehicleDB.Model);
         if (vehiclePrice is null)
         {
-            player.SendMessage(MessageType.Error, Globalization.VEHICLE_PRICE_NOT_SET);
+            player.SendMessage(MessageType.Error, Resources.VehiclePriceNotConfigured);
             return;
         }
 
@@ -1040,7 +1039,7 @@ public class VehicleScript : Script
 
         if (player.Money < value)
         {
-            player.SendMessage(MessageType.Error, string.Format(Globalization.INSUFFICIENT_MONEY_ERROR_MESSAGE, value));
+            player.SendMessage(MessageType.Error, string.Format(Resources.YouDontHaveEnoughMoney, value));
             return;
         }
 
@@ -1071,7 +1070,7 @@ public class VehicleScript : Script
     {
         if (player.Vehicle is not MyVehicle vehicle || vehicle.Driver != player)
         {
-            player.SendMessage(MessageType.Error, Globalization.VEHICLE_DRIVER_ERROR_MESSAGE);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotTheDriverOfTheVehicle);
             return;
         }
 
@@ -1156,7 +1155,7 @@ public class VehicleScript : Script
     {
         if (player.Vehicle is not MyVehicle vehicle || vehicle.Driver != player)
         {
-            player.SendMessage(MessageType.Error, Globalization.VEHICLE_DRIVER_ERROR_MESSAGE);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotTheDriverOfTheVehicle);
             return;
         }
 
@@ -1217,7 +1216,7 @@ public class VehicleScript : Script
         var price = Functions.GetVehiclePrice(vehicle.VehicleDB.Model);
         if (price is null)
         {
-            player.SendMessage(MessageType.Error, Globalization.VEHICLE_PRICE_NOT_SET);
+            player.SendMessage(MessageType.Error, Resources.VehiclePriceNotConfigured);
             return;
         }
 
@@ -1502,7 +1501,7 @@ public class VehicleScript : Script
             if (price is null)
             {
                 player.SetPosition(player.GetPosition(), 0, false);
-                player.SendNotification(NotificationType.Error, Globalization.VEHICLE_PRICE_NOT_SET);
+                player.SendNotification(NotificationType.Error, Resources.VehiclePriceNotConfigured);
                 return;
             }
 
@@ -1510,7 +1509,7 @@ public class VehicleScript : Script
             if (dealership is null)
             {
                 player.SetPosition(player.GetPosition(), 0, false);
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -1544,28 +1543,28 @@ public class VehicleScript : Script
             var price = Functions.GetVehiclePrice(model);
             if (price is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.VEHICLE_PRICE_NOT_SET);
+                player.SendNotification(NotificationType.Error, Resources.VehiclePriceNotConfigured);
                 return;
             }
 
             var value = price.Value.Item1;
             if (player.Money < value)
             {
-                player.SendNotification(NotificationType.Error, string.Format(Globalization.INSUFFICIENT_MONEY_ERROR_MESSAGE, value));
+                player.SendNotification(NotificationType.Error, string.Format(Resources.YouDontHaveEnoughMoney, value));
                 return;
             }
 
-            var vip = Functions.CheckVIPVehicle(model);
-            if (vip != UserPremium.None && vip > player.GetCurrentPremium())
+            var premium = Functions.CheckPremiumVehicle(model);
+            if (premium != UserPremium.None && premium > player.GetCurrentPremium())
             {
-                player.SendNotification(NotificationType.Error, $"O veículo é restrito para VIP {vip.GetDisplay()}.");
+                player.SendNotification(NotificationType.Error, $"O veículo é restrito para Premium {premium.GetDescription()}.");
                 return;
             }
 
             var dealership = Global.Dealerships.FirstOrDefault(x => x.Id == price.Value.Item2);
             if (dealership is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -1663,7 +1662,7 @@ public class VehicleScript : Script
 
             if (value > player.Money)
             {
-                player.SendMessage(MessageType.Error, string.Format(Globalization.INSUFFICIENT_MONEY_ERROR_MESSAGE, value));
+                player.SendMessage(MessageType.Error, string.Format(Resources.YouDontHaveEnoughMoney, value));
                 return;
             }
 
@@ -1757,7 +1756,7 @@ public class VehicleScript : Script
 
         if (!veh.CanAccess(player) && !player.OnAdminDuty)
         {
-            player.SendMessage(MessageType.Error, Globalization.VEHICLE_ACCESS_ERROR_MESSAGE);
+            player.SendMessage(MessageType.Error, Resources.YouDoNotHaveAccessToTheVehicle);
             return;
         }
 
@@ -1838,7 +1837,7 @@ public class VehicleScript : Script
             {
                 if (!veh.CanAccess(player) && !player.OnAdminDuty)
                 {
-                    player.SendNotification(NotificationType.Error, Globalization.VEHICLE_ACCESS_ERROR_MESSAGE);
+                    player.SendNotification(NotificationType.Error, Resources.YouDoNotHaveAccessToTheVehicle);
                     return;
                 }
 
@@ -1925,7 +1924,7 @@ public class VehicleScript : Script
 
             if (player.Vehicle is not MyVehicle vehicle)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -2081,14 +2080,14 @@ public class VehicleScript : Script
                         var vehiclePrice = Functions.GetVehiclePrice(vehicle.VehicleDB.Model);
                         if (vehiclePrice is null)
                         {
-                            player.SendNotification(NotificationType.Error, Globalization.VEHICLE_PRICE_NOT_SET);
+                            player.SendNotification(NotificationType.Error, Resources.VehiclePriceNotConfigured);
                             return;
                         }
 
                         var company = Global.Companies.FirstOrDefault(x => x.Id == vehicleTuning.CompanyId);
                         if (company is null)
                         {
-                            player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                            player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                             return;
                         }
 
@@ -2103,7 +2102,7 @@ public class VehicleScript : Script
                             var costTuningPrice = Convert.ToInt32(vehiclePrice.Value.Item1 * (costPercentagePrice / 100f));
                             if (tuningPrice < costTuningPrice)
                             {
-                                player.SendMessage(MessageType.Error, $"{companyTuningPriceType.GetDisplay()} de {company.Name} possui Preço de Venda menor que o Preço de Custo. Por favor, avise ao proprietário.");
+                                player.SendMessage(MessageType.Error, $"{companyTuningPriceType.GetDescription()} de {company.Name} possui Preço de Venda menor que o Preço de Custo. Por favor, avise ao proprietário.");
                                 vehicle.SetDefaultMods();
                                 player.Emit(Constants.VEHICLE_TUNING_PAGE_CLOSE);
                                 return;
@@ -2122,7 +2121,7 @@ public class VehicleScript : Script
 
                         if (player.Money < totalValue)
                         {
-                            player.SendNotification(NotificationType.Error, string.Format(Globalization.INSUFFICIENT_MONEY_ERROR_MESSAGE, totalValue));
+                            player.SendNotification(NotificationType.Error, string.Format(Resources.YouDontHaveEnoughMoney, totalValue));
                             vehicle.SetDefaultMods();
                             player.Emit(Constants.VEHICLE_TUNING_PAGE_CLOSE);
                             return;
@@ -2187,7 +2186,7 @@ public class VehicleScript : Script
 
         if (!player.CheckIfTargetIsCloseIC(target, Constants.RP_DISTANCE))
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_CLOSE_TO_THE_PLAYER);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotCloseToThePlayer);
             return;
         }
 
@@ -2233,7 +2232,7 @@ public class VehicleScript : Script
 
         if (!player.CheckIfTargetIsCloseIC(target, Constants.RP_DISTANCE))
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_CLOSE_TO_THE_PLAYER);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotCloseToThePlayer);
             return;
         }
 
@@ -2257,7 +2256,7 @@ public class VehicleScript : Script
     {
         if (player.Vehicle is not MyVehicle vehicle || vehicle.Driver != player)
         {
-            player.SendMessage(MessageType.Error, Globalization.VEHICLE_DRIVER_ERROR_MESSAGE);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotTheDriverOfTheVehicle);
             return;
         }
 
@@ -2304,7 +2303,7 @@ public class VehicleScript : Script
 
         if (player.Money < job.VehicleRentValue)
         {
-            player.SendMessage(MessageType.Error, string.Format(Globalization.INSUFFICIENT_MONEY_ERROR_MESSAGE, job.VehicleRentValue));
+            player.SendMessage(MessageType.Error, string.Format(Resources.YouDontHaveEnoughMoney, job.VehicleRentValue));
             return;
         }
 

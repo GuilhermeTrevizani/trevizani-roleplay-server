@@ -1,6 +1,5 @@
 ﻿using GTANetworkAPI;
-using TrevizaniRoleplay.Domain.Entities;
-using TrevizaniRoleplay.Domain.Enums;
+using TrevizaniRoleplay.Core.Models.Server;
 using TrevizaniRoleplay.Server.Extensions;
 using TrevizaniRoleplay.Server.Factories;
 using TrevizaniRoleplay.Server.Models;
@@ -45,13 +44,13 @@ public class TruckerScript : Script
 
         if (player.Vehicle is not MyVehicle veh || veh.Driver != player)
         {
-            player.SendMessage(MessageType.Error, Globalization.VEHICLE_DRIVER_ERROR_MESSAGE);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotTheDriverOfTheVehicle);
             return;
         }
 
         if (!veh.CanAccess(player))
         {
-            player.SendMessage(MessageType.Error, Globalization.VEHICLE_ACCESS_ERROR_MESSAGE);
+            player.SendMessage(MessageType.Error, Resources.YouDoNotHaveAccessToTheVehicle);
             return;
         }
 
@@ -112,13 +111,13 @@ public class TruckerScript : Script
 
         if (player.Vehicle is not MyVehicle veh || veh.Driver != player)
         {
-            player.SendMessage(MessageType.Error, Globalization.VEHICLE_DRIVER_ERROR_MESSAGE);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotTheDriverOfTheVehicle);
             return;
         }
 
         if (!veh.CanAccess(player))
         {
-            player.SendMessage(MessageType.Error, Globalization.VEHICLE_ACCESS_ERROR_MESSAGE);
+            player.SendMessage(MessageType.Error, Resources.YouDoNotHaveAccessToTheVehicle);
             return;
         }
 
@@ -154,13 +153,13 @@ public class TruckerScript : Script
 
         if (player.Vehicle is not MyVehicle veh || veh.Driver != player)
         {
-            player.SendMessage(MessageType.Error, Globalization.VEHICLE_DRIVER_ERROR_MESSAGE);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotTheDriverOfTheVehicle);
             return;
         }
 
         if (!veh.CanAccess(player))
         {
-            player.SendMessage(MessageType.Error, Globalization.VEHICLE_ACCESS_ERROR_MESSAGE);
+            player.SendMessage(MessageType.Error, Resources.YouDoNotHaveAccessToTheVehicle);
             return;
         }
 

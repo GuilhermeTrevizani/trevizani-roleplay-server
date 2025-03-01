@@ -1,6 +1,4 @@
 ﻿using GTANetworkAPI;
-using TrevizaniRoleplay.Domain.Entities;
-using TrevizaniRoleplay.Domain.Enums;
 using TrevizaniRoleplay.Server.Extensions;
 using TrevizaniRoleplay.Server.Factories;
 using TrevizaniRoleplay.Server.Models;
@@ -14,7 +12,7 @@ public class FactionStorageScript : Script
     {
         if (!player.FactionFlags.Contains(FactionFlag.Storage))
         {
-            player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -47,7 +45,7 @@ public class FactionStorageScript : Script
 
             if (player.Money < factionStorageItem.Price)
             {
-                player.SendNotification(NotificationType.Error, string.Format(Globalization.INSUFFICIENT_MONEY_ERROR_MESSAGE, factionStorageItem.Price));
+                player.SendNotification(NotificationType.Error, string.Format(Resources.YouDontHaveEnoughMoney, factionStorageItem.Price));
                 return;
             }
 

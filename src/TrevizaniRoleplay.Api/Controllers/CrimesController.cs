@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using TrevizaniRoleplay.Core.Globalization;
 using TrevizaniRoleplay.Core.Models.Responses;
 using TrevizaniRoleplay.Core.Models.Settings;
 using TrevizaniRoleplay.Domain.Entities;
@@ -56,7 +57,7 @@ public class CrimesController(DatabaseContext context) : BaseController(context)
         {
             crime = await context.Crimes.FirstOrDefaultAsync(x => x.Id == response.Id);
             if (crime is null)
-                throw new ArgumentException(Globalization.RECORD_NOT_FOUND);
+                throw new ArgumentException(Resources.RecordNotFound);
 
             crime.Update(response.Name, response.PrisonMinutes, response.FineValue, response.DriverLicensePoints);
         }
@@ -79,7 +80,7 @@ public class CrimesController(DatabaseContext context) : BaseController(context)
     public async Task Delete(Guid id)
     {
         var crime = await context.Crimes.FirstOrDefaultAsync(x => x.Id == id)
-            ?? throw new ArgumentException(Globalization.RECORD_NOT_FOUND);
+            ?? throw new ArgumentException(Resources.RecordNotFound);
 
         context.Crimes.Remove(crime);
 

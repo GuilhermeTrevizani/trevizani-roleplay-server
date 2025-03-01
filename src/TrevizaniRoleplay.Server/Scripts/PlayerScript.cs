@@ -1,9 +1,8 @@
 ﻿using GTANetworkAPI;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
-using TrevizaniRoleplay.Core.Extesions;
-using TrevizaniRoleplay.Domain.Entities;
-using TrevizaniRoleplay.Domain.Enums;
+using TrevizaniRoleplay.Core.Extensions;
+using TrevizaniRoleplay.Core.Models.Server;
 using TrevizaniRoleplay.Server.Extensions;
 using TrevizaniRoleplay.Server.Factories;
 using TrevizaniRoleplay.Server.Models;
@@ -89,7 +88,7 @@ public class PlayerScript : Script
 
             if (target.Character.Wound == CharacterWound.SeriouslyInjured)
             {
-                target.SendMessage(MessageType.Error, Globalization.PK_MESSAGE);
+                target.SendMessage(MessageType.Error, Resources.YouDiedAndLostYourMemory);
                 target.Character.SetWound(CharacterWound.PK);
                 target.SetSharedDataEx(Constants.PLAYER_META_DATA_INJURED, (int)target.Character.Wound);
                 target.Emit("DeathPage:ShowServer", (int)target.Character.Wound);
@@ -227,7 +226,7 @@ public class PlayerScript : Script
             {
                 if (player.Character.Wound != CharacterWound.None)
                 {
-                    player.SendMessage(MessageType.Error, Globalization.SERIOUSLY_INJURED_MESSAGE);
+                    player.SendMessage(MessageType.Error, Resources.YouCanNotExecuteThisCommandBecauseYouAreSeriouslyInjured);
                     return;
                 }
 
@@ -303,7 +302,7 @@ public class PlayerScript : Script
                     var vehiclePrice = Functions.GetVehiclePrice(vehicle.VehicleDB.Model);
                     if (vehiclePrice is null)
                     {
-                        player.SendMessage(MessageType.Error, Globalization.VEHICLE_PRICE_NOT_SET);
+                        player.SendMessage(MessageType.Error, Resources.VehiclePriceNotConfigured);
                         return;
                     }
 
@@ -686,7 +685,7 @@ public class PlayerScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (player.IsActionsBlocked())
             {
-                player.SendNotification(NotificationType.Error, Globalization.ACTIONS_BLOCKED_MESSAGE);
+                player.SendNotification(NotificationType.Error, Resources.YouCanNotDoThisBecauseYouAreHandcuffedInjuredOrBeingCarried);
                 return;
             }
 
@@ -751,7 +750,7 @@ public class PlayerScript : Script
 
                 if (prox.RobberyValue > 0)
                 {
-                    player.SendNotification(NotificationType.Error, Globalization.ROBBED_PROPERTY_ERROR_MESSAGE);
+                    player.SendNotification(NotificationType.Error, Resources.PropertyHasBeenStolen);
                     return;
                 }
 
@@ -930,7 +929,7 @@ public class PlayerScript : Script
                     {
                         if (!player.CheckCompanyPermission(company, null))
                         {
-                            player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                            player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                             return;
                         }
 
@@ -1007,13 +1006,13 @@ public class PlayerScript : Script
                 {
                     if (!player.ValidPed)
                     {
-                        player.SendMessage(MessageType.Error, Globalization.INVALID_SKIN_MESSAGE);
+                        player.SendMessage(MessageType.Error, Resources.YouDontHaveAValidSkin);
                         return;
                     }
 
                     if (player.Money < Global.Parameter.BarberValue)
                     {
-                        player.SendNotification(NotificationType.Error, string.Format(Globalization.INSUFFICIENT_MONEY_ERROR_MESSAGE, Global.Parameter.BarberValue));
+                        player.SendNotification(NotificationType.Error, string.Format(Resources.YouDontHaveEnoughMoney, Global.Parameter.BarberValue));
                         return;
                     }
 
@@ -1025,13 +1024,13 @@ public class PlayerScript : Script
                 {
                     if (!player.ValidPed)
                     {
-                        player.SendMessage(MessageType.Error, Globalization.INVALID_SKIN_MESSAGE);
+                        player.SendMessage(MessageType.Error, Resources.YouDontHaveAValidSkin);
                         return;
                     }
 
                     if (player.Money < Global.Parameter.ClothesValue)
                     {
-                        player.SendNotification(NotificationType.Error, string.Format(Globalization.INSUFFICIENT_MONEY_ERROR_MESSAGE, Global.Parameter.ClothesValue));
+                        player.SendNotification(NotificationType.Error, string.Format(Resources.YouDontHaveEnoughMoney, Global.Parameter.ClothesValue));
                         return;
                     }
 
@@ -1043,13 +1042,13 @@ public class PlayerScript : Script
                 {
                     if (!player.ValidPed)
                     {
-                        player.SendMessage(MessageType.Error, Globalization.INVALID_SKIN_MESSAGE);
+                        player.SendMessage(MessageType.Error, Resources.YouDontHaveAValidSkin);
                         return;
                     }
 
                     if (player.Money < Global.Parameter.TattooValue)
                     {
-                        player.SendNotification(NotificationType.Error, string.Format(Globalization.INSUFFICIENT_MONEY_ERROR_MESSAGE, Global.Parameter.TattooValue));
+                        player.SendNotification(NotificationType.Error, string.Format(Resources.YouDontHaveEnoughMoney, Global.Parameter.TattooValue));
                         return;
                     }
 
@@ -1082,13 +1081,13 @@ public class PlayerScript : Script
                 {
                     if (!player.ValidPed)
                     {
-                        player.SendMessage(MessageType.Error, Globalization.INVALID_SKIN_MESSAGE);
+                        player.SendMessage(MessageType.Error, Resources.YouDontHaveAValidSkin);
                         return;
                     }
 
                     if (player.Money < Global.Parameter.PlasticSurgeryValue)
                     {
-                        player.SendNotification(NotificationType.Error, string.Format(Globalization.INSUFFICIENT_MONEY_ERROR_MESSAGE, Global.Parameter.PlasticSurgeryValue));
+                        player.SendNotification(NotificationType.Error, string.Format(Resources.YouDontHaveEnoughMoney, Global.Parameter.PlasticSurgeryValue));
                         return;
                     }
 
@@ -1109,7 +1108,7 @@ public class PlayerScript : Script
                         .Select(x => new
                         {
                             Value = ((byte)x).ToString(),
-                            Label = x.GetDisplay(),
+                            Label = x.GetDescription(),
                         })
                         .OrderBy(x => x.Label)
                     );
@@ -1155,7 +1154,7 @@ public class PlayerScript : Script
                 {
                     if (player.Character.Wound >= CharacterWound.PK)
                     {
-                        player.SendMessage(MessageType.Error, Globalization.PK_MESSAGE);
+                        player.SendMessage(MessageType.Error, Resources.YouDiedAndLostYourMemory);
                         return;
                     }
 
@@ -1168,7 +1167,7 @@ public class PlayerScript : Script
                     var valor = Global.Parameter.HospitalValue / 2;
                     if (player.Money < valor)
                     {
-                        player.SendMessage(MessageType.Error, string.Format(Globalization.INSUFFICIENT_MONEY_ERROR_MESSAGE, valor));
+                        player.SendMessage(MessageType.Error, string.Format(Resources.YouDontHaveEnoughMoney, valor));
                         return;
                     }
 
@@ -1221,7 +1220,7 @@ public class PlayerScript : Script
                     var value = player.Character.DriverLicenseValidDate.HasValue ? Global.Parameter.DriverLicenseRenewValue : Global.Parameter.DriverLicenseBuyValue;
                     if (player.Money < value)
                     {
-                        player.SendMessage(MessageType.Error, string.Format(Globalization.INSUFFICIENT_MONEY_ERROR_MESSAGE, value));
+                        player.SendMessage(MessageType.Error, string.Format(Resources.YouDontHaveEnoughMoney, value));
                         return;
                     }
 
@@ -1284,7 +1283,7 @@ public class PlayerScript : Script
                     {
                         Model = x.Model.ToUpper(),
                         Price = x.Value,
-                        Restriction = Functions.CheckVIPVehicle(x.Model),
+                        Restriction = Functions.CheckPremiumVehicle(x.Model),
                     }).ToList();
                 if (vehicles.Count == 0)
                 {
@@ -1343,7 +1342,7 @@ public class PlayerScript : Script
     {
         if (player.Vehicle is not MyVehicle vehicle || vehicle.Driver != player)
         {
-            player.SendNotification(NotificationType.Error, Globalization.VEHICLE_DRIVER_ERROR_MESSAGE);
+            player.SendNotification(NotificationType.Error, Resources.YouAreNotTheDriverOfTheVehicle);
             return;
         }
 
@@ -1355,7 +1354,7 @@ public class PlayerScript : Script
 
         if (!vehicle.CanAccess(player))
         {
-            player.SendNotification(NotificationType.Error, Globalization.VEHICLE_ACCESS_ERROR_MESSAGE);
+            player.SendNotification(NotificationType.Error, Resources.YouDoNotHaveAccessToTheVehicle);
             return;
         }
 
@@ -1417,7 +1416,7 @@ public class PlayerScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (player.Vehicle is not MyVehicle vehicle || vehicle.Driver != player)
             {
-                player.SendNotification(NotificationType.Error, Globalization.VEHICLE_DRIVER_ERROR_MESSAGE);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotTheDriverOfTheVehicle);
                 return;
             }
 
@@ -1553,7 +1552,7 @@ public class PlayerScript : Script
             var item = Global.Items.FirstOrDefault(x => x.Id == new Guid(itemId));
             if (item is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -1669,7 +1668,7 @@ public class PlayerScript : Script
                     await player.VehicleEmergencyCall.SendMessage();
                     break;
                 case AreaNameType.TaxiCall:
-                    Functions.SendJobMessage(CharacterJob.TaxiDriver, $"{Globalization.TAXI_DRIVERS_CENTER} | Solicitação de Táxi {{#FFFFFF}}#{player.SessionId}", Constants.CELLPHONE_SECONDARY_COLOR);
+                    Functions.SendJobMessage(CharacterJob.TaxiDriver, $"{Resources.TaxiDriversCenter} | Solicitação de Táxi {{#FFFFFF}}#{player.SessionId}", Constants.CELLPHONE_SECONDARY_COLOR);
                     Functions.SendJobMessage(CharacterJob.TaxiDriver, $"De: {{#FFFFFF}}{player.Character.Cellphone}", Constants.CELLPHONE_SECONDARY_COLOR);
                     Functions.SendJobMessage(CharacterJob.TaxiDriver, $"Localização: {{#FFFFFF}}{areaName}", Constants.CELLPHONE_SECONDARY_COLOR);
                     Functions.SendJobMessage(CharacterJob.TaxiDriver, $"Destino: {{#FFFFFF}}{player.AreaNameAuxiliar}", Constants.CELLPHONE_SECONDARY_COLOR);
@@ -1678,7 +1677,7 @@ public class PlayerScript : Script
                     await player.EndCellphoneCall();
                     break;
                 case AreaNameType.MechanicCall:
-                    Functions.SendJobMessage(CharacterJob.Mechanic, $"{Globalization.MECHANICS_CENTER} | Solicitação de Mecânico {{#FFFFFF}}#{player.SessionId}", Constants.CELLPHONE_SECONDARY_COLOR);
+                    Functions.SendJobMessage(CharacterJob.Mechanic, $"{Resources.MechanicsCenter} | Solicitação de Mecânico {{#FFFFFF}}#{player.SessionId}", Constants.CELLPHONE_SECONDARY_COLOR);
                     Functions.SendJobMessage(CharacterJob.Mechanic, $"De: {{#FFFFFF}}{player.Character.Cellphone}", Constants.CELLPHONE_SECONDARY_COLOR);
                     Functions.SendJobMessage(CharacterJob.Mechanic, $"Localização: {{#FFFFFF}}{areaName}", Constants.CELLPHONE_SECONDARY_COLOR);
                     Functions.SendJobMessage(CharacterJob.Mechanic, $"Mensagem: {{#FFFFFF}}{player.AreaNameAuxiliar}", Constants.CELLPHONE_SECONDARY_COLOR);

@@ -1,6 +1,5 @@
 ﻿using GTANetworkAPI;
-using TrevizaniRoleplay.Domain.Entities;
-using TrevizaniRoleplay.Domain.Enums;
+using TrevizaniRoleplay.Core.Models.Server;
 using TrevizaniRoleplay.Server.Extensions;
 using TrevizaniRoleplay.Server.Factories;
 using TrevizaniRoleplay.Server.Models;
@@ -16,13 +15,13 @@ public class PropertyScript : Script
             .FirstOrDefault(x => x.CharacterId == player.Character.Id && x.Number == player.GetDimension());
         if (property is null)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_ON_YOUR_OWN_PROPERTY);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotOnYourOwnProperty);
             return;
         }
 
         if (property.RobberyValue > 0)
         {
-            player.SendMessage(MessageType.Error, Globalization.ROBBED_PROPERTY_ERROR_MESSAGE);
+            player.SendMessage(MessageType.Error, Resources.PropertyHasBeenStolen);
             return;
         }
 
@@ -32,7 +31,7 @@ public class PropertyScript : Script
 
         if (!player.CheckIfTargetIsCloseIC(target, Constants.RP_DISTANCE))
         {
-            player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_CLOSE_TO_THE_PLAYER);
+            player.SendNotification(NotificationType.Error, Resources.YouAreNotCloseToThePlayer);
             return;
         }
 
@@ -77,7 +76,7 @@ public class PropertyScript : Script
 
         if (property.RobberyValue > 0)
         {
-            player.SendMessage(MessageType.Error, Globalization.ROBBED_PROPERTY_ERROR_MESSAGE);
+            player.SendMessage(MessageType.Error, Resources.PropertyHasBeenStolen);
             return;
         }
 
@@ -91,19 +90,19 @@ public class PropertyScript : Script
             .FirstOrDefault(x => x.CharacterId == player.Character.Id && x.Number == player.GetDimension());
         if (property is null)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_ON_YOUR_OWN_PROPERTY);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotOnYourOwnProperty);
             return;
         }
 
         if (property.RobberyValue > 0)
         {
-            player.SendMessage(MessageType.Error, Globalization.ROBBED_PROPERTY_ERROR_MESSAGE);
+            player.SendMessage(MessageType.Error, Resources.PropertyHasBeenStolen);
             return;
         }
 
         if (player.Money < Global.Parameter.LockValue)
         {
-            player.SendMessage(MessageType.Error, string.Format(Globalization.INSUFFICIENT_MONEY_ERROR_MESSAGE, Global.Parameter.LockValue));
+            player.SendMessage(MessageType.Error, string.Format(Resources.YouDontHaveEnoughMoney, Global.Parameter.LockValue));
             return;
         }
 
@@ -124,19 +123,19 @@ public class PropertyScript : Script
             .FirstOrDefault(x => x.CharacterId == player.Character.Id && x.Number == player.GetDimension());
         if (property is null)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_ON_YOUR_OWN_PROPERTY);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotOnYourOwnProperty);
             return;
         }
 
         if (property.RobberyValue > 0)
         {
-            player.SendMessage(MessageType.Error, Globalization.ROBBED_PROPERTY_ERROR_MESSAGE);
+            player.SendMessage(MessageType.Error, Resources.PropertyHasBeenStolen);
             return;
         }
 
         if (player.Money < Global.Parameter.KeyValue)
         {
-            player.SendMessage(MessageType.Error, string.Format(Globalization.INSUFFICIENT_MONEY_ERROR_MESSAGE, Global.Parameter.KeyValue));
+            player.SendMessage(MessageType.Error, string.Format(Resources.YouDontHaveEnoughMoney, Global.Parameter.KeyValue));
             return;
         }
 
@@ -161,13 +160,13 @@ public class PropertyScript : Script
             .FirstOrDefault(x => x.CharacterId == player.Character.Id && x.Number == player.GetDimension());
         if (property is null)
         {
-            player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_ON_YOUR_OWN_PROPERTY);
+            player.SendNotification(NotificationType.Error, Resources.YouAreNotOnYourOwnProperty);
             return;
         }
 
         if (property.RobberyValue > 0)
         {
-            player.SendNotification(NotificationType.Error, Globalization.ROBBED_PROPERTY_ERROR_MESSAGE);
+            player.SendNotification(NotificationType.Error, Resources.PropertyHasBeenStolen);
             return;
         }
 
@@ -176,17 +175,17 @@ public class PropertyScript : Script
             {
                 new
                 {
-                    Name = Globalization.PROTECTION_LEVEL_1,
+                    Name = Resources.ProtectionLevel1,
                     Price = Math.Truncate(property.Value * (Global.Parameter.PropertyProtectionLevelPercentageValue / 100)),
                 },
                 new
                 {
-                    Name = Globalization.PROTECTION_LEVEL_2,
+                    Name = Resources.ProtectionLevel2,
                     Price = Math.Truncate(property.Value * (Global.Parameter.PropertyProtectionLevelPercentageValue / 100) * 2),
                 },
                 new
                 {
-                    Name = Globalization.PROTECTION_LEVEL_3,
+                    Name = Resources.ProtectionLevel3,
                     Price = Math.Truncate(property.Value * (Global.Parameter.PropertyProtectionLevelPercentageValue / 100) * 3),
                 },
             }
@@ -218,7 +217,7 @@ public class PropertyScript : Script
 
         if (property.RobberyValue > 0)
         {
-            player.SendMessage(MessageType.Error, Globalization.ROBBED_PROPERTY_ERROR_MESSAGE);
+            player.SendMessage(MessageType.Error, Resources.PropertyHasBeenStolen);
             return;
         }
 
@@ -229,7 +228,7 @@ public class PropertyScript : Script
             context.Properties.Update(property);
             await context.SaveChangesAsync();
             player.SendMessageToNearbyPlayers("arromba a porta.", MessageCategory.Ame);
-            await player.WriteLog(LogType.BreakIn, $"{property.FormatedAddress} ({property.Number}) POLICE", null);
+            await player.WriteLog(LogType.Breakin, $"{property.FormatedAddress} ({property.Number}) POLICE", null);
             return;
         }
 
@@ -280,7 +279,7 @@ public class PropertyScript : Script
 
         if (property.RobberyValue > 0)
         {
-            player.SendMessage(MessageType.Error, Globalization.ROBBED_PROPERTY_ERROR_MESSAGE);
+            player.SendMessage(MessageType.Error, Resources.PropertyHasBeenStolen);
             return;
         }
 
@@ -366,7 +365,7 @@ public class PropertyScript : Script
 
         if (player.Money < property.RobberyValue)
         {
-            player.SendMessage(MessageType.Error, string.Format(Globalization.INSUFFICIENT_MONEY_ERROR_MESSAGE, property.RobberyValue));
+            player.SendMessage(MessageType.Error, string.Format(Resources.YouDontHaveEnoughMoney, property.RobberyValue));
             return;
         }
 
@@ -400,13 +399,13 @@ public class PropertyScript : Script
             .FirstOrDefault(x => x.CharacterId == player.Character.Id && x.Number == player.GetDimension());
         if (property is null)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_ON_YOUR_OWN_PROPERTY);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotOnYourOwnProperty);
             return;
         }
 
         if (property.RobberyValue > 0)
         {
-            player.SendMessage(MessageType.Error, Globalization.ROBBED_PROPERTY_ERROR_MESSAGE);
+            player.SendMessage(MessageType.Error, Resources.PropertyHasBeenStolen);
             return;
         }
 
@@ -441,60 +440,54 @@ public class PropertyScript : Script
             var property = Global.Properties.FirstOrDefault(x => x.Id == idPropertyString.ToGuid());
             if (property is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
             var value = property.Value;
 
-            switch (name)
-            {
-                case Globalization.PROTECTION_LEVEL_1:
-                    value = Convert.ToInt32(Math.Truncate(value * (Global.Parameter.PropertyProtectionLevelPercentageValue / 100)));
-                    break;
-                case Globalization.PROTECTION_LEVEL_2:
-                    value = Convert.ToInt32(Math.Truncate(value * (Global.Parameter.PropertyProtectionLevelPercentageValue / 100) * 2));
-                    break;
-                case Globalization.PROTECTION_LEVEL_3:
-                    value = Convert.ToInt32(Math.Truncate(value * (Global.Parameter.PropertyProtectionLevelPercentageValue / 100) * 3));
-                    break;
-            }
+            if (name == Resources.ProtectionLevel1)
+                value = Convert.ToInt32(Math.Truncate(value * (Global.Parameter.PropertyProtectionLevelPercentageValue / 100)));
+            else if (name == Resources.ProtectionLevel2)
+                value = Convert.ToInt32(Math.Truncate(value * (Global.Parameter.PropertyProtectionLevelPercentageValue / 100) * 2));
+            else if (name == Resources.ProtectionLevel3)
+                value = Convert.ToInt32(Math.Truncate(value * (Global.Parameter.PropertyProtectionLevelPercentageValue / 100) * 3));
 
             if (player.Money < value)
             {
-                player.SendMessage(MessageType.Error, string.Format(Globalization.INSUFFICIENT_MONEY_ERROR_MESSAGE, value));
+                player.SendMessage(MessageType.Error, string.Format(Resources.YouDontHaveEnoughMoney, value));
                 return;
             }
 
-            switch (name)
+            if (name == Resources.ProtectionLevel1)
             {
-                case Globalization.PROTECTION_LEVEL_1:
-                    if (property.ProtectionLevel >= 1)
-                    {
-                        player.SendNotification(NotificationType.Error, $"A propriedade já possui um nível de proteção igual ou maior que 1.");
-                        return;
-                    }
+                if (property.ProtectionLevel >= 1)
+                {
+                    player.SendNotification(NotificationType.Error, $"A propriedade já possui um nível de proteção igual ou maior que 1.");
+                    return;
+                }
 
-                    property.SetProtectionLevel(1);
-                    break;
-                case Globalization.PROTECTION_LEVEL_2:
-                    if (property.ProtectionLevel >= 2)
-                    {
-                        player.SendNotification(NotificationType.Error, $"A propriedade já possui um nível de proteção igual ou maior que 2.");
-                        return;
-                    }
+                property.SetProtectionLevel(1);
+            }
+            else if (name == Resources.ProtectionLevel2)
+            {
+                if (property.ProtectionLevel >= 2)
+                {
+                    player.SendNotification(NotificationType.Error, $"A propriedade já possui um nível de proteção igual ou maior que 2.");
+                    return;
+                }
 
-                    property.SetProtectionLevel(2);
-                    break;
-                case Globalization.PROTECTION_LEVEL_3:
-                    if (property.ProtectionLevel >= 3)
-                    {
-                        player.SendNotification(NotificationType.Error, $"A propriedade já possui um nível de proteção igual ou maior que 3.");
-                        return;
-                    }
+                property.SetProtectionLevel(2);
+            }
+            else if (name == Resources.ProtectionLevel3)
+            {
+                if (property.ProtectionLevel >= 3)
+                {
+                    player.SendNotification(NotificationType.Error, $"A propriedade já possui um nível de proteção igual ou maior que 3.");
+                    return;
+                }
 
-                    property.SetProtectionLevel(3);
-                    break;
+                property.SetProtectionLevel(3);
             }
 
             var context = Functions.GetDatabaseContext();
@@ -520,7 +513,7 @@ public class PropertyScript : Script
             var property = Global.Properties.FirstOrDefault(x => x.Id == idString.ToGuid());
             if (property is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -532,7 +525,7 @@ public class PropertyScript : Script
 
             if (property.RobberyValue > 0)
             {
-                player.SendNotification(NotificationType.Error, Globalization.ROBBED_PROPERTY_ERROR_MESSAGE);
+                player.SendNotification(NotificationType.Error, Resources.PropertyHasBeenStolen);
                 return;
             }
 
@@ -555,7 +548,7 @@ public class PropertyScript : Script
             var property = Global.Properties.FirstOrDefault(x => x.Id == idString.ToGuid());
             if (property is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -589,7 +582,7 @@ public class PropertyScript : Script
             var property = Global.Properties.FirstOrDefault(x => x.Id == idString.ToGuid());
             if (property is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -607,7 +600,7 @@ public class PropertyScript : Script
 
             if (player.Money < property.RobberyValue)
             {
-                player.SendMessage(MessageType.Error, string.Format(Globalization.INSUFFICIENT_MONEY_ERROR_MESSAGE, property.RobberyValue));
+                player.SendMessage(MessageType.Error, string.Format(Resources.YouDontHaveEnoughMoney, property.RobberyValue));
                 return;
             }
 
@@ -649,7 +642,7 @@ public class PropertyScript : Script
             var property = Global.Properties.FirstOrDefault(x => x.Id == idString.ToGuid());
             if (property is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -661,7 +654,7 @@ public class PropertyScript : Script
 
             if (property.RobberyValue > 0)
             {
-                player.SendMessage(MessageType.Error, Globalization.ROBBED_PROPERTY_ERROR_MESSAGE);
+                player.SendMessage(MessageType.Error, Resources.PropertyHasBeenStolen);
                 return;
             }
 
@@ -686,7 +679,7 @@ public class PropertyScript : Script
 
                     player.ToggleGameControls(true);
                     player.SendMessageToNearbyPlayers("arromba a porta.", MessageCategory.Ame);
-                    await player.WriteLog(LogType.BreakIn, $"{property.FormatedAddress} ({property.Number})", null);
+                    await player.WriteLog(LogType.Breakin, $"{property.FormatedAddress} ({property.Number})", null);
                     player.CancellationTokenSourceAcao = null;
                 });
             });
@@ -707,7 +700,7 @@ public class PropertyScript : Script
             var property = Global.Properties.FirstOrDefault(x => x.Id == idString.ToGuid());
             if (property is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -719,7 +712,7 @@ public class PropertyScript : Script
 
             if (player.Money < property.Value)
             {
-                player.SendNotification(NotificationType.Error, string.Format(Globalization.INSUFFICIENT_MONEY_ERROR_MESSAGE, property.Value));
+                player.SendNotification(NotificationType.Error, string.Format(Resources.YouDontHaveEnoughMoney, property.Value));
                 return;
             }
 
@@ -942,21 +935,21 @@ public class PropertyScript : Script
             var myObject = Global.Objects.FirstOrDefault(x => x.Id == id);
             if (myObject is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
             var propertyFurniture = property.Furnitures!.FirstOrDefault(x => x.Id == myObject.PropertyFurnitureId);
             if (propertyFurniture is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
             var furniture = Global.Furnitures.FirstOrDefault(x => x.Model.ToLower() == propertyFurniture.Model.ToLower());
             if (furniture is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 

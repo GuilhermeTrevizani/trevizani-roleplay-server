@@ -7,8 +7,6 @@ using System.Text.Json.Nodes;
 using System.Timers;
 using TrevizaniRoleplay.Core.Models.Requests;
 using TrevizaniRoleplay.Core.Models.Server;
-using TrevizaniRoleplay.Domain.Entities;
-using TrevizaniRoleplay.Domain.Enums;
 using TrevizaniRoleplay.Server.Extensions;
 using TrevizaniRoleplay.Server.Models;
 
@@ -41,39 +39,39 @@ public class Server : Script
 
     private async Task InsertItemsTemplates()
     {
-        await InsertItemTemplate(new Guid(Constants.MONEY_ITEM_TEMPLATE_ID), ItemCategory.Money, Globalization.MONEY,
+        await InsertItemTemplate(new Guid(Constants.MONEY_ITEM_TEMPLATE_ID), ItemCategory.Money, Resources.Money,
             0.000001f, "https://i.imgur.com/z5afrcD.png", "bkr_prop_money_sorted_01");
-        await InsertItemTemplate(new Guid(Constants.VEHICLE_PART_ITEM_TEMPLATE_ID), ItemCategory.VehiclePart, Globalization.VEHICLE_PART,
+        await InsertItemTemplate(new Guid(Constants.VEHICLE_PART_ITEM_TEMPLATE_ID), ItemCategory.VehiclePart, Resources.VehiclePart,
             0.1f, "https://i.imgur.com/w3D4MtH.png", "imp_prop_impexp_exhaust_06");
-        await InsertItemTemplate(new Guid(Constants.VEHICLE_KEY_ITEM_TEMPLATE_ID), ItemCategory.VehicleKey, Globalization.VEHICLE_KEY,
+        await InsertItemTemplate(new Guid(Constants.VEHICLE_KEY_ITEM_TEMPLATE_ID), ItemCategory.VehicleKey, Resources.VehicleKey,
             0.1f, "https://i.imgur.com/bkYGL8a.png", "p_car_keys_01");
-        await InsertItemTemplate(new Guid(Constants.PROPERTY_KEY_ITEM_TEMPLATE_ID), ItemCategory.PropertyKey, Globalization.PROPERTY_KEY,
+        await InsertItemTemplate(new Guid(Constants.PROPERTY_KEY_ITEM_TEMPLATE_ID), ItemCategory.PropertyKey, Resources.PropertyKey,
             0.1f, "https://i.imgur.com/IEDSv1j.png", "prop_cs_keys_01");
-        await InsertItemTemplate(new Guid(Constants.BLOOD_SAMPLE_ITEM_TEMPLATE_ID), ItemCategory.BloodSample, Globalization.BLOOD_SAMPLE,
+        await InsertItemTemplate(new Guid(Constants.BLOOD_SAMPLE_ITEM_TEMPLATE_ID), ItemCategory.BloodSample, Resources.BloodSample,
             0.0001f, "https://i.imgur.com/5pguCOS.png", "p_bloodsplat_s");
-        await InsertItemTemplate(new Guid(Constants.PISTOL_AMMO_ITEM_TEMPLATE_ID), ItemCategory.PistolAmmo, Globalization.PISTOL_AMMO,
+        await InsertItemTemplate(new Guid(Constants.PISTOL_AMMO_ITEM_TEMPLATE_ID), ItemCategory.PistolAmmo, Resources.PistolAmmo,
            0.0001f, "https://i.imgur.com/QoQqfEq.png", string.Empty);
-        await InsertItemTemplate(new Guid(Constants.SHOTGUN_AMMO_ITEM_TEMPLATE_ID), ItemCategory.ShotgunAmmo, Globalization.SHOTGUN_AMMO,
+        await InsertItemTemplate(new Guid(Constants.SHOTGUN_AMMO_ITEM_TEMPLATE_ID), ItemCategory.ShotgunAmmo, Resources.ShotgunAmmo,
            0.0001f, "https://i.imgur.com/QoQqfEq.png", string.Empty);
-        await InsertItemTemplate(new Guid(Constants.ASSAULT_RIFLE_AMMO_ITEM_TEMPLATE_ID), ItemCategory.AssaultRifleAmmo, Globalization.ASSAULT_RIFLE_AMMO,
+        await InsertItemTemplate(new Guid(Constants.ASSAULT_RIFLE_AMMO_ITEM_TEMPLATE_ID), ItemCategory.AssaultRifleAmmo, Resources.AssaultRifleAmmo,
            0.0001f, "https://i.imgur.com/QoQqfEq.png", string.Empty);
-        await InsertItemTemplate(new Guid(Constants.LIGHT_MACHINE_GUN_AMMO_ITEM_TEMPLATE_ID), ItemCategory.LightMachineGunAmmo, Globalization.LIGHT_MACHINE_GUN_AMMO,
+        await InsertItemTemplate(new Guid(Constants.LIGHT_MACHINE_GUN_AMMO_ITEM_TEMPLATE_ID), ItemCategory.LightMachineGunAmmo, Resources.LightMachineGunAmmo,
            0.0001f, "https://i.imgur.com/QoQqfEq.png", string.Empty);
-        await InsertItemTemplate(new Guid(Constants.SNIPER_RIFLE_AMMO_ITEM_TEMPLATE_ID), ItemCategory.SniperRifleAmmo, Globalization.SNIPER_RIFLE_AMMO,
+        await InsertItemTemplate(new Guid(Constants.SNIPER_RIFLE_AMMO_ITEM_TEMPLATE_ID), ItemCategory.SniperRifleAmmo, Resources.SniperRifleAmmo,
            0.0001f, "https://i.imgur.com/QoQqfEq.png", string.Empty);
-        await InsertItemTemplate(new Guid(Constants.SUB_MACHINE_GUN_AMMO_ITEM_TEMPLATE_ID), ItemCategory.SubMachineGunAmmo, Globalization.SUB_MACHINE_GUN_AMMO,
+        await InsertItemTemplate(new Guid(Constants.SUB_MACHINE_GUN_AMMO_ITEM_TEMPLATE_ID), ItemCategory.SubMachineGunAmmo, Resources.SubMachineGunAmmo,
            0.0001f, "https://i.imgur.com/QoQqfEq.png", string.Empty);
-        await InsertItemTemplate(new Guid(Constants.PISTOL_BULLET_SHELL_ITEM_TEMPLATE_ID), ItemCategory.PistolBulletShell, Globalization.PISTOL_BULLET_SHELL,
+        await InsertItemTemplate(new Guid(Constants.PISTOL_BULLET_SHELL_ITEM_TEMPLATE_ID), ItemCategory.PistolBulletShell, Resources.PistolBulletShell,
            0.0001f, "https://i.imgur.com/zUZ41G6.png", "w_pi_singleshoth4_shell");
-        await InsertItemTemplate(new Guid(Constants.SHOTGUN_BULLET_SHELL_ITEM_TEMPLATE_ID), ItemCategory.ShotgunBulletShell, Globalization.SHOTGUN_BULLET_SHELL,
+        await InsertItemTemplate(new Guid(Constants.SHOTGUN_BULLET_SHELL_ITEM_TEMPLATE_ID), ItemCategory.ShotgunBulletShell, Resources.ShotgunBulletShell,
            0.0001f, "https://i.imgur.com/zUZ41G6.png", "prop_sgun_casing");
-        await InsertItemTemplate(new Guid(Constants.ASSAULT_RIFLE_BULLET_SHELL_ITEM_TEMPLATE_ID), ItemCategory.AssaultRifleBulletShell, Globalization.ASSAULT_RIFLE_BULLET_SHELL,
+        await InsertItemTemplate(new Guid(Constants.ASSAULT_RIFLE_BULLET_SHELL_ITEM_TEMPLATE_ID), ItemCategory.AssaultRifleBulletShell, Resources.AssaultRifleBulletShell,
            0.0001f, "https://i.imgur.com/zUZ41G6.png", "w_pi_singleshot_shell");
-        await InsertItemTemplate(new Guid(Constants.LIGHT_MACHINE_GUN_BULLET_SHELL_ITEM_TEMPLATE_ID), ItemCategory.LightMachineGunBulletShell, Globalization.LIGHT_MACHINE_GUN_BULLET_SHELL,
+        await InsertItemTemplate(new Guid(Constants.LIGHT_MACHINE_GUN_BULLET_SHELL_ITEM_TEMPLATE_ID), ItemCategory.LightMachineGunBulletShell, Resources.LightMachineGunBulletShell,
            0.0001f, "https://i.imgur.com/zUZ41G6.png", "w_pi_singleshot_shell");
-        await InsertItemTemplate(new Guid(Constants.SNIPER_RIFLE_BULLET_SHELL_ITEM_TEMPLATE_ID), ItemCategory.SniperRifleBulletShell, Globalization.SNIPER_RIFLE_BULLET_SHELL,
+        await InsertItemTemplate(new Guid(Constants.SNIPER_RIFLE_BULLET_SHELL_ITEM_TEMPLATE_ID), ItemCategory.SniperRifleBulletShell, Resources.SniperRifleBulletShell,
            0.0001f, "https://i.imgur.com/zUZ41G6.png", "w_pi_singleshot_shell");
-        await InsertItemTemplate(new Guid(Constants.SUB_MACHINE_GUN_BULLET_SHELL_ITEM_TEMPLATE_ID), ItemCategory.SubMachineGunBulletShell, Globalization.SUB_MACHINE_GUN_BULLET_SHELL,
+        await InsertItemTemplate(new Guid(Constants.SUB_MACHINE_GUN_BULLET_SHELL_ITEM_TEMPLATE_ID), ItemCategory.SubMachineGunBulletShell, Resources.SubMachineGunBulletShell,
            0.0001f, "https://i.imgur.com/zUZ41G6.png", "w_pi_singleshoth4_shell");
     }
 
@@ -175,16 +173,16 @@ public class Server : Script
         }
 
         Global.PremiumItems = Functions.Deserialize<List<PremiumItem>>(parameter.PremiumItemsJSON);
-        InsertPremiumItem(Globalization.NAME_CHANGE, 35);
-        InsertPremiumItem(Globalization.PLATE_CHANGE, 25);
-        InsertPremiumItem(Globalization.NUMBER_CHANGE, 25);
-        InsertPremiumItem(Globalization.CHARACTER_SLOT, 150);
-        InsertPremiumItem(Globalization.OUTFIT_10, 75);
-        InsertPremiumItem(Globalization.INTERNAL_FURNITURES_50, 75);
-        InsertPremiumItem(Globalization.INTERNAL_FURNITURES_500, 500);
-        InsertPremiumItem(Globalization.PREMIUM_BRONZE, 150);
-        InsertPremiumItem(Globalization.PREMIUM_SILVER, 250);
-        InsertPremiumItem(Globalization.PREMIUM_GOLD, 375);
+        InsertPremiumItem(Resources.NameChange, 35);
+        InsertPremiumItem(Resources.PlateChange, 25);
+        InsertPremiumItem(Resources.NumberChange, 25);
+        InsertPremiumItem(Resources.CharacterSlot, 150);
+        InsertPremiumItem(Resources.Outfits10, 75);
+        InsertPremiumItem(Resources.InternalFurnitures50, 75);
+        InsertPremiumItem(Resources.InternalFurnitures500, 500);
+        InsertPremiumItem(Resources.PremiumBronze, 150);
+        InsertPremiumItem(Resources.PremiumSilver, 250);
+        InsertPremiumItem(Resources.PremiumGold, 375);
         parameter.SetPremiumItemsJSON(Functions.Serialize(Global.PremiumItems));
         context.Parameters.Update(parameter);
         await context.SaveChangesAsync();

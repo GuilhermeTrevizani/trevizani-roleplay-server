@@ -1,6 +1,4 @@
 ﻿using GTANetworkAPI;
-using TrevizaniRoleplay.Domain.Entities;
-using TrevizaniRoleplay.Domain.Enums;
 using TrevizaniRoleplay.Server.Factories;
 using TrevizaniRoleplay.Server.Models;
 
@@ -13,14 +11,13 @@ public class PremiumScript : Script
     {
         bool GetDifferentLevel(string name)
         {
-            UserPremium? userPremium = name switch
-            {
-                Globalization.PREMIUM_GOLD => UserPremium.Gold,
-                Globalization.PREMIUM_SILVER => UserPremium.Silver,
-                Globalization.PREMIUM_BRONZE => UserPremium.Bronze,
-                _ => null,
-            };
-
+            UserPremium? userPremium = null;
+            if (name == Resources.PremiumGold)
+                userPremium = UserPremium.Gold;
+            else if (name == Resources.PremiumSilver)
+                userPremium = UserPremium.Silver;
+            else if (name == Resources.PremiumBronze)
+                userPremium = UserPremium.Bronze;
             var currentPremium = player.GetCurrentPremium();
             return userPremium is not null && currentPremium != UserPremium.None && currentPremium != userPremium;
         }
@@ -45,7 +42,7 @@ public class PremiumScript : Script
             var item = Global.PremiumItems.FirstOrDefault(x => x.Name == name);
             if (item is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -57,58 +54,65 @@ public class PremiumScript : Script
 
             ulong premiumDiscordRole = 0;
 
-            switch (item.Name)
+            if (item.Name == Resources.PremiumBronze)
             {
-                case Globalization.PREMIUM_BRONZE:
-                    premiumDiscordRole = Global.PremiumBronzeDiscordRole;
-                    player.User.SetPremium(UserPremium.Bronze);
-                    player.Character.SetPremium(UserPremium.Bronze);
-                    break;
-                case Globalization.PREMIUM_SILVER:
-                    premiumDiscordRole = Global.PremiumSilverDiscordRole;
-                    player.User.SetPremium(UserPremium.Silver);
-                    player.Character.SetPremium(UserPremium.Silver);
-                    break;
-                case Globalization.PREMIUM_GOLD:
-                    premiumDiscordRole = Global.PremiumGoldDiscordRole;
-                    player.User.SetPremium(UserPremium.Gold);
-                    player.Character.SetPremium(UserPremium.Gold);
-                    break;
-                case Globalization.NAME_CHANGE:
-                    player.User.AddNameChanges();
-                    break;
-                case Globalization.NUMBER_CHANGE:
-                    player.User.AddNumberChanges();
-                    break;
-                case Globalization.PLATE_CHANGE:
-                    player.User.AddPlateChanges();
-                    break;
-                case Globalization.CHARACTER_SLOT:
-                    player.User.AddCharacterSlots();
-                    break;
-                case Globalization.OUTFIT_10:
-                    player.User.AddExtraOutfitSlots(10);
-                    break;
-                case Globalization.INTERNAL_FURNITURES_50:
-                    if (player.User.ExtraInteriorFurnitureSlots + 50 > 1000)
-                    {
-                        player.SendNotification(NotificationType.Error, "Não é possível prosseguir pois o limite de mobílias internas extra é de 1000.");
-                        return;
-                    }
-
-                    player.User.AddExtraInteriorFurnitureSlots(50);
-                    break;
-                case Globalization.INTERNAL_FURNITURES_500:
-                    if (player.User.ExtraInteriorFurnitureSlots + 500 > 1000)
-                    {
-                        player.SendNotification(NotificationType.Error, "Não é possível prosseguir pois o limite de mobílias internas extra é de 1000.");
-                        return;
-                    }
-                    player.User.AddExtraInteriorFurnitureSlots(500);
-                    break;
-                default:
-                    player.SendNotification(NotificationType.Error, $"Item Premium {name} não foi implementado. Por favor, reporte o bug.");
-                    break;
+                premiumDiscordRole = Global.PremiumBronzeDiscordRole;
+                player.User.SetPremium(UserPremium.Bronze);
+                player.Character.SetPremium(UserPremium.Bronze);
+            }
+            else if (item.Name == Resources.PremiumSilver)
+            {
+                premiumDiscordRole = Global.PremiumSilverDiscordRole;
+                player.User.SetPremium(UserPremium.Silver);
+                player.Character.SetPremium(UserPremium.Silver);
+            }
+            else if (item.Name == Resources.PremiumGold)
+            {
+                premiumDiscordRole = Global.PremiumGoldDiscordRole;
+                player.User.SetPremium(UserPremium.Gold);
+                player.Character.SetPremium(UserPremium.Gold);
+            }
+            else if (item.Name == Resources.NameChange)
+            {
+                player.User.AddNameChanges();
+            }
+            else if (item.Name == Resources.NumberChange)
+            {
+                player.User.AddNumberChanges();
+            }
+            else if (item.Name == Resources.PlateChange)
+            {
+                player.User.AddPlateChanges();
+            }
+            else if (item.Name == Resources.CharacterSlot)
+            {
+                player.User.AddCharacterSlots();
+            }
+            else if (item.Name == Resources.Outfits10)
+            {
+                player.User.AddExtraOutfitSlots(10);
+            }
+            else if (item.Name == Resources.InternalFurnitures50)
+            {
+                if (player.User.ExtraInteriorFurnitureSlots + 50 > 1000)
+                {
+                    player.SendNotification(NotificationType.Error, "Não é possível prosseguir pois o limite de mobílias internas extra é de 1000.");
+                    return;
+                }
+                player.User.AddExtraInteriorFurnitureSlots(50);
+            }
+            else if (item.Name == Resources.InternalFurnitures500)
+            {
+                if (player.User.ExtraInteriorFurnitureSlots + 500 > 1000)
+                {
+                    player.SendNotification(NotificationType.Error, "Não é possível prosseguir pois o limite de mobílias internas extra é de 1000.");
+                    return;
+                }
+                player.User.AddExtraInteriorFurnitureSlots(500);
+            }
+            else
+            {
+                player.SendNotification(NotificationType.Error, $"Item Premium {name} não foi implementado. Por favor, reporte o bug.");
             }
 
             player.User.RemovePremiumPoints(item.Value);

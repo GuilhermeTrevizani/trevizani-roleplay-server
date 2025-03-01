@@ -1,6 +1,4 @@
 ﻿using GTANetworkAPI;
-using TrevizaniRoleplay.Domain.Entities;
-using TrevizaniRoleplay.Domain.Enums;
 using TrevizaniRoleplay.Server.Extensions;
 using TrevizaniRoleplay.Server.Factories;
 using TrevizaniRoleplay.Server.Models;
@@ -14,7 +12,7 @@ public class StaffPropertyScript : Script
     {
         if (!player.StaffFlags.Contains(StaffFlag.Properties))
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -54,7 +52,7 @@ public class StaffPropertyScript : Script
     {
         if (!player.StaffFlags.Contains(StaffFlag.Properties))
         {
-            player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -103,7 +101,7 @@ public class StaffPropertyScript : Script
     {
         if (!player.StaffFlags.Contains(StaffFlag.Properties))
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -142,7 +140,7 @@ public class StaffPropertyScript : Script
     {
         if (!player.StaffFlags.Contains(StaffFlag.Properties))
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -200,7 +198,7 @@ public class StaffPropertyScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (!player.StaffFlags.Contains(StaffFlag.Properties))
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -310,7 +308,7 @@ public class StaffPropertyScript : Script
                 property = Global.Properties.FirstOrDefault(x => x.Id == id);
                 if (property is null)
                 {
-                    player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                    player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                     return;
                 }
 
@@ -373,7 +371,7 @@ public class StaffPropertyScript : Script
     {
         if (!player.StaffFlags.Contains(StaffFlag.Properties))
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 

@@ -3,8 +3,6 @@ using Discord.WebSocket;
 using GTANetworkAPI;
 using Microsoft.EntityFrameworkCore;
 using System.Drawing;
-using TrevizaniRoleplay.Domain.Entities;
-using TrevizaniRoleplay.Domain.Enums;
 using TrevizaniRoleplay.Server.Extensions;
 using TrevizaniRoleplay.Server.Factories;
 using TrevizaniRoleplay.Server.Models;
@@ -36,7 +34,7 @@ public class GovernmentScript : Script
 
         if (!player.FactionFlags.Contains(FactionFlag.GovernmentAdvertisement))
         {
-            player.SendMessage(Models.MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(Models.MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -213,7 +211,7 @@ public class GovernmentScript : Script
 
         if (!player.CheckIfTargetIsCloseIC(target, Constants.RP_DISTANCE))
         {
-            player.SendMessage(Models.MessageType.Error, Globalization.YOU_ARE_NOT_CLOSE_TO_THE_PLAYER);
+            player.SendMessage(Models.MessageType.Error, Resources.YouAreNotCloseToThePlayer);
             return;
         }
 
@@ -233,7 +231,7 @@ public class GovernmentScript : Script
 
         if (!player.FactionFlags.Contains(FactionFlag.HQ))
         {
-            player.SendMessage(Models.MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(Models.MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -261,7 +259,7 @@ public class GovernmentScript : Script
             return;
         }
 
-        var furnitures = Global.Furnitures.Where(x => x.Category.ToLower() == Globalization.BARRIERS).ToList();
+        var furnitures = Global.Furnitures.Where(x => x.Category.ToLower() == Resources.Barriers).ToList();
         if (furnitures.Count == 0)
         {
             player.SendMessage(Models.MessageType.Error, "Nenhuma barreira criada. Por favor, reporte o bug.");
@@ -323,7 +321,7 @@ public class GovernmentScript : Script
 
         if (!player.FactionFlags.Contains(FactionFlag.RemoveAllBarriers))
         {
-            player.SendMessage(Models.MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(Models.MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -414,7 +412,7 @@ public class GovernmentScript : Script
 
         if (player.IsActionsBlocked())
         {
-            player.SendMessage(Models.MessageType.Error, Globalization.ACTIONS_BLOCKED_MESSAGE);
+            player.SendMessage(Models.MessageType.Error, Resources.YouCanNotDoThisBecauseYouAreHandcuffedInjuredOrBeingCarried);
             return;
         }
 
@@ -437,7 +435,7 @@ public class GovernmentScript : Script
     {
         if (!player.ValidPed)
         {
-            player.SendMessage(Models.MessageType.Error, Globalization.INVALID_SKIN_MESSAGE);
+            player.SendMessage(Models.MessageType.Error, Resources.YouDontHaveAValidSkin);
             return;
         }
 
@@ -489,7 +487,7 @@ public class GovernmentScript : Script
 
         if (!player.FactionFlags.Contains(FactionFlag.RespawnVehicles))
         {
-            player.SendMessage(Models.MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(Models.MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 

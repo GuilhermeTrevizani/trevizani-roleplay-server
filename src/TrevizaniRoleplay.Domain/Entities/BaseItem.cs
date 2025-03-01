@@ -5,9 +5,9 @@ namespace TrevizaniRoleplay.Domain.Entities;
 public abstract class BaseItem : BaseEntity
 {
     public Guid ItemTemplateId { get; private set; }
-    public uint Subtype { get; internal set; }
+    public uint Subtype { get; protected set; }
     public int Quantity { get; private set; }
-    public string? Extra { get; internal set; }
+    public string? Extra { get; protected set; }
 
     [JsonIgnore]
     public ItemTemplate? ItemTemplate { get; private set; }

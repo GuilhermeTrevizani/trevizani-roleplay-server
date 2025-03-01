@@ -1,5 +1,4 @@
 ﻿using GTANetworkAPI;
-using TrevizaniRoleplay.Domain.Entities;
 
 namespace TrevizaniRoleplay.Server.Extensions;
 
@@ -17,7 +16,7 @@ public static class DealershipExtension
             marker.DealershipId = dealership.Id;
 
             var colShape = Functions.CreateColShapeCylinder(pos, 1, 1.5f, 0);
-            colShape.Description = $"[{dealership.Name}] {{#FFFFFF}}Pressione Y para interagir.";
+            colShape.Description = $"[{dealership.Name}] {{#FFFFFF}}{Resources.PressYToInteract}";
             colShape.DealershipId = dealership.Id;
         });
     }

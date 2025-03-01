@@ -1,5 +1,4 @@
 ﻿using GTANetworkAPI;
-using TrevizaniRoleplay.Domain.Entities;
 using TrevizaniRoleplay.Server.Factories;
 using TrevizaniRoleplay.Server.Models;
 
@@ -12,7 +11,7 @@ public class OutfitScript : Script
     {
         if (!player.ValidPed)
         {
-            player.SendMessage(MessageType.Error, Globalization.INVALID_SKIN_MESSAGE);
+            player.SendMessage(MessageType.Error, Resources.YouDontHaveAValidSkin);
             return;
         }
 
@@ -33,13 +32,13 @@ public class OutfitScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (player.IsActionsBlocked())
             {
-                player.SendMessage(MessageType.Error, Globalization.ACTIONS_BLOCKED_MESSAGE);
+                player.SendMessage(MessageType.Error, Resources.YouCanNotDoThisBecauseYouAreHandcuffedInjuredOrBeingCarried);
                 return;
             }
 
             if (!player.ValidPed)
             {
-                player.SendMessage(MessageType.Error, Globalization.INVALID_SKIN_MESSAGE);
+                player.SendMessage(MessageType.Error, Resources.YouDontHaveAValidSkin);
                 return;
             }
 
@@ -72,7 +71,7 @@ public class OutfitScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (!player.ValidPed)
             {
-                player.SendMessage(MessageType.Error, Globalization.INVALID_SKIN_MESSAGE);
+                player.SendMessage(MessageType.Error, Resources.YouDontHaveAValidSkin);
                 return;
             }
 

@@ -1,8 +1,6 @@
 ﻿using GTANetworkAPI;
 using Microsoft.EntityFrameworkCore;
-using TrevizaniRoleplay.Core.Extesions;
-using TrevizaniRoleplay.Domain.Entities;
-using TrevizaniRoleplay.Domain.Enums;
+using TrevizaniRoleplay.Core.Extensions;
 using TrevizaniRoleplay.Server.Extensions;
 using TrevizaniRoleplay.Server.Factories;
 using TrevizaniRoleplay.Server.Models;
@@ -51,7 +49,7 @@ public class FactionScript : Script
     {
         if (!player.FactionFlags.Contains(FactionFlag.BlockChat))
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -90,7 +88,7 @@ public class FactionScript : Script
             .Select(x => new
             {
                 Value = x,
-                Label = x.GetDisplay(),
+                Label = x.GetDescription(),
             })
         );
 
@@ -116,7 +114,7 @@ public class FactionScript : Script
                     !.Where(y => y.Type == SessionType.FactionDuty && y.FinalDate.HasValue
                         && y.RegisterDate >= DateTime.Now.AddDays(-DAYS_INTERVAL_ON_DUTY_SESSION_AVERAGE))
                     .Sum(y => (y.FinalDate!.Value - y.RegisterDate).TotalMinutes) / DAYS_INTERVAL_ON_DUTY_SESSION_AVERAGE,
-                Flags = Functions.Deserialize<FactionFlag[]>(x.FactionFlagsJSON).Select(x => x.GetDisplay()).Order(),
+                Flags = Functions.Deserialize<FactionFlag[]>(x.FactionFlagsJSON).Select(x => x.GetDescription()).Order(),
             };
         }
 
@@ -177,7 +175,7 @@ public class FactionScript : Script
             var factionId = new Guid(factionIdString);
             if (!player.IsFactionLeader || player.Character.FactionId != factionId)
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -194,7 +192,7 @@ public class FactionScript : Script
                 factionRank = Global.FactionsRanks.FirstOrDefault(x => x.Id == factionRankId);
                 if (factionRank == null)
                 {
-                    player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                    player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                     return;
                 }
 
@@ -231,7 +229,7 @@ public class FactionScript : Script
             var factionId = new Guid(factionIdString);
             if (!player.IsFactionLeader || player.Character.FactionId != factionId)
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -270,7 +268,7 @@ public class FactionScript : Script
             var factionId = new Guid(factionIdString);
             if (!player.IsFactionLeader || player.Character.FactionId != factionId)
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -302,7 +300,7 @@ public class FactionScript : Script
         var faction = player.Faction;
         if ((!player.FactionFlags.Contains(FactionFlag.InviteMember) && !player.IsFactionLeader) || faction is null)
         {
-            player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -358,7 +356,7 @@ public class FactionScript : Script
             var factionId = new Guid(factionIdString);
             if ((!player.FactionFlags.Contains(FactionFlag.EditMember) && !player.IsFactionLeader) || player.Character.FactionId != factionId)
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -447,7 +445,7 @@ public class FactionScript : Script
             var factionId = new Guid(factionIdString);
             if ((!player.FactionFlags.Contains(FactionFlag.RemoveMember) && !player.IsFactionLeader) || player.Character.FactionId != factionId)
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -565,7 +563,7 @@ public class FactionScript : Script
             var faction = Global.Factions.FirstOrDefault(x => x.Id == id);
             if (!player.IsFactionLeader || player.Character.FactionId != id || faction is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -593,7 +591,7 @@ public class FactionScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (!player.FactionFlags.Contains(FactionFlag.ManageVehicles))
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -602,7 +600,7 @@ public class FactionScript : Script
             var vehicle = await context.Vehicles.FirstOrDefaultAsync(x => x.Id == id && x.FactionId == player.Character.FactionId);
             if (vehicle is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 

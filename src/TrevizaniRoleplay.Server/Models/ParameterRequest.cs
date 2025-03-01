@@ -1,6 +1,4 @@
-﻿using TrevizaniRoleplay.Domain.Enums;
-
-namespace TrevizaniRoleplay.Server.Models;
+﻿namespace TrevizaniRoleplay.Server.Models;
 
 public class ParameterRequest
 {

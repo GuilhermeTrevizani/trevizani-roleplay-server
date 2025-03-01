@@ -1,6 +1,4 @@
 ﻿using GTANetworkAPI;
-using TrevizaniRoleplay.Domain.Entities;
-using TrevizaniRoleplay.Domain.Enums;
 using TrevizaniRoleplay.Server.Extensions;
 using TrevizaniRoleplay.Server.Factories;
 using TrevizaniRoleplay.Server.Models;
@@ -14,7 +12,7 @@ public class FireScript : Script
     {
         if (!player.FactionFlags.Contains(FactionFlag.FireManager))
         {
-            player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -50,14 +48,14 @@ public class FireScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (!player.FactionFlags.Contains(FactionFlag.FireManager))
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
             var fire = Global.Fires.FirstOrDefault(x => x.Id == idString.ToGuid());
             if (fire is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -91,7 +89,7 @@ public class FireScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (!player.FactionFlags.Contains(FactionFlag.FireManager))
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -114,7 +112,7 @@ public class FireScript : Script
                 fire = Global.Fires.FirstOrDefault(x => x.Id == id);
                 if (fire is null)
                 {
-                    player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                    player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                     return;
                 }
 
@@ -157,14 +155,14 @@ public class FireScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (!player.FactionFlags.Contains(FactionFlag.FireManager))
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
             var fire = Global.Fires.FirstOrDefault(x => x.Id == idString.ToGuid());
             if (fire is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -189,14 +187,14 @@ public class FireScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (!player.FactionFlags.Contains(FactionFlag.FireManager))
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
             var fire = Global.Fires.FirstOrDefault(x => x.Id == idString.ToGuid());
             if (fire is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 

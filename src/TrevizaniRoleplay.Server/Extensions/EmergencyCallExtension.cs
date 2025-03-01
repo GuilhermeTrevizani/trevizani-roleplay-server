@@ -1,8 +1,6 @@
 ﻿using Discord;
 using Discord.WebSocket;
-using TrevizaniRoleplay.Core.Extesions;
-using TrevizaniRoleplay.Domain.Entities;
-using TrevizaniRoleplay.Domain.Enums;
+using TrevizaniRoleplay.Core.Extensions;
 
 namespace TrevizaniRoleplay.Server.Extensions;
 
@@ -12,12 +10,12 @@ public static class EmergencyCallExtension
     {
         async Task Send911(FactionType factionType)
         {
-            var relator = emergencyCall.Number == Constants.EMERGENCY_NUMBER ? Globalization.EMERGENCY_CENTER : emergencyCall.Number.ToString("000-0000");
+            var relator = emergencyCall.Number == Constants.EMERGENCY_NUMBER ? Resources.EmergencyCenter : emergencyCall.Number.ToString("000-0000");
             foreach (var player in Global.SpawnedPlayers.Where(x => x.Faction?.Type == factionType && x.OnDuty))
             {
                 player.SendMessage(Models.MessageType.None, "|__________CHAMADA EMERGENCIAL__________|", Constants.EMERGENCY_CALL_COLOR);
                 player.SendMessage(Models.MessageType.None, $"Relator: {relator}", Constants.EMERGENCY_CALL_COLOR);
-                player.SendMessage(Models.MessageType.None, $"Serviço: {emergencyCall.Type.GetDisplay()}", Constants.EMERGENCY_CALL_COLOR);
+                player.SendMessage(Models.MessageType.None, $"Serviço: {emergencyCall.Type.GetDescription()}", Constants.EMERGENCY_CALL_COLOR);
                 player.SendMessage(Models.MessageType.None, $"Localização: {emergencyCall.Location}", Constants.EMERGENCY_CALL_COLOR);
                 player.SendMessage(Models.MessageType.None, $"Ocorrência: {emergencyCall.Message}", Constants.EMERGENCY_CALL_COLOR);
             }
@@ -42,7 +40,7 @@ public static class EmergencyCallExtension
                     Color = new Color(Global.MainRgba.Red, Global.MainRgba.Green, Global.MainRgba.Blue),
                 };
                 embedBuilder.AddField("Relator", relator);
-                embedBuilder.AddField("Serviço", emergencyCall.Type.GetDisplay());
+                embedBuilder.AddField("Serviço", emergencyCall.Type.GetDescription());
                 embedBuilder.AddField("Localização", emergencyCall.Location);
                 embedBuilder.AddField("Ocorrência", emergencyCall.Message);
                 embedBuilder.WithFooter($"Enviada em {DateTime.Now}.");

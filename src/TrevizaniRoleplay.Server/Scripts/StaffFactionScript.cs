@@ -1,8 +1,6 @@
 ﻿using GTANetworkAPI;
 using Microsoft.EntityFrameworkCore;
-using TrevizaniRoleplay.Core.Extesions;
-using TrevizaniRoleplay.Domain.Entities;
-using TrevizaniRoleplay.Domain.Enums;
+using TrevizaniRoleplay.Core.Extensions;
 using TrevizaniRoleplay.Server.Extensions;
 using TrevizaniRoleplay.Server.Factories;
 using TrevizaniRoleplay.Server.Models;
@@ -16,7 +14,7 @@ public class StaffFactionScript : Script
     {
         if (!player.StaffFlags.Contains(StaffFlag.Factions))
         {
-            player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -25,7 +23,7 @@ public class StaffFactionScript : Script
             .Select(x => new
             {
                 Value = x,
-                Label = x.GetDisplay(),
+                Label = x.GetDescription(),
             })
         );
 
@@ -40,7 +38,7 @@ public class StaffFactionScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (!player.StaffFlags.Contains(StaffFlag.Factions))
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -111,7 +109,7 @@ public class StaffFactionScript : Script
                 faction = Global.Factions.FirstOrDefault(x => x.Id == id);
                 if (faction is null)
                 {
-                    player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                    player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                     return;
                 }
 
@@ -204,7 +202,7 @@ public class StaffFactionScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (!player.StaffFlags.Contains(StaffFlag.Factions))
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -226,7 +224,7 @@ public class StaffFactionScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (!player.StaffFlags.Contains(StaffFlag.Factions))
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -240,7 +238,7 @@ public class StaffFactionScript : Script
             var factionRank = Global.FactionsRanks.FirstOrDefault(x => x.Id == factionRankId);
             if (factionRank is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -298,7 +296,7 @@ public class StaffFactionScript : Script
             x.Name,
             x.Type,
             x.Slots,
-            TypeDisplay = x.Type.GetDisplay(),
+            TypeDisplay = x.Type.GetDescription(),
             Leader = GetLeader(x.CharacterId),
             x.ShortName,
         }));
@@ -341,7 +339,7 @@ public class StaffFactionScript : Script
     {
         if (!player.StaffFlags.Contains(StaffFlag.Factions))
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 

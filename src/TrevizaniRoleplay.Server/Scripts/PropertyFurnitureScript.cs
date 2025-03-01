@@ -1,7 +1,5 @@
 ﻿using GTANetworkAPI;
 using Microsoft.EntityFrameworkCore;
-using TrevizaniRoleplay.Domain.Entities;
-using TrevizaniRoleplay.Domain.Enums;
 using TrevizaniRoleplay.Server.Extensions;
 using TrevizaniRoleplay.Server.Factories;
 using TrevizaniRoleplay.Server.Models;
@@ -81,7 +79,7 @@ public class PropertyFurnitureScript : Script
             .OrderBy(x => x.Distance));
 
         var categoriesJson = Functions.Serialize(Global.Furnitures
-            .Where(x => x.Category.ToLower() != Globalization.BARRIERS)
+            .Where(x => x.Category.ToLower() != Resources.Barriers)
             .GroupBy(x => x.Category)
             .Select(x => new
             {
@@ -150,7 +148,7 @@ public class PropertyFurnitureScript : Script
             var property = Global.Properties.FirstOrDefault(x => x.Id == propertyId);
             if (property is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -158,7 +156,7 @@ public class PropertyFurnitureScript : Script
             var furniture = Global.Furnitures.FirstOrDefault(x => x.Id == furnitureId);
             if (furniture is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -182,7 +180,7 @@ public class PropertyFurnitureScript : Script
             var property = Global.Properties.FirstOrDefault(x => x.Id == propertyId);
             if (property is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -190,7 +188,7 @@ public class PropertyFurnitureScript : Script
             player.DropPropertyFurniture = property.Furnitures!.FirstOrDefault(x => x.Id == propertyFurnitureId);
             if (player.DropPropertyFurniture is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -214,7 +212,7 @@ public class PropertyFurnitureScript : Script
             var property = Global.Properties.FirstOrDefault(x => x.Id == propertyIdString.ToGuid());
             if (property is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -228,7 +226,7 @@ public class PropertyFurnitureScript : Script
             var propertyFurniture = property.Furnitures!.FirstOrDefault(x => x.Id == propertyFurnitureId);
             if (propertyFurniture is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -284,14 +282,14 @@ public class PropertyFurnitureScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (player.DropPropertyFurniture is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
             var property = Global.Properties.FirstOrDefault(x => x.Id == player.DropPropertyFurniture.PropertyId);
             if (property is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -348,7 +346,7 @@ public class PropertyFurnitureScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (player.DropPropertyFurniture is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -361,7 +359,7 @@ public class PropertyFurnitureScript : Script
             var property = Global.Properties.FirstOrDefault(x => x.Id == player.DropPropertyFurniture.PropertyId);
             if (property is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -374,7 +372,7 @@ public class PropertyFurnitureScript : Script
             var furniture = Global.Furnitures.FirstOrDefault(x => x.Model.ToLower() == player.DropPropertyFurniture.Model.ToLower());
             if (furniture is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -404,7 +402,7 @@ public class PropertyFurnitureScript : Script
                 {
                     if (player.Money < furniture.Value)
                     {
-                        player.SendNotification(NotificationType.Error, string.Format(Globalization.INSUFFICIENT_MONEY_ERROR_MESSAGE, furniture.Value));
+                        player.SendNotification(NotificationType.Error, string.Format(Resources.YouDontHaveEnoughMoney, furniture.Value));
                         return;
                     }
 
@@ -464,14 +462,14 @@ public class PropertyFurnitureScript : Script
             var property = Global.Properties.FirstOrDefault(x => x.Id == propertyIdString.ToGuid());
             if (property is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
             var propertyFurniture = property.Furnitures!.FirstOrDefault(x => x.Id == propertyFurnitureIdString.ToGuid());
             if (propertyFurniture is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 

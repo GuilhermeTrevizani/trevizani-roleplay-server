@@ -1,6 +1,4 @@
 ﻿using GTANetworkAPI;
-using TrevizaniRoleplay.Domain.Entities;
-using TrevizaniRoleplay.Domain.Enums;
 using TrevizaniRoleplay.Server.Extensions;
 using TrevizaniRoleplay.Server.Factories;
 using TrevizaniRoleplay.Server.Models;
@@ -14,7 +12,7 @@ public class StaffFactionEquipmentScript : Script
     {
         if (!player.StaffFlags.Contains(StaffFlag.FactionsStorages))
         {
-            player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -36,14 +34,14 @@ public class StaffFactionEquipmentScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (!player.StaffFlags.Contains(StaffFlag.FactionsStorages))
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
             var factionEquipment = Global.FactionsEquipments.FirstOrDefault(x => x.Id == idString.ToGuid());
             if (factionEquipment is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -73,7 +71,7 @@ public class StaffFactionEquipmentScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (!player.StaffFlags.Contains(StaffFlag.FactionsStorages))
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -109,7 +107,7 @@ public class StaffFactionEquipmentScript : Script
                 factionEquipment = Global.FactionsEquipments.FirstOrDefault(x => x.Id == id);
                 if (factionEquipment is null)
                 {
-                    player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                    player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                     return;
                 }
 
@@ -145,14 +143,14 @@ public class StaffFactionEquipmentScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (!player.StaffFlags.Contains(StaffFlag.FactionsStorages))
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
             var factionEquipment = Global.FactionsEquipments.FirstOrDefault(x => x.Id == idString.ToGuid());
             if (factionEquipment is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -173,7 +171,7 @@ public class StaffFactionEquipmentScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (!player.StaffFlags.Contains(StaffFlag.FactionsStorages))
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -193,7 +191,7 @@ public class StaffFactionEquipmentScript : Script
             var factionEquipment = Global.FactionsEquipments.FirstOrDefault(x => x.Id == factionEquipmentIdString.ToGuid());
             if (factionEquipment is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -209,7 +207,7 @@ public class StaffFactionEquipmentScript : Script
                 factionEquipmentItem = factionEquipment.Items!.FirstOrDefault(x => x.Id == factionEquipmentItemId);
                 if (factionEquipmentItem is null)
                 {
-                    player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                    player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                     return;
                 }
             }
@@ -247,21 +245,21 @@ public class StaffFactionEquipmentScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (!player.StaffFlags.Contains(StaffFlag.FactionsStorages))
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
             var factionEquipment = Global.FactionsEquipments.FirstOrDefault(x => x.Id == factionEquipmentIdString.ToGuid());
             if (factionEquipment is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
             var factionEquipmentItem = factionEquipment.Items!.FirstOrDefault(x => x.Id == factionEquipmentItemIdString.ToGuid());
             if (factionEquipmentItem is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 

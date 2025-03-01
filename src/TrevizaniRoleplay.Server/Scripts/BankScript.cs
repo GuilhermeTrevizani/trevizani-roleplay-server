@@ -1,7 +1,5 @@
 ﻿using GTANetworkAPI;
 using Microsoft.EntityFrameworkCore;
-using TrevizaniRoleplay.Domain.Entities;
-using TrevizaniRoleplay.Domain.Enums;
 using TrevizaniRoleplay.Server.Extensions;
 using TrevizaniRoleplay.Server.Factories;
 using TrevizaniRoleplay.Server.Models;
@@ -41,7 +39,7 @@ public class BankScript : Script
 
             if (player.Money < value)
             {
-                player.SendNotification(NotificationType.Error, string.Format(Globalization.INSUFFICIENT_MONEY_ERROR_MESSAGE, value));
+                player.SendNotification(NotificationType.Error, string.Format(Resources.YouDontHaveEnoughMoney, value));
                 return;
             }
 
@@ -80,7 +78,7 @@ public class BankScript : Script
 
             if (player.Character.Bank < value)
             {
-                player.SendNotification(NotificationType.Error, string.Format(Globalization.INSUFFICIENT_BANK_ERROR_MESSAGE, value));
+                player.SendNotification(NotificationType.Error, string.Format(Resources.YouDontHaveEnoughInYourBankAccount, value));
                 return;
             }
 
@@ -123,7 +121,7 @@ public class BankScript : Script
 
             if (player.Character.Bank < value)
             {
-                player.SendMessage(MessageType.Error, string.Format(Globalization.INSUFFICIENT_BANK_ERROR_MESSAGE, value));
+                player.SendMessage(MessageType.Error, string.Format(Resources.YouDontHaveEnoughInYourBankAccount, value));
                 return;
             }
 
@@ -197,13 +195,13 @@ public class BankScript : Script
     {
         if (player.Character.Cellphone == 0)
         {
-            player.SendMessage(MessageType.Error, Globalization.UNEQUIPPED_CELPPHONE_ERROR_MESSAGE);
+            player.SendMessage(MessageType.Error, Resources.YouDontHaveAnEquippedCellphone);
             return;
         }
 
         if (player.IsActionsBlocked())
         {
-            player.SendMessage(MessageType.Error, Globalization.ACTIONS_BLOCKED_MESSAGE);
+            player.SendMessage(MessageType.Error, Resources.YouCanNotDoThisBecauseYouAreHandcuffedInjuredOrBeingCarried);
             return;
         }
 
@@ -233,13 +231,13 @@ public class BankScript : Script
             var fine = await context.Fines.FirstOrDefaultAsync(x => x.Id == id);
             if (fine is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
             if (player.Character.Bank < fine.Value)
             {
-                player.SendNotification(NotificationType.Error, string.Format(Globalization.INSUFFICIENT_BANK_ERROR_MESSAGE, fine.Value));
+                player.SendNotification(NotificationType.Error, string.Format(Resources.YouDontHaveEnoughInYourBankAccount, fine.Value));
                 return;
             }
 

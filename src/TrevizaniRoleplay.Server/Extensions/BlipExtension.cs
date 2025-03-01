@@ -2,7 +2,7 @@
 
 public static class BlipExtension
 {
-    public static void CreateIdentifier(this Domain.Entities.Blip blip)
+    public static void CreateIdentifier(this Blip blip)
     {
         RemoveIdentifier(blip);
 
@@ -13,7 +13,7 @@ public static class BlipExtension
         });
     }
 
-    public static void RemoveIdentifier(this Domain.Entities.Blip blip)
+    public static void RemoveIdentifier(this Blip blip)
     {
         Functions.RunOnMainThread(() =>
         {

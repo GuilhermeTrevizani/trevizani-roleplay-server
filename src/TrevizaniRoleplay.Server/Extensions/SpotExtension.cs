@@ -1,6 +1,4 @@
 ﻿using GTANetworkAPI;
-using TrevizaniRoleplay.Domain.Entities;
-using TrevizaniRoleplay.Domain.Enums;
 using TrevizaniRoleplay.Server.Factories;
 
 namespace TrevizaniRoleplay.Server.Extensions;
@@ -18,19 +16,19 @@ public static class SpotExtension
         {
             case SpotType.Bank:
                 name = "BANCO";
-                description = "Pressione Y para interagir.";
+                description = Resources.PressYToInteract;
                 break;
             case SpotType.Company:
                 name = "EMPRESA";
-                description = "Pressione Y para interagir.";
+                description = Resources.PressYToInteract;
                 break;
             case SpotType.ClothesStore:
                 name = "LOJA DE ROUPAS";
-                description = "Pressione Y para interagir.";
+                description = Resources.PressYToInteract;
                 break;
             case SpotType.FactionVehicleSpawn:
                 name = "SPAWN DE VEÍCULOS DA FACÇÃO";
-                description = "Pressione Y para interagir.";
+                description = Resources.PressYToInteract;
                 break;
             case SpotType.VehicleSeizure:
                 name = "APREENSÃO DE VEÍCULOS";
@@ -42,31 +40,31 @@ public static class SpotExtension
                 break;
             case SpotType.BarberShop:
                 name = "BARBEARIA";
-                description = "Pressione Y para interagir.";
+                description = Resources.PressYToInteract;
                 break;
             case SpotType.DMV:
                 name = "DMV";
-                description = "Pressione Y para interagir.";
+                description = Resources.PressYToInteract;
                 break;
             case SpotType.HealMe:
                 name = "TRATAMENTO DE FERIDOS";
-                description = "Pressione Y para interagir.";
+                description = Resources.PressYToInteract;
                 break;
             case SpotType.TattooShop:
                 name = "ESTÚDIO DE TATUAGENS";
-                description = "Pressione Y para interagir.";
+                description = Resources.PressYToInteract;
                 break;
             case SpotType.PlasticSurgery:
                 name = "CIRURGIA PLÁSTICA";
-                description = "Pressione Y para interagir.";
+                description = Resources.PressYToInteract;
                 break;
             case SpotType.ForensicLaboratory:
-                name = Globalization.FORENSIC_LABORATORY.ToUpper();
-                description = "Pressione Y para interagir.";
+                name = Resources.ForensicLaboratory;
+                description = Resources.PressYToInteract;
                 break;
             case SpotType.Morgue:
-                name = Globalization.MORGUE.ToUpper();
-                description = "Pressione Y para interagir.";
+                name = Resources.Morgue;
+                description = Resources.PressYToInteract;
                 break;
             default:
                 return;
@@ -81,7 +79,7 @@ public static class SpotExtension
             marker.SpotId = spot.Id;
 
             var colShape = Functions.CreateColShapeCylinder(pos, 1, 1.5f, spot.Dimension);
-            colShape.Description = $"[{name}] {{#FFFFFF}}{description}";
+            colShape.Description = $"[{name.ToUpper()}] {{#FFFFFF}}{description}";
             colShape.SpotId = spot.Id;
         });
     }

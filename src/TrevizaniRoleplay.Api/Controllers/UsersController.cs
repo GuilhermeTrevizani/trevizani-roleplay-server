@@ -6,7 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using TrevizaniRoleplay.Core.Extesions;
+using TrevizaniRoleplay.Core.Extensions;
 using TrevizaniRoleplay.Core.Models.Responses;
 using TrevizaniRoleplay.Core.Models.Settings;
 using TrevizaniRoleplay.Domain.Enums;
@@ -130,13 +130,13 @@ public class UsersController(
                 .ThenBy(x => x.Name)
             .Select(x => new StafferResponse
             {
-                Staff = x.Staff.GetDisplay(),
+                Staff = x.Staff.GetDescription(),
                 Name = $"{x.Name} ({x.DiscordUsername})",
                 HelpRequestsAnswersQuantity = x.HelpRequestsAnswersQuantity,
                 CharacterApplicationsQuantity = x.CharacterApplicationsQuantity,
                 StaffDutyTime = x.StaffDutyTime,
                 ConnectedTime = x.Characters!.Sum(x => x.ConnectedTime),
-                Flags = Deserialize<List<StaffFlag>>(x.StaffFlagsJSON)!.Select(x => x.GetDisplay()).Order(),
+                Flags = Deserialize<List<StaffFlag>>(x.StaffFlagsJSON)!.Select(x => x.GetDescription()).Order(),
                 LastAccessDate = x.LastAccessDate,
             });
     }
@@ -191,7 +191,7 @@ public class UsersController(
         HAVING COUNT(*) > 1;").ToListAsync();
 
         users.AddRange(usersLogs);
-        users = users.DistinctBy(x => x.Users).ToList();
+        users = [.. users.DistinctBy(x => x.Users)];
         return users;
     }
 }

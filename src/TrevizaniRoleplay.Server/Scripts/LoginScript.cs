@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using System.Net.Http.Json;
 using TrevizaniRoleplay.Core.Models.Responses;
-using TrevizaniRoleplay.Domain.Enums;
 using TrevizaniRoleplay.Server.Extensions;
 using TrevizaniRoleplay.Server.Models;
 

@@ -1,6 +1,5 @@
 ﻿using GTANetworkAPI;
-using TrevizaniRoleplay.Domain.Entities;
-using TrevizaniRoleplay.Domain.Enums;
+using TrevizaniRoleplay.Core.Models.Server;
 using TrevizaniRoleplay.Server.Extensions;
 using TrevizaniRoleplay.Server.Factories;
 using TrevizaniRoleplay.Server.Models;
@@ -42,7 +41,7 @@ public class ICChatScript : Script
     {
         if (player.Character.Wound != CharacterWound.None)
         {
-            player.SendMessage(MessageType.Error, Globalization.SERIOUSLY_INJURED_MESSAGE);
+            player.SendMessage(MessageType.Error, Resources.YouCanNotExecuteThisCommandBecauseYouAreSeriouslyInjured);
             return;
         }
 
@@ -52,7 +51,7 @@ public class ICChatScript : Script
 
         if (!player.CheckIfTargetIsCloseIC(target, Constants.RP_DISTANCE))
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_CLOSE_TO_THE_PLAYER);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotCloseToThePlayer);
             return;
         }
 
@@ -108,7 +107,7 @@ public class ICChatScript : Script
 
         if (!player.CheckIfTargetIsCloseIC(target, 10))
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_CLOSE_TO_THE_PLAYER);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotCloseToThePlayer);
             return;
         }
 
@@ -125,7 +124,7 @@ public class ICChatScript : Script
 
         if (!player.CheckIfTargetIsCloseIC(target, 5))
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_CLOSE_TO_THE_PLAYER);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotCloseToThePlayer);
             return;
         }
 
@@ -142,7 +141,7 @@ public class ICChatScript : Script
 
         if (!player.CheckIfTargetIsCloseIC(target, 30))
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_CLOSE_TO_THE_PLAYER);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotCloseToThePlayer);
             return;
         }
 
@@ -183,7 +182,7 @@ public class ICChatScript : Script
     {
         if (player.Character.Wound != CharacterWound.None)
         {
-            player.SendMessage(MessageType.Error, Globalization.SERIOUSLY_INJURED_MESSAGE);
+            player.SendMessage(MessageType.Error, Resources.YouCanNotExecuteThisCommandBecauseYouAreSeriouslyInjured);
             return;
         }
 

@@ -1,8 +1,6 @@
 ﻿using GTANetworkAPI;
 using Microsoft.EntityFrameworkCore;
-using TrevizaniRoleplay.Core.Extesions;
-using TrevizaniRoleplay.Domain.Entities;
-using TrevizaniRoleplay.Domain.Enums;
+using TrevizaniRoleplay.Core.Extensions;
 using TrevizaniRoleplay.Server.Extensions;
 using TrevizaniRoleplay.Server.Factories;
 using TrevizaniRoleplay.Server.Models;
@@ -32,7 +30,7 @@ public class CompanyScript : Script
             var company = Global.Companies.FirstOrDefault(x => x.Id == idString.ToGuid());
             if (company?.CharacterId != player.Character.Id)
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -82,7 +80,7 @@ public class CompanyScript : Script
             var company = Global.Companies.FirstOrDefault(x => x.Id == id);
             if (company is null || !player.CheckCompanyPermission(company, null))
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -93,7 +91,7 @@ public class CompanyScript : Script
                 .Select(x => new
                 {
                     Value = x,
-                    Label = x.GetDisplay(),
+                    Label = x.GetDescription(),
                 })
                 .OrderBy(x => x.Label)
             );
@@ -136,7 +134,7 @@ public class CompanyScript : Script
             var company = Global.Companies.FirstOrDefault(x => x.Id == idString.ToGuid());
             if (company is null || !player.CheckCompanyPermission(company, CompanyFlag.Open))
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -180,7 +178,7 @@ public class CompanyScript : Script
             var company = Global.Companies.FirstOrDefault(x => x.Id == idString.ToGuid());
             if (company is null || !player.CheckCompanyPermission(company, CompanyFlag.Open))
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -210,7 +208,7 @@ public class CompanyScript : Script
             var company = Global.Companies.FirstOrDefault(x => x.Id == companyId);
             if (company is null || !player.CheckCompanyPermission(company, CompanyFlag.InviteEmployee))
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -258,7 +256,7 @@ public class CompanyScript : Script
             var company = Global.Companies.FirstOrDefault(x => x.Id == companyIdString.ToGuid());
             if (company is null || !player.CheckCompanyPermission(company, CompanyFlag.EditEmployee))
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -298,7 +296,7 @@ public class CompanyScript : Script
             var company = Global.Companies.FirstOrDefault(x => x.Id == companyId);
             if (company is null || !player.CheckCompanyPermission(company, CompanyFlag.RemoveEmployee))
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -364,7 +362,7 @@ public class CompanyScript : Script
 
         if (player.Money < company.WeekRentValue)
         {
-            player.SendNotification(NotificationType.Error, string.Format(Globalization.INSUFFICIENT_MONEY_ERROR_MESSAGE, company.WeekRentValue));
+            player.SendNotification(NotificationType.Error, string.Format(Resources.YouDontHaveEnoughMoney, company.WeekRentValue));
             return;
         }
 
@@ -393,7 +391,7 @@ public class CompanyScript : Script
             var company = Global.Companies.FirstOrDefault(x => x.Id == id);
             if (company is null || !player.CheckCompanyPermission(company, null))
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -423,7 +421,7 @@ public class CompanyScript : Script
             var company = Global.Companies.FirstOrDefault(x => x.Id == companyIdString.ToGuid());
             if (company is null || !player.CheckCompanyPermission(company, CompanyFlag.ManageItems))
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -437,7 +435,7 @@ public class CompanyScript : Script
             var companyItem = company.Items!.FirstOrDefault(x => x.Id == companyItemId);
             if (companyItem is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -478,14 +476,14 @@ public class CompanyScript : Script
             var company = Global.Companies.FirstOrDefault(x => x.Id == companyIdString.ToGuid());
             if (company is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
             var companyItem = company.Items!.FirstOrDefault(x => x.Id == companyItemIdString.ToGuid());
             if (companyItem is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -505,7 +503,7 @@ public class CompanyScript : Script
 
             if (player.Money < value)
             {
-                player.SendNotification(NotificationType.Error, string.Format(Globalization.INSUFFICIENT_MONEY_ERROR_MESSAGE, value));
+                player.SendNotification(NotificationType.Error, string.Format(Resources.YouDontHaveEnoughMoney, value));
                 return;
             }
 
@@ -633,7 +631,7 @@ public class CompanyScript : Script
             var company = Global.Companies.FirstOrDefault(x => x.Id == id);
             if (company is null || !player.CheckCompanyPermission(company, CompanyFlag.Safe))
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -681,7 +679,7 @@ public class CompanyScript : Script
             !.Select(x => new
             {
                 x.Id,
-                Type = x.Type.GetDisplay(),
+                Type = x.Type.GetDescription(),
                 x.CostPercentagePrice,
                 x.SellPercentagePrice,
             })
@@ -697,7 +695,7 @@ public class CompanyScript : Script
             var company = Global.Companies.FirstOrDefault(x => x.Id == companyIdString.ToGuid());
             if (company is null || !player.CheckCompanyPermission(company, CompanyFlag.ManageItems))
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -710,7 +708,7 @@ public class CompanyScript : Script
             var companyTuningPrice = company.TuningPrices!.FirstOrDefault(x => x.Id == companyTuningPriceIdString.ToGuid());
             if (companyTuningPrice is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -738,14 +736,14 @@ public class CompanyScript : Script
             var company = Global.Companies.FirstOrDefault(x => x.Id == companyIdString.ToGuid());
             if (company is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
             var companyItem = company.Items!.FirstOrDefault(x => x.Id == companyItemIdString.ToGuid());
             if (companyItem is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 

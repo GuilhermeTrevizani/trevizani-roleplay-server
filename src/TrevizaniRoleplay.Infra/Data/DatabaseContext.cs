@@ -1,38 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using System.Reflection;
 using TrevizaniRoleplay.Domain.Entities;
-using TrevizaniRoleplay.Infra.Data.ModelConfigurations;
+using TrevizaniRoleplay.Infra.Data.Maps;
 
 namespace TrevizaniRoleplay.Infra.Data;
 
-public class DatabaseContext : DbContext
+public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbContext(options)
 {
-    public DatabaseContext()
-    {
-    }
-
-    public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
-    {
-    }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        if (optionsBuilder.IsConfigured)
-            return;
-
-        var loggerFactory = LoggerFactory.Create(builder =>
-        {
-            builder.AddFilter("Microsoft.EntityFrameworkCore", LogLevel.None);
-        });
-
-        optionsBuilder.UseLoggerFactory(loggerFactory)
-            .EnableDetailedErrors()
-            .EnableSensitiveDataLogging();
-        optionsBuilder.UseMySql(Constants.DATABASE_CONNECTION, ServerVersion.AutoDetect(Constants.DATABASE_CONNECTION));
-        optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-    }
-
     public DbSet<AdminObject> AdminObjects { get; set; }
     public DbSet<Animation> Animations { get; set; }
     public DbSet<Banishment> Banishments { get; set; }
@@ -111,7 +85,7 @@ public class DatabaseContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetAssembly(typeof(UserModelConfiguration))!);
+        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetAssembly(typeof(UserMap))!);
     }
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

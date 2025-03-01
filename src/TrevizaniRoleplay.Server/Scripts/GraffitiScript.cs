@@ -1,6 +1,4 @@
 ﻿using GTANetworkAPI;
-using TrevizaniRoleplay.Domain.Entities;
-using TrevizaniRoleplay.Domain.Enums;
 using TrevizaniRoleplay.Server.Extensions;
 using TrevizaniRoleplay.Server.Factories;
 using TrevizaniRoleplay.Server.Models;
@@ -14,7 +12,7 @@ public class GraffitiScript : Script
     {
         if (player.IsActionsBlocked())
         {
-            player.SendMessage(MessageType.Error, Globalization.ACTIONS_BLOCKED_MESSAGE);
+            player.SendMessage(MessageType.Error, Resources.YouCanNotDoThisBecauseYouAreHandcuffedInjuredOrBeingCarried);
             return;
         }
 
@@ -40,7 +38,7 @@ public class GraffitiScript : Script
             var graffitiRequest = Functions.Deserialize<GraffitiRequest>(json);
             if (graffitiRequest is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -105,7 +103,7 @@ public class GraffitiScript : Script
     {
         if (player.IsActionsBlocked())
         {
-            player.SendMessage(MessageType.Error, Globalization.ACTIONS_BLOCKED_MESSAGE);
+            player.SendMessage(MessageType.Error, Resources.YouCanNotDoThisBecauseYouAreHandcuffedInjuredOrBeingCarried);
             return;
         }
 

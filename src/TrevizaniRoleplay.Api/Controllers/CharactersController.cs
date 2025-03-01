@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using TrevizaniRoleplay.Core.Extensions;
 using TrevizaniRoleplay.Core.Models.Requests;
 using TrevizaniRoleplay.Core.Models.Responses;
+using TrevizaniRoleplay.Core.Models.Server;
 using TrevizaniRoleplay.Core.Models.Settings;
 using TrevizaniRoleplay.Domain.Entities;
 using TrevizaniRoleplay.Domain.Enums;

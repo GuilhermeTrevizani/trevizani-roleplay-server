@@ -1,7 +1,5 @@
 ﻿using GTANetworkAPI;
-using TrevizaniRoleplay.Core.Extesions;
-using TrevizaniRoleplay.Domain.Entities;
-using TrevizaniRoleplay.Domain.Enums;
+using TrevizaniRoleplay.Core.Extensions;
 using TrevizaniRoleplay.Server.Extensions;
 using TrevizaniRoleplay.Server.Factories;
 using TrevizaniRoleplay.Server.Models;
@@ -60,7 +58,7 @@ public class InventoryScript : Script
 
             if (player.IsActionsBlocked())
             {
-                player.SendNotification(NotificationType.Error, Globalization.ACTIONS_BLOCKED_MESSAGE);
+                player.SendNotification(NotificationType.Error, Resources.YouCanNotDoThisBecauseYouAreHandcuffedInjuredOrBeingCarried);
                 return;
             }
 
@@ -149,14 +147,14 @@ public class InventoryScript : Script
         var item = player.Items.FirstOrDefault(x => x.Id == id);
         if (item is null)
         {
-            player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+            player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
             UpdateCurrentInventory(player);
             return;
         }
 
         if (player.Items.Any(x => x.Slot == slot))
         {
-            player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+            player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
             UpdateCurrentInventory(player);
             return;
         }
@@ -176,7 +174,7 @@ public class InventoryScript : Script
             var prop = Global.Properties.FirstOrDefault(x => x.Id == player.InventoryRightTargetId);
             if (prop is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 UpdateCurrentInventory(player);
                 return;
             }
@@ -184,14 +182,14 @@ public class InventoryScript : Script
             var item = prop.Items!.FirstOrDefault(x => x.Id == id);
             if (item is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 UpdateCurrentInventory(player);
                 return;
             }
 
             if (prop.Items!.Any(x => x.Slot == slot))
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 UpdateCurrentInventory(player);
                 return;
             }
@@ -209,7 +207,7 @@ public class InventoryScript : Script
             var veh = Global.Vehicles.FirstOrDefault(x => x.VehicleDB.Id == player.InventoryRightTargetId);
             if (veh is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 UpdateCurrentInventory(player);
                 return;
             }
@@ -217,14 +215,14 @@ public class InventoryScript : Script
             var item = veh.VehicleDB.Items!.FirstOrDefault(x => x.Id == id);
             if (item is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 UpdateCurrentInventory(player);
                 return;
             }
 
             if (veh.VehicleDB.Items!.Any(x => x.Slot == slot))
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 UpdateCurrentInventory(player);
                 return;
             }
@@ -249,7 +247,7 @@ public class InventoryScript : Script
         var item = player.Items.FirstOrDefault(x => x.Id == id);
         if (item is null)
         {
-            player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+            player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
             UpdateCurrentInventory(player);
             return;
         }
@@ -308,7 +306,7 @@ public class InventoryScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (player.IsActionsBlocked())
             {
-                player.SendNotification(NotificationType.Error, Globalization.ACTIONS_BLOCKED_MESSAGE);
+                player.SendNotification(NotificationType.Error, Resources.YouCanNotDoThisBecauseYouAreHandcuffedInjuredOrBeingCarried);
                 return;
             }
 
@@ -354,7 +352,7 @@ public class InventoryScript : Script
         var item = player.Items.FirstOrDefault(x => x.Id == id);
         if (item is null)
         {
-            player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+            player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
             UpdateCurrentInventory(player);
             return;
         }
@@ -376,7 +374,7 @@ public class InventoryScript : Script
         var veh = Global.Vehicles.FirstOrDefault(x => x.VehicleDB.Id == player.InventoryRightTargetId);
         if (veh is null)
         {
-            player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+            player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
             UpdateCurrentInventory(player);
             return;
         }
@@ -392,7 +390,7 @@ public class InventoryScript : Script
 
         if (veh.VehicleDB.Items!.Any(x => x.Slot == slot))
         {
-            player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+            player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
             UpdateCurrentInventory(player);
             return;
         }
@@ -440,7 +438,7 @@ public class InventoryScript : Script
         var item = player.Items.FirstOrDefault(x => x.Id == id);
         if (item is null)
         {
-            player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+            player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
             UpdateCurrentInventory(player);
             return;
         }
@@ -462,7 +460,7 @@ public class InventoryScript : Script
         var prop = Global.Properties.FirstOrDefault(x => x.Id == player.InventoryRightTargetId);
         if (prop is null)
         {
-            player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+            player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
             UpdateCurrentInventory(player);
             return;
         }
@@ -478,7 +476,7 @@ public class InventoryScript : Script
 
         if (prop.Items!.Any(x => x.Slot == slot))
         {
-            player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+            player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
             UpdateCurrentInventory(player);
             return;
         }
@@ -532,7 +530,7 @@ public class InventoryScript : Script
         var veh = Global.Vehicles.FirstOrDefault(x => x.VehicleDB.Id == player.InventoryRightTargetId);
         if (veh is null)
         {
-            player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+            player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
             UpdateCurrentInventory(player);
             return;
         }
@@ -540,7 +538,7 @@ public class InventoryScript : Script
         var item = veh.VehicleDB.Items!.FirstOrDefault(x => x.Id == id);
         if (item is null)
         {
-            player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+            player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
             UpdateCurrentInventory(player);
             return;
         }
@@ -586,7 +584,7 @@ public class InventoryScript : Script
         var prop = Global.Properties.FirstOrDefault(x => x.Id == player.InventoryRightTargetId);
         if (prop is null)
         {
-            player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+            player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
             UpdateCurrentInventory(player);
             return;
         }
@@ -594,7 +592,7 @@ public class InventoryScript : Script
         var item = prop.Items!.FirstOrDefault(x => x.Id == id);
         if (item is null)
         {
-            player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+            player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
             UpdateCurrentInventory(player);
             return;
         }
@@ -665,7 +663,7 @@ public class InventoryScript : Script
         if (Functions.CheckIfIsBulletShell(item.GetCategory()))
         {
             var temperature = Functions.GetBulletShellTemperature(item.Extra!);
-            if (temperature == Globalization.HOT)
+            if (temperature == Resources.Hot)
             {
                 player.Health -= 2;
                 player.SendMessageToNearbyPlayers("se queima ao tentar pegar uma cápsula quente.", MessageCategory.Ame);
@@ -709,7 +707,7 @@ public class InventoryScript : Script
         var body = Global.Bodies.FirstOrDefault(x => x.Id == player.InventoryRightTargetId);
         if (body is null)
         {
-            player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+            player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
             UpdateCurrentInventory(player);
             return;
         }
@@ -717,7 +715,7 @@ public class InventoryScript : Script
         var item = body.Items!.FirstOrDefault(x => x.Id == id);
         if (item is null)
         {
-            player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+            player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
             UpdateCurrentInventory(player);
             return;
         }
@@ -763,7 +761,7 @@ public class InventoryScript : Script
         var target = Global.SpawnedPlayers.FirstOrDefault(x => x.Character.Id == player.InventoryRightTargetId);
         if (target is null)
         {
-            player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+            player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
             UpdateCurrentInventory(player);
             return;
         }
@@ -771,7 +769,7 @@ public class InventoryScript : Script
         var item = target.Items.FirstOrDefault(x => x.Id == id);
         if (item is null)
         {
-            player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+            player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
             UpdateCurrentInventory(player);
             return;
         }
@@ -858,7 +856,7 @@ public class InventoryScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (player.IsActionsBlocked())
             {
-                player.SendNotification(NotificationType.Error, Globalization.ACTIONS_BLOCKED_MESSAGE);
+                player.SendNotification(NotificationType.Error, Resources.YouCanNotDoThisBecauseYouAreHandcuffedInjuredOrBeingCarried);
                 UpdateCurrentInventory(player);
                 return;
             }
@@ -866,7 +864,7 @@ public class InventoryScript : Script
             var item = player.Items.FirstOrDefault(x => x.Id == new Guid(id));
             if (item is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 UpdateCurrentInventory(player);
                 return;
             }
@@ -943,14 +941,14 @@ public class InventoryScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (player.IsActionsBlocked())
             {
-                player.SendNotification(NotificationType.Error, Globalization.ACTIONS_BLOCKED_MESSAGE);
+                player.SendNotification(NotificationType.Error, Resources.YouCanNotDoThisBecauseYouAreHandcuffedInjuredOrBeingCarried);
                 return;
             }
 
             var item = player.Items.FirstOrDefault(x => x.Id == new Guid(id));
             if (item is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -1232,14 +1230,14 @@ public class InventoryScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (player.IsActionsBlocked())
             {
-                player.SendNotification(NotificationType.Error, Globalization.ACTIONS_BLOCKED_MESSAGE);
+                player.SendNotification(NotificationType.Error, Resources.YouCanNotDoThisBecauseYouAreHandcuffedInjuredOrBeingCarried);
                 return;
             }
 
             var item = player.Items.FirstOrDefault(x => x.Id == idString.ToGuid());
             if (item is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -1407,7 +1405,7 @@ public class InventoryScript : Script
 
         if (!player.CheckIfTargetIsCloseIC(target, Constants.RP_DISTANCE))
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_CLOSE_TO_THE_PLAYER);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotCloseToThePlayer);
             return;
         }
 
@@ -1523,7 +1521,7 @@ public class InventoryScript : Script
     {
         if (player.IsActionsBlocked())
         {
-            player.SendNotification(NotificationType.Error, Globalization.ACTIONS_BLOCKED_MESSAGE);
+            player.SendNotification(NotificationType.Error, Resources.YouCanNotDoThisBecauseYouAreHandcuffedInjuredOrBeingCarried);
             return;
         }
 
@@ -1641,13 +1639,13 @@ public class InventoryScript : Script
 
         if (factionEquipment.SWAT && !player.FactionFlags.Contains(FactionFlag.SWAT))
         {
-            player.SendMessage(MessageType.Error, $"Você não possui a flag {FactionFlag.SWAT.GetDisplay()};");
+            player.SendMessage(MessageType.Error, $"Você não possui a flag {FactionFlag.SWAT.GetDescription()};");
             return;
         }
 
         if (factionEquipment.UPR && !player.FactionFlags.Contains(FactionFlag.UPR))
         {
-            player.SendMessage(MessageType.Error, $"Você não possui a flag {FactionFlag.UPR.GetDisplay()};");
+            player.SendMessage(MessageType.Error, $"Você não possui a flag {FactionFlag.UPR.GetDescription()};");
             return;
         }
 

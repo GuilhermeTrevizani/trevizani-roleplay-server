@@ -1,7 +1,5 @@
 ﻿using GTANetworkAPI;
 using TrevizaniRoleplay.Core.Extensions;
-using TrevizaniRoleplay.Domain.Entities;
-using TrevizaniRoleplay.Domain.Enums;
 using TrevizaniRoleplay.Server.Extensions;
 using TrevizaniRoleplay.Server.Factories;
 using TrevizaniRoleplay.Server.Models;
@@ -133,7 +131,7 @@ public class JobScript : Script
         {
             if (!player.ValidPed)
             {
-                player.SendMessage(MessageType.Error, Globalization.INVALID_SKIN_MESSAGE);
+                player.SendMessage(MessageType.Error, Resources.YouDontHaveAValidSkin);
                 return;
             }
 
@@ -268,6 +266,6 @@ public class JobScript : Script
             return;
         }
 
-        player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+        player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
     }
 }

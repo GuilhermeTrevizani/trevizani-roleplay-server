@@ -1,6 +1,4 @@
-﻿using TrevizaniRoleplay.Domain.Entities;
-using TrevizaniRoleplay.Domain.Enums;
-using TrevizaniRoleplay.Server.Models;
+﻿using TrevizaniRoleplay.Server.Models;
 
 namespace TrevizaniRoleplay.Server.Extensions;
 

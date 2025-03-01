@@ -2,8 +2,6 @@
 using Discord.WebSocket;
 using GTANetworkAPI;
 using System.Drawing;
-using TrevizaniRoleplay.Domain.Entities;
-using TrevizaniRoleplay.Domain.Enums;
 using TrevizaniRoleplay.Infra.Data;
 using TrevizaniRoleplay.Server.Factories;
 using TrevizaniRoleplay.Server.Models;

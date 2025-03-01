@@ -1,6 +1,5 @@
 ﻿using GTANetworkAPI;
 using TrevizaniRoleplay.Core.Extensions;
-using TrevizaniRoleplay.Domain.Entities;
 
 namespace TrevizaniRoleplay.Server.Extensions;
 

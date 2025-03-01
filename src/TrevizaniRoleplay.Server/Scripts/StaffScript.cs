@@ -1,9 +1,7 @@
 ﻿using GTANetworkAPI;
 using Microsoft.EntityFrameworkCore;
 using TrevizaniRoleplay.Core.Extensions;
-using TrevizaniRoleplay.Core.Extesions;
-using TrevizaniRoleplay.Domain.Entities;
-using TrevizaniRoleplay.Domain.Enums;
+using TrevizaniRoleplay.Core.Models.Server;
 using TrevizaniRoleplay.Server.Extensions;
 using TrevizaniRoleplay.Server.Factories;
 using TrevizaniRoleplay.Server.Models;
@@ -17,7 +15,7 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.JuniorServerAdmin)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -30,7 +28,7 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.JuniorServerAdmin)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -45,7 +43,7 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.JuniorServerAdmin)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -57,7 +55,7 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.LeadServerAdmin)
         {
-            player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -77,13 +75,13 @@ public class StaffScript : Script
     {
         if (!player.StaffFlags.Contains(StaffFlag.VehicleMaintenance))
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
         if (!player.OnAdminDuty)
         {
-            player.SendMessage(MessageType.Error, Globalization.NEED_ADMIN_DUTY);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotOnAdministrativeDuty);
             return;
         }
 
@@ -116,7 +114,7 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.ServerManager)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -157,7 +155,7 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.JuniorServerAdmin)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -176,7 +174,7 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.JuniorServerAdmin)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -195,7 +193,7 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.JuniorServerAdmin)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -221,7 +219,7 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.JuniorServerAdmin)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -244,7 +242,7 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.LeadServerAdmin)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -267,7 +265,7 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.ServerSupport)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -290,7 +288,7 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.JuniorServerAdmin)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -300,7 +298,7 @@ public class StaffScript : Script
 
         if (target.User.Staff >= player.User.Staff)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -320,7 +318,7 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.JuniorServerAdmin)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -342,7 +340,7 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.JuniorServerAdmin)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -365,7 +363,7 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.JuniorServerAdmin)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -396,7 +394,7 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.ServerSupport)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -439,7 +437,7 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.JuniorServerAdmin)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -482,7 +480,7 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.ServerSupport)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -505,7 +503,7 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.JuniorServerAdmin)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -528,7 +526,7 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.ServerSupport)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -561,7 +559,7 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.JuniorServerAdmin)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -594,19 +592,19 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.JuniorServerAdmin)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
         if (player.IsActionsBlocked())
         {
-            player.SendNotification(NotificationType.Error, Globalization.ACTIONS_BLOCKED_MESSAGE);
+            player.SendNotification(NotificationType.Error, Resources.YouCanNotDoThisBecauseYouAreHandcuffedInjuredOrBeingCarried);
             return;
         }
 
         if (!player.OnAdminDuty)
         {
-            player.SendMessage(MessageType.Error, Globalization.NEED_ADMIN_DUTY);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotOnAdministrativeDuty);
             return;
         }
 
@@ -663,7 +661,7 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.JuniorServerAdmin)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -682,7 +680,7 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.JuniorServerAdmin)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -709,7 +707,7 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.JuniorServerAdmin)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -741,7 +739,7 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.JuniorServerAdmin)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -771,13 +769,13 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.JuniorServerAdmin)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
         if (!player.OnAdminDuty)
         {
-            player.SendMessage(MessageType.Error, Globalization.NEED_ADMIN_DUTY);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotOnAdministrativeDuty);
             return;
         }
 
@@ -833,7 +831,7 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.JuniorServerAdmin)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -861,7 +859,7 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.JuniorServerAdmin)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -881,7 +879,7 @@ public class StaffScript : Script
             if (x.Dimension == player.GetDimension()
                 && player.GetPosition().DistanceTo(new(x.PosX, x.PosY, x.PosZ)) <= distance)
             {
-                player.SendMessage(MessageType.None, $"Ponto {x.Id} | Tipo: {x.Type.GetDisplay()} ({(byte)x.Type})");
+                player.SendMessage(MessageType.None, $"Ponto {x.Id} | Tipo: {x.Type.GetDescription()} ({(byte)x.Type})");
                 hasAnythingNear = true;
             }
         }
@@ -1016,7 +1014,7 @@ public class StaffScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (player.User.Staff < UserStaff.JuniorServerAdmin)
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -1028,7 +1026,7 @@ public class StaffScript : Script
 
             if (!player.OnAdminDuty)
             {
-                player.SendNotification(NotificationType.Error, Globalization.NEED_ADMIN_DUTY);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotOnAdministrativeDuty);
                 return;
             }
 
@@ -1052,7 +1050,7 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.LeadServerAdmin)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -1088,7 +1086,7 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.JuniorServerAdmin)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -1110,7 +1108,7 @@ public class StaffScript : Script
 
         if (target.User.Staff >= player.User.Staff)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -1133,7 +1131,7 @@ public class StaffScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (player.User.Staff < UserStaff.JuniorServerAdmin)
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -1175,7 +1173,7 @@ public class StaffScript : Script
 
                 if (character.User!.Staff >= player.User.Staff)
                 {
-                    player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                    player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                     return;
                 }
 
@@ -1202,7 +1200,7 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.LeadServerAdmin)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -1254,13 +1252,13 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.JuniorServerAdmin)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
         if (!player.OnAdminDuty)
         {
-            player.SendMessage(MessageType.Error, Globalization.NEED_ADMIN_DUTY);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotOnAdministrativeDuty);
             return;
         }
 
@@ -1281,13 +1279,13 @@ public class StaffScript : Script
     {
         if (!player.StaffFlags.Contains(StaffFlag.VehicleMaintenance))
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
         if (!player.OnAdminDuty)
         {
-            player.SendMessage(MessageType.Error, Globalization.NEED_ADMIN_DUTY);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotOnAdministrativeDuty);
             return;
         }
 
@@ -1307,13 +1305,13 @@ public class StaffScript : Script
     {
         if (!player.StaffFlags.Contains(StaffFlag.VehicleMaintenance))
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
         if (!player.OnAdminDuty)
         {
-            player.SendMessage(MessageType.Error, Globalization.NEED_ADMIN_DUTY);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotOnAdministrativeDuty);
             return;
         }
 
@@ -1334,13 +1332,13 @@ public class StaffScript : Script
     {
         if (!player.StaffFlags.Contains(StaffFlag.VehicleMaintenance))
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
         if (!player.OnAdminDuty)
         {
-            player.SendMessage(MessageType.Error, Globalization.NEED_ADMIN_DUTY);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotOnAdministrativeDuty);
             return;
         }
 
@@ -1373,7 +1371,7 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.SeniorServerAdmin)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -1403,7 +1401,7 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.SeniorServerAdmin)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -1414,7 +1412,7 @@ public class StaffScript : Script
             .FirstOrDefaultAsync(x => x.NewPlate == plate);
         if (vehicle is null)
         {
-            player.SendMessage(MessageType.Error, Globalization.RECORD_NOT_FOUND);
+            player.SendMessage(MessageType.Error, Resources.RecordNotFound);
             return;
         }
 
@@ -1466,7 +1464,7 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.SeniorServerAdmin)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -1475,7 +1473,7 @@ public class StaffScript : Script
             .FirstOrDefaultAsync(x => x.NewPlate == plate);
         if (vehicle is null)
         {
-            player.SendMessage(MessageType.Error, Globalization.RECORD_NOT_FOUND);
+            player.SendMessage(MessageType.Error, Resources.RecordNotFound);
             return;
         }
 
@@ -1505,7 +1503,7 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.JuniorServerAdmin)
         {
-            player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -1544,7 +1542,7 @@ public class StaffScript : Script
             .Select(x => new
             {
                 Value = x,
-                Label = x.GetDisplay(),
+                Label = x.GetDescription(),
             })
         );
 
@@ -1563,7 +1561,7 @@ public class StaffScript : Script
                 {
                     Character = y.Character!.Name,
                     y.RegisterDate,
-                    Type = y.Type.GetDisplay(),
+                    Type = y.Type.GetDescription(),
                     y.Duration,
                     Staff = y.StaffUser!.Name,
                     y.Reason
@@ -1579,7 +1577,7 @@ public class StaffScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (player.User.Staff < UserStaff.ServerManager)
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -1601,7 +1599,7 @@ public class StaffScript : Script
             var staff = (UserStaff)staffValue;
             if ((player.User.Staff <= user.Staff && player.User.Id != user.Id) || player.User.Staff < staff)
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -1639,7 +1637,7 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.JuniorServerAdmin)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -1713,7 +1711,7 @@ public class StaffScript : Script
                 }),
                 Job = character.Job.GetDescription(),
                 character.RegisterDate,
-                Premium = userPremium.GetDisplay(),
+                Premium = userPremium.GetDescription(),
                 character.ConnectedTime,
                 character.User.NameChanges,
                 character.User.PlateChanges,
@@ -1737,7 +1735,7 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.JuniorServerAdmin)
         {
-            player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -1747,7 +1745,7 @@ public class StaffScript : Script
 
         if (target.User.Staff >= player.User.Staff)
         {
-            player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -1781,7 +1779,7 @@ public class StaffScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (player.User.Staff < UserStaff.JuniorServerAdmin)
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -1818,7 +1816,7 @@ public class StaffScript : Script
 
                 if (character.User!.Staff >= player.User.Staff)
                 {
-                    player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                    player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                     return;
                 }
 
@@ -1857,7 +1855,7 @@ public class StaffScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (!player.StaffFlags.Contains(StaffFlag.CK))
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -1897,7 +1895,7 @@ public class StaffScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (!player.StaffFlags.Contains(StaffFlag.CK))
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -1950,7 +1948,7 @@ public class StaffScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (!player.StaffFlags.Contains(StaffFlag.CK))
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -2001,7 +1999,7 @@ public class StaffScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (!player.StaffFlags.Contains(StaffFlag.CK))
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -2052,7 +2050,7 @@ public class StaffScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (player.User.Staff < UserStaff.LeadServerAdmin)
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -2111,7 +2109,7 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.JuniorServerAdmin)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -2121,7 +2119,7 @@ public class StaffScript : Script
 
         if (target.User.Staff >= player.User.Staff)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -2146,7 +2144,7 @@ public class StaffScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (player.User.Staff < UserStaff.JuniorServerAdmin)
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -2176,7 +2174,7 @@ public class StaffScript : Script
             {
                 if (character.User!.Staff >= player.User.Staff)
                 {
-                    player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                    player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                     return;
                 }
 
@@ -2205,13 +2203,13 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.JuniorServerAdmin)
         {
-            player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
         if (!player.OnAdminDuty)
         {
-            player.SendMessage(MessageType.Error, Globalization.NEED_ADMIN_DUTY);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotOnAdministrativeDuty);
             return;
         }
 
@@ -2244,13 +2242,13 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.JuniorServerAdmin)
         {
-            player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
         if (!player.OnAdminDuty)
         {
-            player.SendMessage(MessageType.Error, Globalization.NEED_ADMIN_DUTY);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotOnAdministrativeDuty);
             return;
         }
 
@@ -2294,13 +2292,13 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.JuniorServerAdmin)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
         if (!player.OnAdminDuty)
         {
-            player.SendMessage(MessageType.Error, Globalization.NEED_ADMIN_DUTY);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotOnAdministrativeDuty);
             return;
         }
 
@@ -2313,13 +2311,13 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.SeniorServerAdmin)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
         if (!player.OnAdminDuty)
         {
-            player.SendMessage(MessageType.Error, Globalization.NEED_ADMIN_DUTY);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotOnAdministrativeDuty);
             return;
         }
 
@@ -2347,13 +2345,13 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.JuniorServerAdmin)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
         if (!player.OnAdminDuty)
         {
-            player.SendMessage(MessageType.Error, Globalization.NEED_ADMIN_DUTY);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotOnAdministrativeDuty);
             return;
         }
 
@@ -2372,13 +2370,13 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.ServerAdminII)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
         if (!player.OnAdminDuty)
         {
-            player.SendMessage(MessageType.Error, Globalization.NEED_ADMIN_DUTY);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotOnAdministrativeDuty);
             return;
         }
 
@@ -2405,13 +2403,13 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.JuniorServerAdmin)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
         if (!player.OnAdminDuty)
         {
-            player.SendMessage(MessageType.Error, Globalization.NEED_ADMIN_DUTY);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotOnAdministrativeDuty);
             return;
         }
 
@@ -2425,13 +2423,13 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.JuniorServerAdmin)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
         if (!player.OnAdminDuty)
         {
-            player.SendMessage(MessageType.Error, Globalization.NEED_ADMIN_DUTY);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotOnAdministrativeDuty);
             return;
         }
 
@@ -2446,13 +2444,13 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.JuniorServerAdmin)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
         if (!player.OnAdminDuty)
         {
-            player.SendMessage(MessageType.Error, Globalization.NEED_ADMIN_DUTY);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotOnAdministrativeDuty);
             return;
         }
 
@@ -2472,7 +2470,7 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.JuniorServerAdmin)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -2502,13 +2500,13 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.ServerAdminI)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
         if (!player.OnAdminDuty)
         {
-            player.SendMessage(MessageType.Error, Globalization.NEED_ADMIN_DUTY);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotOnAdministrativeDuty);
             return;
         }
 
@@ -2525,7 +2523,7 @@ public class StaffScript : Script
         if (target.User.Staff >= player.User.Staff
             && target.Character.Id != player.Character.Id)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -2540,13 +2538,13 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.ServerAdminII)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
         if (!player.OnAdminDuty)
         {
-            player.SendMessage(MessageType.Error, Globalization.NEED_ADMIN_DUTY);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotOnAdministrativeDuty);
             return;
         }
 
@@ -2563,7 +2561,7 @@ public class StaffScript : Script
         if (target.User.Staff >= player.User.Staff
             && target.Character.Id != player.Character.Id)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -2576,18 +2574,18 @@ public class StaffScript : Script
     [Command("vertela", "/vertela (ID ou nome)")]
     public async Task CMD_vertela(MyPlayer player, string idOrName)
     {
-        player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+        player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
         return;
 
         if (player.User.Staff < UserStaff.ServerManager)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
         if (!player.OnAdminDuty)
         {
-            player.SendMessage(MessageType.Error, Globalization.NEED_ADMIN_DUTY);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotOnAdministrativeDuty);
             return;
         }
 
@@ -2622,13 +2620,13 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.LeadServerAdmin)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
         if (!player.OnAdminDuty)
         {
-            player.SendMessage(MessageType.Error, Globalization.NEED_ADMIN_DUTY);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotOnAdministrativeDuty);
             return;
         }
 
@@ -2648,13 +2646,13 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.JuniorServerAdmin)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
         if (!player.OnAdminDuty)
         {
-            player.SendMessage(MessageType.Error, Globalization.NEED_ADMIN_DUTY);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotOnAdministrativeDuty);
             return;
         }
 
@@ -2669,13 +2667,13 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.JuniorServerAdmin)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
         if (!player.OnAdminDuty)
         {
-            player.SendMessage(MessageType.Error, Globalization.NEED_ADMIN_DUTY);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotOnAdministrativeDuty);
             return;
         }
 
@@ -2697,13 +2695,13 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.JuniorServerAdmin)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
         if (!player.OnAdminDuty)
         {
-            player.SendMessage(MessageType.Error, Globalization.NEED_ADMIN_DUTY);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotOnAdministrativeDuty);
             return;
         }
 
@@ -2724,13 +2722,13 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.LeadServerAdmin)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
         if (!player.OnAdminDuty)
         {
-            player.SendMessage(MessageType.Error, Globalization.NEED_ADMIN_DUTY);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotOnAdministrativeDuty);
             return;
         }
 
@@ -2751,13 +2749,13 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.JuniorServerAdmin)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
         if (!player.OnAdminDuty)
         {
-            player.SendMessage(MessageType.Error, Globalization.NEED_ADMIN_DUTY);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotOnAdministrativeDuty);
             return;
         }
 
@@ -2778,13 +2776,13 @@ public class StaffScript : Script
     {
         if (player.User.Staff < UserStaff.ServerManager)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
         if (!player.OnAdminDuty)
         {
-            player.SendMessage(MessageType.Error, Globalization.NEED_ADMIN_DUTY);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotOnAdministrativeDuty);
             return;
         }
 

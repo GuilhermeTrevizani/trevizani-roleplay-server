@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using TrevizaniRoleplay.Core.Globalization;
 using TrevizaniRoleplay.Core.Models.Responses;
 using TrevizaniRoleplay.Core.Models.Settings;
 using TrevizaniRoleplay.Domain.Entities;
@@ -67,7 +68,7 @@ public class AnimationsController(DatabaseContext context) : BaseController(cont
         {
             animation = await context.Animations.FirstOrDefaultAsync(x => x.Id == response.Id);
             if (animation is null)
-                throw new ArgumentException(Globalization.RECORD_NOT_FOUND);
+                throw new ArgumentException(Resources.RecordNotFound);
 
             animation.Update(response.Display, response.Dictionary, response.Name, response.Flag,
                 response.OnlyInVehicle, response.Category, response.Scenario);
@@ -91,7 +92,7 @@ public class AnimationsController(DatabaseContext context) : BaseController(cont
     public async Task Delete(Guid id)
     {
         var animation = await context.Animations.FirstOrDefaultAsync(x => x.Id == id)
-            ?? throw new ArgumentException(Globalization.RECORD_NOT_FOUND);
+            ?? throw new ArgumentException(Resources.RecordNotFound);
 
         context.Animations.Remove(animation);
 

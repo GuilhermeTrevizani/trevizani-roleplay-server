@@ -1,7 +1,6 @@
 ﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-using GTANetworkAPI;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace TrevizaniRoleplay.Server.DiscordBOT;

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using TrevizaniRoleplay.Core.Extesions;
+using TrevizaniRoleplay.Core.Extensions;
 using TrevizaniRoleplay.Core.Models.Requests;
 using TrevizaniRoleplay.Core.Models.Responses;
 using TrevizaniRoleplay.Core.Models.Settings;
@@ -26,7 +26,7 @@ public class LogsController(DatabaseContext context) : BaseController(context)
            .Select(x => new SelectOptionResponse
            {
                Value = (byte)x,
-               Label = x.GetDisplay(),
+               Label = x.GetDescription(),
            })
            .OrderBy(x => x.Label);
     }
@@ -88,12 +88,12 @@ public class LogsController(DatabaseContext context) : BaseController(context)
             .Take(100)
             .ToListAsync();
 
-        await WriteLog(LogType.ViewLogs, $"{user.Name} ({user.DiscordUsername}) | Tipo: {request.Type?.GetDisplay()} | {Serialize(request)}");
+        await WriteLog(LogType.ViewLogs, $"{user.Name} ({user.DiscordUsername}) | Tipo: {request.Type?.GetDescription()} | {Serialize(request)}");
 
         return logs.Select(x => new LogResponse
         {
             Id = x.Id,
-            Type = x.Type.GetDisplay(),
+            Type = x.Type.GetDescription(),
             Date = x.RegisterDate,
             Description = x.Description,
             OriginCharacterName = x.OriginCharacterId.HasValue ? $"{x.OriginCharacter!.Name} ({x.OriginCharacter.User!.Name} ({x.OriginCharacter.User.DiscordUsername}))" : string.Empty,

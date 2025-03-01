@@ -2,10 +2,9 @@
 using Discord.WebSocket;
 using GTANetworkAPI;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System.Text.Json;
-using TrevizaniRoleplay.Core.Extesions;
-using TrevizaniRoleplay.Domain.Entities;
-using TrevizaniRoleplay.Domain.Enums;
+using TrevizaniRoleplay.Core.Extensions;
 using TrevizaniRoleplay.Infra.Data;
 using TrevizaniRoleplay.Server.Extensions;
 using TrevizaniRoleplay.Server.Factories;
@@ -173,7 +172,7 @@ public static class Functions
         await channel.SendMessageAsync(embed: embedBuilder.Build());
     }
 
-    public static UserPremium CheckVIPVehicle(string model)
+    public static UserPremium CheckPremiumVehicle(string model)
     {
         var vip = UserPremium.None;
         model = model.ToLower();
@@ -355,7 +354,7 @@ public static class Functions
     {
         if (player.Vehicle is not MyVehicle vehicle || vehicle.Driver != player)
         {
-            player.SendMessage(Models.MessageType.Error, Globalization.VEHICLE_DRIVER_ERROR_MESSAGE);
+            player.SendMessage(Models.MessageType.Error, Resources.YouAreNotTheDriverOfTheVehicle);
             return;
         }
 
@@ -392,13 +391,13 @@ public static class Functions
                 var costTuningPrice = Convert.ToInt32(realVehiclePrice * (costPercentagePrice / 100f));
                 if (tuningPrice.Item1 < costTuningPrice)
                 {
-                    player.SendMessage(Models.MessageType.Error, $"[{company.Name}] {companyTuningPriceType.GetDisplay()} possui Preço de Venda menor que o Preço de Custo. Por favor, avise ao proprietário.");
+                    player.SendMessage(Models.MessageType.Error, $"[{company.Name}] {companyTuningPriceType.GetDescription()} possui Preço de Venda menor que o Preço de Custo. Por favor, avise ao proprietário.");
                     return;
                 }
 
                 if ((tuningPrice.Item2 - costPercentagePrice) > 5)
                 {
-                    player.SendMessage(Models.MessageType.Error, $"[{company.Name}] {companyTuningPriceType.GetDisplay()} possui Preço de Venda acima do limite. Por exemplo, se o Preço de Custo for 5%, o máximo que o Preço de Venda pode ser é 10%. Por favor, avise ao proprietário.");
+                    player.SendMessage(Models.MessageType.Error, $"[{company.Name}] {companyTuningPriceType.GetDescription()} possui Preço de Venda acima do limite. Por exemplo, se o Preço de Custo for 5%, o máximo que o Preço de Venda pode ser é 10%. Por favor, avise ao proprietário.");
                     return;
                 }
             }
@@ -422,7 +421,7 @@ public static class Functions
                     .Select(x => new VehicleTuning.Mod
                     {
                         Type = Convert.ToByte(x),
-                        Name = x.GetDisplay(),
+                        Name = x.GetDescription(),
                         UnitaryValue = GetTuningPrice(realVehiclePrice, company, x).Item1,
                         Current = realMods.FirstOrDefault(y => y.Type == (byte)x)?.Id ?? -1,
                         Selected = realMods.FirstOrDefault(y => y.Type == (byte)x)?.Id ?? -1,
@@ -449,7 +448,7 @@ public static class Functions
                 WindowTint = vehicle.VehicleDB.WindowTint,
                 WindowTintValue = GetTuningPrice(realVehiclePrice, company, CompanyTuningPriceType.Insufilm).Item1,
                 TireSmokeColor = $"#{vehicle.VehicleDB.TireSmokeColorR:X2}{vehicle.VehicleDB.TireSmokeColorG:X2}{vehicle.VehicleDB.TireSmokeColorB:X2}",
-                TireSmokeColorValue = GetTuningPrice(realVehiclePrice, company, CompanyTuningPriceType.TireSmoke).Item1,
+                TireSmokeColorValue = GetTuningPrice(realVehiclePrice, company, CompanyTuningPriceType.TireSmokeColor).Item1,
                 ProtectionLevel = vehicle.VehicleDB.ProtectionLevel,
                 ProtectionLevelValue = GetTuningPrice(realVehiclePrice, company, CompanyTuningPriceType.ProtectionLevel).Item1,
                 XMR = Convert.ToByte(vehicle.VehicleDB.XMR),
@@ -658,7 +657,7 @@ public static class Functions
         if (totalMinutes >= 10)
             return "Morna";
 
-        return Globalization.HOT;
+        return Resources.Hot;
     }
 
     public static bool IsOwnedByState(CompanyType type) => type == CompanyType.ConvenienceStore ||
@@ -734,7 +733,22 @@ public static class Functions
             || type == CompanyTuningPriceType.Armor;
     }
 
-    public static DatabaseContext GetDatabaseContext() => new();
+    public static DatabaseContext GetDatabaseContext()
+    {
+        var loggerFactory = LoggerFactory.Create(builder =>
+        {
+            builder.AddFilter("Microsoft.EntityFrameworkCore", LogLevel.None);
+        });
+
+        var optionsBuilder = new DbContextOptionsBuilder<DatabaseContext>()
+            .UseLoggerFactory(loggerFactory)
+            .EnableDetailedErrors()
+            .EnableSensitiveDataLogging()
+            .UseMySql(Constants.DATABASE_CONNECTION, ServerVersion.AutoDetect(Constants.DATABASE_CONNECTION))
+            .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+
+        return new DatabaseContext(optionsBuilder.Options);
+    }
 
     public static void SetWeatherInfo()
     {
@@ -806,7 +820,7 @@ public static class Functions
 
         if (player.IsActionsBlocked())
         {
-            player.SendMessage(Models.MessageType.Error, Globalization.ACTIONS_BLOCKED_MESSAGE);
+            player.SendMessage(Models.MessageType.Error, Resources.YouCanNotDoThisBecauseYouAreHandcuffedInjuredOrBeingCarried);
             return;
         }
 

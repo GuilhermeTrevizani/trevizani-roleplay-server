@@ -1,5 +1,4 @@
 ﻿using GTANetworkAPI;
-using TrevizaniRoleplay.Domain.Entities;
 using TrevizaniRoleplay.Server.Factories;
 using TrevizaniRoleplay.Server.Models;
 
@@ -12,7 +11,7 @@ public class DebugScript : Script
     {
         if (player.User.Staff < Domain.Enums.UserStaff.JuniorServerAdmin)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -26,7 +25,7 @@ public class DebugScript : Script
     {
         if (player.User.Staff < Domain.Enums.UserStaff.HeadServerDeveloper)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -40,7 +39,7 @@ public class DebugScript : Script
     {
         if (player.User.Staff < Domain.Enums.UserStaff.HeadServerDeveloper)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -54,7 +53,7 @@ public class DebugScript : Script
     {
         if (player.User.Staff < Domain.Enums.UserStaff.HeadServerDeveloper)
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 

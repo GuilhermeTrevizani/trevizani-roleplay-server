@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using TrevizaniRoleplay.Core.Globalization;
 using TrevizaniRoleplay.Core.Models.Responses;
 using TrevizaniRoleplay.Core.Models.Settings;
 using TrevizaniRoleplay.Domain.Entities;
@@ -36,7 +37,7 @@ public class FurnituresController(DatabaseContext context) : BaseController(cont
     [HttpPost, Authorize(Policy = PolicySettings.POLICY_STAFF_FLAG_FURNITURES)]
     public async Task CreateOrUpdate([FromBody] FurnitureResponse response)
     {
-        if (response.Category.ToLower() != Globalization.BARRIERS && response.Value <= 0)
+        if (response.Category.ToLower() != Resources.Barriers && response.Value <= 0)
             throw new ArgumentException("Valor inválido.");
 
         var isNew = !response.Id.HasValue;
@@ -50,7 +51,7 @@ public class FurnituresController(DatabaseContext context) : BaseController(cont
         {
             furniture = await context.Furnitures.FirstOrDefaultAsync(x => x.Id == response.Id);
             if (furniture is null)
-                throw new ArgumentException(Globalization.RECORD_NOT_FOUND);
+                throw new ArgumentException(Resources.RecordNotFound);
 
             furniture.Update(response.Category, response.Name, response.Model, response.Value, response.Door,
                 response.AudioOutput, response.TVTexture, response.Subcategory, response.UseSlot);
@@ -74,7 +75,7 @@ public class FurnituresController(DatabaseContext context) : BaseController(cont
     public async Task Delete(Guid id)
     {
         var furniture = await context.Furnitures.FirstOrDefaultAsync(x => x.Id == id)
-            ?? throw new ArgumentException(Globalization.RECORD_NOT_FOUND);
+            ?? throw new ArgumentException(Resources.RecordNotFound);
 
         context.Furnitures.Remove(furniture);
 

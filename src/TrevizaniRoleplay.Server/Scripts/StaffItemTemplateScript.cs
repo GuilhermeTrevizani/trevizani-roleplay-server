@@ -1,7 +1,5 @@
 ﻿using GTANetworkAPI;
-using TrevizaniRoleplay.Core.Extesions;
-using TrevizaniRoleplay.Domain.Entities;
-using TrevizaniRoleplay.Domain.Enums;
+using TrevizaniRoleplay.Core.Extensions;
 using TrevizaniRoleplay.Server.Extensions;
 using TrevizaniRoleplay.Server.Factories;
 using TrevizaniRoleplay.Server.Models;
@@ -15,7 +13,7 @@ public class StaffItemTemplateScript : Script
     {
         if (!player.StaffFlags.Contains(StaffFlag.Items))
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -31,7 +29,7 @@ public class StaffItemTemplateScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (!player.StaffFlags.Contains(StaffFlag.Items))
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -124,7 +122,7 @@ public class StaffItemTemplateScript : Script
                     || itemCategory == ItemCategory.VehicleKey || itemCategory == ItemCategory.VehiclePart
                     || itemCategory == ItemCategory.BloodSample || Functions.CheckIfIsAmmo(itemCategory))
                 {
-                    player.SendNotification(NotificationType.Error, $"{itemCategory.GetDisplay()} só pode ter um item.");
+                    player.SendNotification(NotificationType.Error, $"{itemCategory.GetDescription()} só pode ter um item.");
                     return;
                 }
 
@@ -135,7 +133,7 @@ public class StaffItemTemplateScript : Script
                 itemTemplate = Global.ItemsTemplates.FirstOrDefault(x => x.Id == id);
                 if (itemTemplate is null)
                 {
-                    player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                    player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                     return;
                 }
 
@@ -190,7 +188,7 @@ public class StaffItemTemplateScript : Script
             {
                 x.Id,
                 x.Category,
-                CategoryDisplay = x.Category.GetDisplay(),
+                CategoryDisplay = x.Category.GetDescription(),
                 Type = GetType(x),
                 x.Name,
                 x.Weight,
@@ -206,7 +204,7 @@ public class StaffItemTemplateScript : Script
             .Select(category => new
             {
                 Id = (int)category,
-                Name = category.GetDisplay(),
+                Name = category.GetDescription(),
                 HasType = category == ItemCategory.Weapon || category == ItemCategory.Boombox || category == ItemCategory.WeaponComponent,
             })
             .OrderBy(x => x.Name)

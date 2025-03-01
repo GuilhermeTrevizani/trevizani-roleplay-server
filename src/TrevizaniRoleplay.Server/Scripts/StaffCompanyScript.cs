@@ -1,8 +1,6 @@
 ﻿using GTANetworkAPI;
 using Microsoft.EntityFrameworkCore;
-using TrevizaniRoleplay.Core.Extesions;
-using TrevizaniRoleplay.Domain.Entities;
-using TrevizaniRoleplay.Domain.Enums;
+using TrevizaniRoleplay.Core.Extensions;
 using TrevizaniRoleplay.Server.Extensions;
 using TrevizaniRoleplay.Server.Factories;
 using TrevizaniRoleplay.Server.Models;
@@ -16,7 +14,7 @@ public class StaffCompanyScript : Script
     {
         if (!player.StaffFlags.Contains(StaffFlag.Companies))
         {
-            player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -25,7 +23,7 @@ public class StaffCompanyScript : Script
             .Select(x => new
             {
                 Value = x,
-                Label = x.GetDisplay(),
+                Label = x.GetDescription(),
             })
             .OrderBy(x => x.Label)
         );
@@ -43,7 +41,7 @@ public class StaffCompanyScript : Script
             var company = Global.Companies.FirstOrDefault(x => x.Id == id);
             if (company is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -64,7 +62,7 @@ public class StaffCompanyScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (!player.StaffFlags.Contains(StaffFlag.Companies))
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -118,7 +116,7 @@ public class StaffCompanyScript : Script
                 company = Global.Companies.FirstOrDefault(x => x.Id == id);
                 if (company is null)
                 {
-                    player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                    player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                     return;
                 }
 
@@ -157,14 +155,14 @@ public class StaffCompanyScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (!player.StaffFlags.Contains(StaffFlag.Companies))
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
             var company = Global.Companies.FirstOrDefault(x => x.Id == idString.ToGuid());
             if (company is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -228,7 +226,7 @@ public class StaffCompanyScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (!player.StaffFlags.Contains(StaffFlag.Companies))
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
@@ -280,7 +278,7 @@ public class StaffCompanyScript : Script
                 x.WeekRentValue,
                 x.RentPaymentDate,
                 Owner = GetOwner(x.CharacterId),
-                TypeDisplay = x.Type.GetDisplay(),
+                TypeDisplay = x.Type.GetDescription(),
                 x.Type,
                 x.Safe,
                 x.BlipType,
@@ -326,21 +324,21 @@ public class StaffCompanyScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (!player.StaffFlags.Contains(StaffFlag.Companies))
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
             var company = Global.Companies.FirstOrDefault(x => x.Id == companyIdString.ToGuid());
             if (company is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
             var itemTemplate = Global.ItemsTemplates.FirstOrDefault(x => x.Id == itemTemplateIdString.ToGuid());
             if (itemTemplate is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -362,7 +360,7 @@ public class StaffCompanyScript : Script
                 companyItem = company.Items!.FirstOrDefault(x => x.Id == id);
                 if (companyItem is null)
                 {
-                    player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                    player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                     return;
                 }
 
@@ -398,14 +396,14 @@ public class StaffCompanyScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (!player.StaffFlags.Contains(StaffFlag.Companies))
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
             var company = Global.Companies.FirstOrDefault(x => x.Id == companyIdString.ToGuid());
             if (company is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -470,7 +468,7 @@ public class StaffCompanyScript : Script
             !.Select(x => new
             {
                 x.Id,
-                Type = x.Type.GetDisplay(),
+                Type = x.Type.GetDescription(),
                 x.CostPercentagePrice,
                 x.SellPercentagePrice,
             })
@@ -486,14 +484,14 @@ public class StaffCompanyScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (!player.StaffFlags.Contains(StaffFlag.Companies))
             {
-                player.SendNotification(NotificationType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
             }
 
             var company = Global.Companies.FirstOrDefault(x => x.Id == companyIdString.ToGuid());
             if (company is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 
@@ -506,7 +504,7 @@ public class StaffCompanyScript : Script
             var companyTuningPrice = company.TuningPrices!.FirstOrDefault(x => x.Id == companyTuningPriceIdString.ToGuid());
             if (companyTuningPrice is null)
             {
-                player.SendNotification(NotificationType.Error, Globalization.RECORD_NOT_FOUND);
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
                 return;
             }
 

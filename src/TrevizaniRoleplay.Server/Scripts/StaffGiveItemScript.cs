@@ -1,6 +1,4 @@
 ﻿using GTANetworkAPI;
-using TrevizaniRoleplay.Domain.Entities;
-using TrevizaniRoleplay.Domain.Enums;
 using TrevizaniRoleplay.Server.Extensions;
 using TrevizaniRoleplay.Server.Factories;
 using TrevizaniRoleplay.Server.Models;
@@ -14,13 +12,13 @@ public class StaffGiveItemScript : Script
     {
         if (!player.StaffFlags.Contains(StaffFlag.GiveItem))
         {
-            player.SendMessage(MessageType.Error, Globalization.YOU_ARE_NOT_AUTHORIZED);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
         if (!player.OnAdminDuty)
         {
-            player.SendMessage(MessageType.Error, Globalization.NEED_ADMIN_DUTY);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotOnAdministrativeDuty);
             return;
         }
 
@@ -35,7 +33,7 @@ public class StaffGiveItemScript : Script
             var player = Functions.CastPlayer(playerParam);
             if (!player.OnAdminDuty)
             {
-                player.SendNotification(NotificationType.Error, Globalization.NEED_ADMIN_DUTY);
+                player.SendNotification(NotificationType.Error, Resources.YouAreNotOnAdministrativeDuty);
                 return;
             }
 
