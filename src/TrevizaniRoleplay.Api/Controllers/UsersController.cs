@@ -168,24 +168,22 @@ public class UsersController(
     [HttpGet("potential-fakes"), Authorize(Policy = PolicySettings.POLICY_JUNIOR_SERVER_ADMIN)]
     public async Task<IEnumerable<PotentialFakeResponse>> GetPotentialFakes()
     {
-        var users = await context.Database.SqlQueryRaw<PotentialFakeResponse>(@"SELECT GROUP_CONCAT(DiscordUserName SEPARATOR ', ') AS Users
+        var users = await context.Database.SqlQueryRaw<PotentialFakeResponse>(@"SELECT DISTINCT GROUP_CONCAT(DiscordUserName ORDER BY DiscordUsername SEPARATOR ', ') AS Users
         FROM (
             SELECT DISTINCT s.Ip, u.DiscordUserName FROM Sessions s
             inner join characters c on c.Id = s.CharacterId
             inner join users u on u.Id = c.UserId
             WHERE s.Ip != ''
-            ORDER BY u.DiscordUsername
         ) as AllUsers
         GROUP BY Ip
         HAVING COUNT(*) > 1;").ToListAsync();
 
-        var usersLogs = await context.Database.SqlQueryRaw<PotentialFakeResponse>(@"SELECT GROUP_CONCAT(DiscordUserName SEPARATOR ', ') AS Users
+        var usersLogs = await context.Database.SqlQueryRaw<PotentialFakeResponse>(@"SELECT DISTINCT GROUP_CONCAT(DiscordUserName ORDER BY DiscordUsername SEPARATOR ', ') AS Users
         FROM (
             SELECT DISTINCT s.SocialCLubName, u.DiscordUserName FROM Sessions s
             inner join characters c on c.Id = s.CharacterId
             inner join users u on u.Id = c.UserId
             WHERE s.SocialCLubName != ''
-            ORDER BY u.DiscordUsername
         ) as AllUsers
         GROUP BY SocialCLubName
         HAVING COUNT(*) > 1;").ToListAsync();
