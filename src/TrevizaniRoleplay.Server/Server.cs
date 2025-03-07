@@ -6,7 +6,6 @@ using System.Reflection;
 using System.Text.Json.Nodes;
 using System.Timers;
 using TrevizaniRoleplay.Core.Models.Requests;
-using TrevizaniRoleplay.Core.Models.Server;
 using TrevizaniRoleplay.Server.Extensions;
 using TrevizaniRoleplay.Server.Models;
 
@@ -117,25 +116,31 @@ public class Server : Script
     public async Task ResourceStart()
     {
         CultureInfo.DefaultThreadCurrentCulture = CultureInfo.CurrentCulture = CultureInfo.CurrentUICulture = CultureInfo.DefaultThreadCurrentUICulture =
-              CultureInfo.GetCultureInfo("pt-BR");
+              CultureInfo.GetCultureInfo(GetSetting("language"));
 
         NAPI.Server.SetAutoRespawnAfterDeath(false);
         NAPI.Server.SetGlobalServerChat(false);
 
-        Global.AnnouncementDiscordChannel = Convert.ToUInt64(GetSetting("announcementDiscordChannel"));
-        Global.GovernmentAnnouncementDiscordChannel = Convert.ToUInt64(GetSetting("governmentAnnouncementDiscordChannel"));
-        Global.StaffDiscordChannel = Convert.ToUInt64(GetSetting("staffDiscordChannel"));
-        Global.CompanyAnnouncementDiscordChannel = Convert.ToUInt64(GetSetting("companyAnnouncementDiscordChannel"));
-        Global.PremiumGoldDiscordRole = Convert.ToUInt64(GetSetting("premiumGoldDiscordRole"));
-        Global.PremiumSilverDiscordRole = Convert.ToUInt64(GetSetting("premiumSilverDiscordRole"));
-        Global.PremiumBronzeDiscordRole = Convert.ToUInt64(GetSetting("premiumBronzeDiscordRole"));
-        Global.MainDiscordGuild = Convert.ToUInt64(GetSetting("mainDiscordGuild"));
-        Global.RoleplayAnnouncementDiscordChannel = Convert.ToUInt64(GetSetting("roleplayAnnouncementDiscordChannel"));
-        Global.PoliceEmergencyCallDiscordChannel = Convert.ToUInt64(GetSetting("policeEmergencyCallDiscordChannel"));
-        Global.FirefighterEmergencyCallDiscordChannel = Convert.ToUInt64(GetSetting("firefighterEmergencyCallDiscordChannel"));
+        Global.AnnouncementDiscordChannel = GetSetting("announcementDiscordChannel").ToULong();
+        Global.GovernmentAnnouncementDiscordChannel = GetSetting("governmentAnnouncementDiscordChannel").ToULong();
+        Global.StaffDiscordChannel = GetSetting("staffDiscordChannel").ToULong();
+        Global.CompanyAnnouncementDiscordChannel = GetSetting("companyAnnouncementDiscordChannel").ToULong();
+        Global.PremiumGoldDiscordRole = GetSetting("premiumGoldDiscordRole").ToULong();
+        Global.PremiumSilverDiscordRole = GetSetting("premiumSilverDiscordRole").ToULong();
+        Global.PremiumBronzeDiscordRole = GetSetting("premiumBronzeDiscordRole").ToULong();
+        Global.MainDiscordGuild = GetSetting("mainDiscordGuild").ToULong();
+        Global.RoleplayAnnouncementDiscordChannel = GetSetting("roleplayAnnouncementDiscordChannel").ToULong();
+        Global.PoliceEmergencyCallDiscordChannel = GetSetting("policeEmergencyCallDiscordChannel").ToULong();
+        Global.FirefighterEmergencyCallDiscordChannel = GetSetting("firefighterEmergencyCallDiscordChannel").ToULong();
         var discordBotToken = GetSetting("discordBotToken");
         Global.DiscordClientId = GetSetting("discordClientId");
         Global.DiscordClientSecret = GetSetting("discordClientSecret");
+
+        if (string.IsNullOrWhiteSpace(Global.DiscordClientId))
+            throw new Exception(Resources.DiscordClientIdIsNotConfigured);
+
+        if (string.IsNullOrWhiteSpace(Global.DiscordClientSecret))
+            throw new Exception(Resources.DiscordClientSecretIsNotConfigured);
 
         var context = Functions.GetDatabaseContext();
         await context.Database.MigrateAsync();

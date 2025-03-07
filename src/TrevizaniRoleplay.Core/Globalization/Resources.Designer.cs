@@ -520,6 +520,24 @@ namespace TrevizaniRoleplay.Core.Globalization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Discord Client Id is not configured in conf.json.
+        /// </summary>
+        public static string DiscordClientIdIsNotConfigured {
+            get {
+                return ResourceManager.GetString("DiscordClientIdIsNotConfigured", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Discord Client Secret is not configured in conf.json.
+        /// </summary>
+        public static string DiscordClientSecretIsNotConfigured {
+            get {
+                return ResourceManager.GetString("DiscordClientSecretIsNotConfigured", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dismantling.
         /// </summary>
         public static string Dismantling {

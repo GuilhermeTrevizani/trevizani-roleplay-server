@@ -990,4 +990,10 @@
   <data name="Trucker" xml:space="preserve">
     <value>Trucker</value>
   </data>
+  <data name="DiscordClientIdIsNotConfigured" xml:space="preserve">
+    <value>Discord Client Id is not configured in conf.json</value>
+  </data>
+  <data name="DiscordClientSecretIsNotConfigured" xml:space="preserve">
+    <value>Discord Client Secret is not configured in conf.json</value>
+  </data>
 </root>
