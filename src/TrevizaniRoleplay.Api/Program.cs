@@ -11,10 +11,12 @@ using TrevizaniRoleplay.Core.Models.Settings;
 using TrevizaniRoleplay.Domain.Enums;
 using TrevizaniRoleplay.Infra.Data;
 
-CultureInfo.DefaultThreadCurrentCulture = CultureInfo.CurrentCulture = CultureInfo.CurrentUICulture = CultureInfo.DefaultThreadCurrentUICulture =
-    CultureInfo.GetCultureInfo("pt-BR");
-
 var builder = WebApplication.CreateBuilder(args);
+
+var language = builder.Configuration.GetValue<string>("Language")!;
+
+CultureInfo.DefaultThreadCurrentCulture = CultureInfo.CurrentCulture = CultureInfo.CurrentUICulture = CultureInfo.DefaultThreadCurrentUICulture =
+    CultureInfo.GetCultureInfo(language);
 
 builder.Logging.AddFile("logs/api-{Date}.txt");
 
