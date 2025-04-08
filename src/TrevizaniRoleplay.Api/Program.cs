@@ -82,7 +82,7 @@ builder.Services.AddAuthorization(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(x =>
 {
-    x.SwaggerDoc("v1", new OpenApiInfo { Title = "Los Santos Chronicles", Version = "v1" });
+    x.SwaggerDoc("v1", new OpenApiInfo { Title = "Trevizani Roleplay", Version = "v1" });
     x.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
     {
         Name = "Authorization",
