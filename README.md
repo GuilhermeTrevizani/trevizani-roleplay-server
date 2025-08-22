@@ -12,7 +12,8 @@ I'll soon update the documentation with the configuration steps. But you can fin
 1. Create a Discord application [here](https://discord.com/developers/applications).
 2. Configure your Discord App Id on client-side [here](https://github.com/GuilhermeTrevizani/trevizani-roleplay-client/blob/b069369fb3a1c9dd61b65a6cf5b80ce7eb5d0ebf/src/base/constants.ts#L3).
 3. Configure your Discord App Id and Discord Client Secret on server-side in your conf.json putting these section below in the file.
-```"settings": {
+```
+"settings": {
     "language": "en-US",
     "discordClientId": "DISCORD_CLIENT_ID",
     "discordClientSecret": "DISCORD_CLIENT_SECRET",
@@ -27,7 +28,8 @@ I'll soon update the documentation with the configuration steps. But you can fin
     "mainDiscordGuild": "",
     "roleplayAnnouncementDiscordChannel": "",
     "firefighterEmergencyCallDiscordChannel": "",
-    "policeEmergencyCallDiscordChannel": ""
+    "policeEmergencyCallDiscordChannel": "",
+    "databaseConnection": ""
   }
 ```
 4. Configure your database connection [here](https://github.com/GuilhermeTrevizani/trevizani-roleplay-server/blob/e2a1a790e7517d2c43d748ff42c3595efd766dcf/src/TrevizaniRoleplay.Core/Models/Server/Constants.cs#L39).
