@@ -18,7 +18,7 @@ public class PremiumScript : Script
                 userPremium = UserPremium.Silver;
             else if (name == Resources.PremiumBronze)
                 userPremium = UserPremium.Bronze;
-            var currentPremium = player.GetCurrentPremium();
+            var currentPremium = player.User.GetCurrentPremium();
             return userPremium is not null && currentPremium != UserPremium.None && currentPremium != userPremium;
         }
 
@@ -58,19 +58,16 @@ public class PremiumScript : Script
             {
                 premiumDiscordRole = Global.PremiumBronzeDiscordRole;
                 player.User.SetPremium(UserPremium.Bronze);
-                player.Character.SetPremium(UserPremium.Bronze);
             }
             else if (item.Name == Resources.PremiumSilver)
             {
                 premiumDiscordRole = Global.PremiumSilverDiscordRole;
                 player.User.SetPremium(UserPremium.Silver);
-                player.Character.SetPremium(UserPremium.Silver);
             }
             else if (item.Name == Resources.PremiumGold)
             {
                 premiumDiscordRole = Global.PremiumGoldDiscordRole;
                 player.User.SetPremium(UserPremium.Gold);
-                player.Character.SetPremium(UserPremium.Gold);
             }
             else if (item.Name == Resources.NameChange)
             {

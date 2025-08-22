@@ -22,6 +22,7 @@ public class MyVehicle(NetHandle netHandle) : GTANetworkAPI.Vehicle(netHandle)
     /// 2 = Back Left Door
     /// 3 = Back Right Door
     /// 4 = Hood
+    /// 5 = Trunk
     /// </summary>
     public List<bool> DoorsStates { get; set; } = [true, true, true, true, true, true];
 
@@ -85,8 +86,8 @@ public class MyVehicle(NetHandle netHandle) : GTANetworkAPI.Vehicle(netHandle)
 
     public bool SpotlightActive { get; set; }
 
-    public bool HasStorage => string.IsNullOrWhiteSpace(VehicleDB.Model)
-            || !(VehicleDB.Model.ToLower() == VehicleModel.Policeb.ToString().ToLower()
+    public bool HasStorage => SpawnType == MyVehicleSpawnType.Normal &&
+            !(VehicleDB.Model.ToLower() == VehicleModel.Policeb.ToString().ToLower()
             || VehicleDB.Model.ToLower() == VehicleModel.Predator.ToString().ToLower()
             || VehicleDB.Model.ToLower() == VehicleModel.Wastlndr.ToString().ToLower()
             || VehicleDB.Model.ToLower() == VehicleModel.Raptor.ToString().ToLower()
@@ -144,8 +145,6 @@ public class MyVehicle(NetHandle netHandle) : GTANetworkAPI.Vehicle(netHandle)
 
     public DateTime? RentExpirationDate { get; set; }
 
-    public List<Guid> FactionsEquipmentsIds { get; set; } = [];
-
     public MyVehicleSpawnType SpawnType { get; set; } = MyVehicleSpawnType.Normal;
 
     public MyPlayer? Driver => Global.SpawnedPlayers.FirstOrDefault(x => x.VehicleSeat == Constants.VEHICLE_SEAT_DRIVER && x.Vehicle == this);
@@ -183,6 +182,7 @@ public class MyVehicle(NetHandle netHandle) : GTANetworkAPI.Vehicle(netHandle)
         if (SpawnType == MyVehicleSpawnType.Normal)
         {
             VehicleDB.SetDamages(GetEngineHealth(), GetBodyHealth(), Functions.Serialize(Damages));
+            VehicleDB.SetSpawned(false);
 
             var context = Functions.GetDatabaseContext();
             context.Vehicles.Update(VehicleDB);
@@ -231,7 +231,7 @@ public class MyVehicle(NetHandle netHandle) : GTANetworkAPI.Vehicle(netHandle)
         return VehicleDB.CharacterId == player.Character.Id
             || (VehicleDB.FactionId.HasValue && VehicleDB.FactionId == player.Character.FactionId)
             || (!string.IsNullOrWhiteSpace(NameInCharge) && NameInCharge == player.Character.Name)
-            || player.Items.Any(x => x.GetCategory() == ItemCategory.VehicleKey && x.Subtype == VehicleDB.LockNumber);
+            || player.VehiclesAccess.Contains(VehicleDB.Id);
     }
 
     public async Task ActivateProtection(MyPlayer player)
@@ -246,7 +246,7 @@ public class MyVehicle(NetHandle netHandle) : GTANetworkAPI.Vehicle(netHandle)
             if (targetCellphone != 0)
             {
                 var phoneMessage = new PhoneMessage();
-                phoneMessage.CreateTextToContact(targetCellphone, Constants.EMERGENCY_NUMBER,
+                phoneMessage.CreateTextToContact(Constants.EMERGENCY_NUMBER, targetCellphone,
                     $"O alarme do seu {Identifier} foi acionado.");
 
                 await Functions.SendSMS(null, [targetCellphone], phoneMessage);

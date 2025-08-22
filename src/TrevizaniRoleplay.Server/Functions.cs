@@ -4,7 +4,6 @@ using GTANetworkAPI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
-using TrevizaniRoleplay.Core.Extensions;
 using TrevizaniRoleplay.Infra.Data;
 using TrevizaniRoleplay.Server.Extensions;
 using TrevizaniRoleplay.Server.Factories;
@@ -14,7 +13,7 @@ namespace TrevizaniRoleplay.Server;
 
 public static class Functions
 {
-    public static async Task<string> GenerateVehiclePlate(bool government)
+    public static async Task<string> GenerateVehiclePlate()
     {
         var context = GetDatabaseContext();
         var plate = string.Empty;
@@ -22,10 +21,7 @@ public static class Functions
         var random = new Random();
         do
         {
-            if (government)
-                plate = $"1{random.Next(0, 9999999).ToString().PadLeft(7, '0')}";
-            else
-                plate = $"{chars[random.Next(25)]}{chars[random.Next(25)]}{chars[random.Next(25)]}{random.Next(0, 999).ToString().PadLeft(3, '0')}";
+            plate = $"{chars[random.Next(25)]}{chars[random.Next(25)]}{chars[random.Next(25)]}{random.Next(0, 999).ToString().PadLeft(3, '0')}";
         } while (await context.Vehicles.AnyAsync(x => x.Plate == plate));
         return plate;
     }
@@ -266,11 +262,13 @@ public static class Functions
         return message;
     }
 
-    public static async Task WriteLog(LogType type, string description)
+    public static async Task WriteLog(LogType type, string description, Guid userId)
     {
         var context = GetDatabaseContext();
         var log = new Log();
-        log.Create(type, description);
+        log.Create(type, description,
+            null, string.Empty, string.Empty, userId,
+            null, string.Empty, string.Empty);
         await context.Logs.AddAsync(log);
         await context.SaveChangesAsync();
     }
@@ -298,7 +296,7 @@ public static class Functions
     {
         if (faction?.HasDuty ?? false)
         {
-            if (characterItem.OnlyOnDuty || characterItem.GetCategory() == ItemCategory.WalkieTalkie)
+            if (characterItem.GetCategory() == ItemCategory.WalkieTalkie)
                 return false;
         }
 
@@ -324,21 +322,6 @@ public static class Functions
                 IsStack = GetItem(x).GetIsStack(),
             })
         );
-    }
-
-    public static bool CheckIfIsAmmo(ItemCategory itemCategory)
-    {
-        return itemCategory == ItemCategory.PistolAmmo || itemCategory == ItemCategory.ShotgunAmmo
-            || itemCategory == ItemCategory.AssaultRifleAmmo || itemCategory == ItemCategory.LightMachineGunAmmo
-            || itemCategory == ItemCategory.SniperRifleAmmo || itemCategory == ItemCategory.SubMachineGunAmmo;
-    }
-
-    public static bool CheckIfIsBulletShell(ItemCategory itemCategory)
-    {
-        return itemCategory == ItemCategory.PistolBulletShell
-            || itemCategory == ItemCategory.ShotgunBulletShell || itemCategory == ItemCategory.AssaultRifleBulletShell
-            || itemCategory == ItemCategory.LightMachineGunBulletShell || itemCategory == ItemCategory.SniperRifleBulletShell
-            || itemCategory == ItemCategory.SubMachineGunBulletShell;
     }
 
     public static (int, float) GetTuningPrice(int vehiclePrice, Company? company, CompanyTuningPriceType type)
@@ -417,7 +400,7 @@ public static class Functions
                 CompanyId = company?.Id,
                 TargetId = target?.Character?.Id,
                 Staff = staff,
-                CurrentMods = GetTuningTypes()
+                CurrentMods = [.. GetTuningTypes()
                     .Select(x => new VehicleTuning.Mod
                     {
                         Type = Convert.ToByte(x),
@@ -426,8 +409,7 @@ public static class Functions
                         Current = realMods.FirstOrDefault(y => y.Type == (byte)x)?.Id ?? -1,
                         Selected = realMods.FirstOrDefault(y => y.Type == (byte)x)?.Id ?? -1,
                         MultiplyValue = CheckCompanyTuningPriceTypeMultiplyValue(x),
-                    })
-                    .ToList(),
+                    })],
                 RepairValue = GetTuningPrice(realVehiclePrice, company, CompanyTuningPriceType.Repair).Item1,
                 WheelType = vehicle.VehicleDB.WheelType,
                 WheelVariation = vehicle.VehicleDB.WheelVariation,
@@ -587,36 +569,14 @@ public static class Functions
         return $"{ts.TotalHours:00}:{ts.Minutes:00}:{ts.Seconds:00}";
     }
 
-    public static bool CheckIfVehicleExists(string model)
-    {
-        return Enum.TryParse(model, true, out VehicleModel _)
-            || Enum.TryParse(model, true, out VehicleModelMods _);
-    }
-
-    public static bool IsValidImageUrl(string url)
-    {
-        return url.StartsWith("https://i.imgur.com/");
-    }
-
-    public static string GetWeaponName(uint type)
-    {
-        return ((WeaponModel)type).ToString();
-    }
-
-    public static uint GetWeaponType(string name)
-    {
-        Enum.TryParse(name, true, out WeaponModel type);
-        return (uint)type;
-    }
-
     public static Guid? GetAmmoItemTemplateIdByWeapon(uint weapon)
     {
-        return Global.WeaponsInfos.FirstOrDefault(x => x.Name == GetWeaponName(weapon))?.AmmoItemTemplateId;
+        return Global.WeaponsInfos.FirstOrDefault(x => x.Name == GlobalFunctions.GetWeaponName(weapon))?.AmmoItemTemplateId;
     }
 
     public static IEnumerable<Guid> GetComponentsItemsTemplatesByWeapon(uint weapon)
     {
-        return Global.WeaponsInfos.FirstOrDefault(x => x.Name == GetWeaponName(weapon))?.Components.Select(x => x.ItemTemplateId) ?? [];
+        return Global.WeaponsInfos.FirstOrDefault(x => x.Name == GlobalFunctions.GetWeaponName(weapon))?.Components.Select(x => x.ItemTemplateId) ?? [];
     }
 
     public static async Task<Guid> GetNewWeaponId()
@@ -652,10 +612,10 @@ public static class Functions
         var bulletShell = Deserialize<BulletShellItem>(extra);
         var totalMinutes = (DateTime.Now - bulletShell.Date).TotalMinutes;
         if (totalMinutes >= 20)
-            return "Fria";
+            return Resources.Cold;
 
         if (totalMinutes >= 10)
-            return "Morna";
+            return Resources.Warm;
 
         return Resources.Hot;
     }
@@ -718,14 +678,6 @@ public static class Functions
         return myBlip;
     }
 
-    public static IQueryable<Character> GetActiveCharacters()
-    {
-        var context = GetDatabaseContext();
-        return context.Characters.Where(x => !x.DeletedDate.HasValue
-            && !x.DeathDate.HasValue
-            && x.NameChangeStatus != CharacterNameChangeStatus.Done);
-    }
-
     public static bool CheckCompanyTuningPriceTypeMultiplyValue(CompanyTuningPriceType type)
     {
         return type == CompanyTuningPriceType.Engine || type == CompanyTuningPriceType.Brakes
@@ -740,11 +692,14 @@ public static class Functions
             builder.AddFilter("Microsoft.EntityFrameworkCore", LogLevel.None);
         });
 
+        if (string.IsNullOrWhiteSpace(Global.DatabaseConnection))
+            Global.DatabaseConnection = Constants.DEFAULT_DATABASE_CONNECTION;
+
         var optionsBuilder = new DbContextOptionsBuilder<DatabaseContext>()
             .UseLoggerFactory(loggerFactory)
             .EnableDetailedErrors()
             .EnableSensitiveDataLogging()
-            .UseMySql(Constants.DATABASE_CONNECTION, ServerVersion.AutoDetect(Constants.DATABASE_CONNECTION))
+            .UseMySql(Global.DatabaseConnection, ServerVersion.AutoDetect(Global.DatabaseConnection))
             .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
 
         return new DatabaseContext(optionsBuilder.Options);
@@ -1058,6 +1013,21 @@ public static class Functions
 
     public static bool IsWeaponWithAmmo(uint weapon)
     {
-        return Global.WeaponsInfos.Any(x => x.Name == Functions.GetWeaponName(weapon) && x.AmmoItemTemplateId.HasValue);
+        return Global.WeaponsInfos.Any(x => x.Name == GlobalFunctions.GetWeaponName(weapon) && x.AmmoItemTemplateId.HasValue);
+    }
+
+    public static async Task SendNotification(User user, string message)
+    {
+        var context = GetDatabaseContext();
+
+        var notification = new Notification(user.Id, message);
+        await context.Notifications.AddAsync(notification);
+        await context.SaveChangesAsync();
+
+        if (user.ReceiveNotificationsOnDiscord)
+            await SendDiscordMessage(Convert.ToUInt64(user.DiscordId), message);
+
+        var player = Global.SpawnedPlayers.FirstOrDefault(x => x.User.Id == user.Id);
+        player?.SendMessage(Models.MessageType.Error, message);
     }
 }

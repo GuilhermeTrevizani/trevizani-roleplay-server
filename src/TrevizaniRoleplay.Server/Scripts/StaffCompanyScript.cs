@@ -55,7 +55,7 @@ public class StaffCompanyScript : Script
 
     [RemoteEvent(nameof(StaffCompanySave))]
     public async Task StaffCompanySave(Player playerParam, string idString, string name, Vector3 pos, int weekRentValue, int type,
-        int blipType, int blipColor)
+        int blipType, int blipColor, bool entranceBenefit)
     {
         try
         {
@@ -109,7 +109,7 @@ public class StaffCompanyScript : Script
             if (isNew)
             {
                 company.Create(name, pos.X, pos.Y, pos.Z, weekRentValue, companyType,
-                    Convert.ToUInt16(blipType), Convert.ToByte(blipColor));
+                    Convert.ToUInt16(blipType), Convert.ToByte(blipColor), entranceBenefit);
             }
             else
             {
@@ -121,7 +121,7 @@ public class StaffCompanyScript : Script
                 }
 
                 company.Update(name, pos.X, pos.Y, pos.Z, weekRentValue, companyType,
-                    Convert.ToUInt16(blipType), Convert.ToByte(blipColor));
+                    Convert.ToUInt16(blipType), Convert.ToByte(blipColor), entranceBenefit);
             }
 
             var context = Functions.GetDatabaseContext();
@@ -287,6 +287,7 @@ public class StaffCompanyScript : Script
                     Global.SpawnedPlayers.FirstOrDefault(y => y.Character.Id == x.EmployeeOnDuty.Value)?.Character?.Name ?? string.Empty
                     :
                     string.Empty,
+                x.EntranceBenefit,
             }));
     }
 

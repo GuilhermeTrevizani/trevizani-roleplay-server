@@ -19,7 +19,7 @@ public class InfoScript : Script
         try
         {
             var player = Functions.CastPlayer(playerParam);
-            var maxDays = player.GetCurrentPremium() switch
+            var maxDays = player.User.GetCurrentPremium() switch
             {
                 UserPremium.Gold => 30,
                 UserPremium.Silver => 15,
@@ -33,13 +33,13 @@ public class InfoScript : Script
                 return;
             }
 
-            if (image && !Functions.IsValidImageUrl(message))
+            if (image && !GlobalFunctions.IsValidImageUrl(message))
             {
                 player.SendNotification(NotificationType.Error, $"URL de imagem inválida. Use Imgur.");
                 return;
             }
 
-            var infoCount = player.GetCurrentPremium() switch
+            var infoCount = player.User.GetCurrentPremium() switch
             {
                 UserPremium.Gold => 10,
                 UserPremium.Silver => 5,

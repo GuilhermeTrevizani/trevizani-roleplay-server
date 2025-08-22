@@ -9,4 +9,5 @@ public class BanishmentResponse
     public string Character { get; set; } = string.Empty;
     public string User { get; set; } = string.Empty;
     public string UserStaff { get; set; } = string.Empty;
+    public bool OnlyCharacterIsBanned { get; set; }
 }

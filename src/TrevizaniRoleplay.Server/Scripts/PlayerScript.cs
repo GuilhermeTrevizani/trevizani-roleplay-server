@@ -1,8 +1,6 @@
 ﻿using GTANetworkAPI;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
-using TrevizaniRoleplay.Core.Extensions;
-using TrevizaniRoleplay.Core.Models.Server;
 using TrevizaniRoleplay.Server.Extensions;
 using TrevizaniRoleplay.Server.Factories;
 using TrevizaniRoleplay.Server.Models;
@@ -48,6 +46,9 @@ public class PlayerScript : Script
         try
         {
             var player = Functions.CastPlayer(playerParam);
+            if (player.Character is null)
+                return;
+
             var killer = killerParam is null ? null : Functions.CastPlayer(killerParam);
 
             Functions.RunOnMainThread(() =>
@@ -73,7 +74,7 @@ public class PlayerScript : Script
             var target = Global.SpawnedPlayers.FirstOrDefault(x => x.Id == targetEntityRemoteId);
             var weapon = Convert.ToUInt32(weaponString);
             if (weapon == 0
-                || target is null
+                || target?.Character is null
                 || target.OnAdminDuty || shooter.OnAdminDuty
                 || !target.Visible || !shooter.Visible)
                 return;
@@ -97,7 +98,7 @@ public class PlayerScript : Script
             var bodyPart = (BodyPart)boneIndex;
             var damage = 0;
             var bodyPartName = Functions.GetBodyPartName(bodyPart);
-            var weaponInfo = Global.WeaponsInfos.FirstOrDefault(x => x.Name.ToLower() == Functions.GetWeaponName(weapon).ToLower());
+            var weaponInfo = Global.WeaponsInfos.FirstOrDefault(x => x.Name.ToLower() == GlobalFunctions.GetWeaponName(weapon).ToLower());
             if (weaponInfo is not null)
             {
                 damage = weaponInfo.Damage;
@@ -109,7 +110,7 @@ public class PlayerScript : Script
 
             target.Wounds.Add(new Wound
             {
-                Weapon = Functions.GetWeaponName(weapon),
+                Weapon = GlobalFunctions.GetWeaponName(weapon),
                 Damage = damage,
                 BodyPart = bodyPartName,
                 Attacker = $"{shooter.Character.Name} ({shooter.Character.Id})",
@@ -152,7 +153,7 @@ public class PlayerScript : Script
             if (weapon == (uint)WeaponHash.Stungun)
                 target.Emit("SetRagdoll");
 
-            var realWeapon = Global.WeaponsInfos.FirstOrDefault(x => x.Name == Functions.GetWeaponName(weapon));
+            var realWeapon = Global.WeaponsInfos.FirstOrDefault(x => x.Name == GlobalFunctions.GetWeaponName(weapon));
             if (realWeapon?.AmmoItemTemplateId is not null)
             {
                 var weaponType = realWeapon.AmmoItemTemplateId.ToString() switch
@@ -191,7 +192,7 @@ public class PlayerScript : Script
                 || player.Character is null
                 || message.Length > 265)
             {
-                await Functions.SendServerMessage($"{player.User.Name} tentou burlar o chat de alguma forma. Mensagem: {message}", UserStaff.JuniorServerAdmin, true);
+                await Functions.SendServerMessage($"{player.User.Name} tentou burlar o chat de alguma forma. Mensagem: {message}", UserStaff.GameAdmin, true);
                 return;
             }
 
@@ -293,7 +294,8 @@ public class PlayerScript : Script
                         return;
                     }
 
-                    if (player.Vehicle is not MyVehicle vehicle || vehicle.VehicleDB.CharacterId != player.Character.Id)
+                    var vehicle = player.GetVehicle();
+                    if (vehicle is null || vehicle.VehicleDB.CharacterId != player.Character.Id)
                     {
                         player.SendMessage(MessageType.Error, "Você não está dentro de um veículo seu.");
                         return;
@@ -640,7 +642,7 @@ public class PlayerScript : Script
         try
         {
             var player = Functions.CastPlayer(playerParam);
-            if (player.User.Staff < UserStaff.JuniorServerAdmin)
+            if (player.User.Staff < UserStaff.GameAdmin)
                 return;
 
             player.SetPosition(new(x, y, z), player.GetDimension(), false);
@@ -768,6 +770,7 @@ public class PlayerScript : Script
 
                 player.SetPosition(prox.GetExitPosition(), prox.Number, false);
                 player.SetRotation(prox.GetExitRotation());
+                await CheckCompanyBenefit(player, prox);
                 return;
             }
 
@@ -835,6 +838,7 @@ public class PlayerScript : Script
 
                 player.SetPosition(propertyEntrance.GetExitPosition(), propertyEntrance.GetProperty().Number, false);
                 player.SetRotation(propertyEntrance.GetExitRotation());
+                await CheckCompanyBenefit(player, propertyEntrance.GetProperty());
                 return;
             }
 
@@ -1250,7 +1254,6 @@ public class PlayerScript : Script
                         {
                             x.Id,
                             Model = x.Model.ToUpper(),
-                            Name = NAPI.Vehicle.GetVehicleDisplayName(Functions.Hash(x.Model)),
                             x.Plate,
                             InChargeCharacterName = Global.Vehicles.FirstOrDefault(y => y.VehicleDB.Id == x.Id)?.NameInCharge ?? string.Empty,
                             SessionId = Global.Vehicles.FirstOrDefault(y => y.VehicleDB.Id == x.Id)?.Id,
@@ -1311,6 +1314,43 @@ public class PlayerScript : Script
         {
             Functions.GetException(ex);
         }
+    }
+
+    private async Task CheckCompanyBenefit(MyPlayer player, Property property)
+    {
+        if (property.CompanyId is null)
+            return;
+
+        var company = Global.Companies.FirstOrDefault(x => x.Id == property.CompanyId);
+        if (company is null || !company.GetIsOpen()
+            || !company.CharacterId.HasValue
+            || !company.EntranceBenefit
+            || Global.Parameter.EntranceBenefitValue == 0
+            || company.EntranceBenefitCooldown > DateTime.Now)
+            return;
+
+        var users = Functions.Deserialize<List<Guid>>(company.EntranceBenefitUsersJson);
+        if (users.Contains(player.User.Id))
+            return;
+
+        await company.MovementSafe(player, company.CharacterId.Value, FinancialTransactionType.Deposit,
+            Global.Parameter.EntranceBenefitValue, "Benefício Entrada");
+
+        users.Add(player.User.Id);
+        company.SetEntranceBenefit(users.Count == Global.Parameter.EntranceBenefitCooldownUsers ?
+            DateTime.Now.AddHours(Global.Parameter.EntranceBenefitCooldownHours)
+            :
+            null,
+            users.Count == Global.Parameter.EntranceBenefitCooldownUsers ?
+            "[]"
+            :
+            Functions.Serialize(users));
+
+        var context = Functions.GetDatabaseContext();
+
+        context.Companies.Update(company);
+
+        await context.SaveChangesAsync();
     }
 
     [Command("propnoclip")]
@@ -1699,11 +1739,6 @@ public class PlayerScript : Script
         try
         {
             var player = Functions.CastPlayer(playerParam);
-            if (Global.Items.Any(x => x.Dimension == player.GetDimension()
-                && position.DistanceTo(new(x.PosX, x.PosY, x.PosZ)) <= 2
-                && x.GetCategory() == ItemCategory.BloodSample
-                && Functions.Deserialize<BloodSampleItem>(x.Extra!).CharacterId == player.Character.Id))
-                return;
 
             var item = new Item();
             item.Create(new Guid(Constants.BLOOD_SAMPLE_ITEM_TEMPLATE_ID), 0, 1, Functions.Serialize(new BloodSampleItem

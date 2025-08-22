@@ -17,7 +17,7 @@ namespace TrevizaniRoleplay.Infra.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.10")
+                .HasAnnotation("ProductVersion", "8.0.17")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
@@ -434,12 +434,6 @@ namespace TrevizaniRoleplay.Infra.Migrations
                     b.Property<float>("PosZ")
                         .HasColumnType("float");
 
-                    b.Property<byte>("Premium")
-                        .HasColumnType("tinyint unsigned");
-
-                    b.Property<DateTime?>("PremiumValidDate")
-                        .HasColumnType("datetime(6)");
-
                     b.Property<DateTime>("RegisterDate")
                         .HasColumnType("datetime(6)");
 
@@ -523,9 +517,6 @@ namespace TrevizaniRoleplay.Infra.Migrations
                     b.Property<Guid>("ItemTemplateId")
                         .HasColumnType("char(36)");
 
-                    b.Property<bool>("OnlyOnDuty")
-                        .HasColumnType("tinyint(1)");
-
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
@@ -547,6 +538,54 @@ namespace TrevizaniRoleplay.Infra.Migrations
                     b.ToTable("CharactersItems", (string)null);
                 });
 
+            modelBuilder.Entity("TrevizaniRoleplay.Domain.Entities.CharacterProperty", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("CharacterId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("PropertyId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("RegisterDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CharacterId");
+
+                    b.HasIndex("PropertyId");
+
+                    b.ToTable("CharactersProperties", (string)null);
+                });
+
+            modelBuilder.Entity("TrevizaniRoleplay.Domain.Entities.CharacterVehicle", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("CharacterId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("RegisterDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid>("VehicleId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CharacterId");
+
+                    b.HasIndex("VehicleId");
+
+                    b.ToTable("CharactersVehicles", (string)null);
+                });
+
             modelBuilder.Entity("TrevizaniRoleplay.Domain.Entities.Company", b =>
                 {
                     b.Property<Guid>("Id")
@@ -566,6 +605,16 @@ namespace TrevizaniRoleplay.Infra.Migrations
                         .IsRequired()
                         .HasMaxLength(6)
                         .HasColumnType("varchar(6)");
+
+                    b.Property<bool>("EntranceBenefit")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime?>("EntranceBenefitCooldown")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("EntranceBenefitUsersJson")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -659,6 +708,40 @@ namespace TrevizaniRoleplay.Infra.Migrations
                     b.HasIndex("ItemTemplateId");
 
                     b.ToTable("CompaniesItems", (string)null);
+                });
+
+            modelBuilder.Entity("TrevizaniRoleplay.Domain.Entities.CompanySafeMovement", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("CharacterId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("RegisterDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<byte>("Type")
+                        .HasColumnType("tinyint unsigned");
+
+                    b.Property<uint>("Value")
+                        .HasColumnType("int unsigned");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CharacterId");
+
+                    b.HasIndex("CompanyId");
+
+                    b.ToTable("CompaniesSafesMovements", (string)null);
                 });
 
             modelBuilder.Entity("TrevizaniRoleplay.Domain.Entities.CompanySell", b =>
@@ -1238,29 +1321,27 @@ namespace TrevizaniRoleplay.Infra.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<string>("Extra")
+                    b.Property<uint>("Ammo")
+                        .HasColumnType("int unsigned");
+
+                    b.Property<string>("ComponentsJson")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<Guid>("FactionEquipmentId")
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid>("ItemTemplateId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("RegisterDate")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<uint>("Subtype")
-                        .HasColumnType("int unsigned");
+                    b.Property<string>("Weapon")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("FactionEquipmentId");
-
-                    b.HasIndex("ItemTemplateId");
 
                     b.ToTable("FactionsEquipmentsItems", (string)null);
                 });
@@ -1955,8 +2036,8 @@ namespace TrevizaniRoleplay.Infra.Migrations
                     b.Property<uint>("Type")
                         .HasColumnType("int unsigned");
 
-                    b.Property<float>("Weight")
-                        .HasColumnType("float");
+                    b.Property<uint>("Weight")
+                        .HasColumnType("int unsigned");
 
                     b.HasKey("Id");
 
@@ -2094,6 +2175,9 @@ namespace TrevizaniRoleplay.Infra.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
+                    b.Property<Guid?>("OriginUserId")
+                        .HasColumnType("char(36)");
+
                     b.Property<DateTime>("RegisterDate")
                         .HasColumnType("datetime(6)");
 
@@ -2117,9 +2201,38 @@ namespace TrevizaniRoleplay.Infra.Migrations
 
                     b.HasIndex("OriginCharacterId");
 
+                    b.HasIndex("OriginUserId");
+
                     b.HasIndex("TargetCharacterId");
 
                     b.ToTable("Logs", (string)null);
+                });
+
+            modelBuilder.Entity("TrevizaniRoleplay.Domain.Entities.Notification", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<DateTime?>("ReadDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("RegisterDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Notifications", (string)null);
                 });
 
             modelBuilder.Entity("TrevizaniRoleplay.Domain.Entities.Parameter", b =>
@@ -2166,6 +2279,15 @@ namespace TrevizaniRoleplay.Infra.Migrations
                     b.Property<byte>("EndTimeCrackDen")
                         .HasColumnType("tinyint unsigned");
 
+                    b.Property<uint>("EntranceBenefitCooldownHours")
+                        .HasColumnType("int unsigned");
+
+                    b.Property<uint>("EntranceBenefitCooldownUsers")
+                        .HasColumnType("int unsigned");
+
+                    b.Property<uint>("EntranceBenefitValue")
+                        .HasColumnType("int unsigned");
+
                     b.Property<int>("ExtraPaymentGarbagemanValue")
                         .HasColumnType("int");
 
@@ -2186,17 +2308,8 @@ namespace TrevizaniRoleplay.Infra.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime?>("InactivePropertiesDate")
-                        .HasColumnType("datetime(6)");
-
                     b.Property<byte>("InitialTimeCrackDen")
                         .HasColumnType("tinyint unsigned");
-
-                    b.Property<int>("KeyValue")
-                        .HasColumnType("int");
-
-                    b.Property<int>("LockValue")
-                        .HasColumnType("int");
 
                     b.Property<string>("MOTD")
                         .IsRequired()
@@ -2591,9 +2704,6 @@ namespace TrevizaniRoleplay.Infra.Migrations
                     b.Property<byte>("Interior")
                         .HasColumnType("tinyint unsigned");
 
-                    b.Property<uint>("LockNumber")
-                        .HasColumnType("int unsigned");
-
                     b.Property<bool>("Locked")
                         .HasColumnType("tinyint(1)");
 
@@ -2609,9 +2719,6 @@ namespace TrevizaniRoleplay.Infra.Migrations
 
                     b.Property<byte>("ProtectionLevel")
                         .HasColumnType("tinyint unsigned");
-
-                    b.Property<DateTime?>("PurchaseDate")
-                        .HasColumnType("datetime(6)");
 
                     b.Property<DateTime>("RegisterDate")
                         .HasColumnType("datetime(6)");
@@ -2865,6 +2972,26 @@ namespace TrevizaniRoleplay.Infra.Migrations
                     b.HasIndex("VehicleId");
 
                     b.ToTable("SeizedVehicles", (string)null);
+                });
+
+            modelBuilder.Entity("TrevizaniRoleplay.Domain.Entities.ServerStatistic", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("RegisterDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("SpawnedPlayersCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalPlayersCount")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ServerStatistics", (string)null);
                 });
 
             modelBuilder.Entity("TrevizaniRoleplay.Domain.Entities.Session", b =>
@@ -3228,6 +3355,9 @@ namespace TrevizaniRoleplay.Infra.Migrations
                     b.Property<DateTime?>("PropertyRobberyCooldown")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<bool>("ReceiveNotificationsOnDiscord")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<byte>("ReceiveSMSDiscord")
                         .HasColumnType("tinyint unsigned");
 
@@ -3338,9 +3468,6 @@ namespace TrevizaniRoleplay.Infra.Migrations
                     b.Property<byte>("Livery")
                         .HasColumnType("tinyint unsigned");
 
-                    b.Property<uint>("LockNumber")
-                        .HasColumnType("int unsigned");
-
                     b.Property<string>("Model")
                         .IsRequired()
                         .HasMaxLength(25)
@@ -3415,6 +3542,9 @@ namespace TrevizaniRoleplay.Infra.Migrations
                         .HasColumnType("int");
 
                     b.Property<bool>("Sold")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("Spawned")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<byte>("TireSmokeColorB")
@@ -3677,11 +3807,50 @@ namespace TrevizaniRoleplay.Infra.Migrations
                     b.Navigation("ItemTemplate");
                 });
 
+            modelBuilder.Entity("TrevizaniRoleplay.Domain.Entities.CharacterProperty", b =>
+                {
+                    b.HasOne("TrevizaniRoleplay.Domain.Entities.Character", "Character")
+                        .WithMany("PropertiesAccess")
+                        .HasForeignKey("CharacterId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("TrevizaniRoleplay.Domain.Entities.Property", "Property")
+                        .WithMany("CharactersAccess")
+                        .HasForeignKey("PropertyId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Character");
+
+                    b.Navigation("Property");
+                });
+
+            modelBuilder.Entity("TrevizaniRoleplay.Domain.Entities.CharacterVehicle", b =>
+                {
+                    b.HasOne("TrevizaniRoleplay.Domain.Entities.Character", "Character")
+                        .WithMany("VehiclesAccess")
+                        .HasForeignKey("CharacterId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("TrevizaniRoleplay.Domain.Entities.Vehicle", "Vehicle")
+                        .WithMany("CharactersAccess")
+                        .HasForeignKey("VehicleId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Character");
+
+                    b.Navigation("Vehicle");
+                });
+
             modelBuilder.Entity("TrevizaniRoleplay.Domain.Entities.Company", b =>
                 {
                     b.HasOne("TrevizaniRoleplay.Domain.Entities.Character", "Character")
                         .WithMany("Companies")
-                        .HasForeignKey("CharacterId");
+                        .HasForeignKey("CharacterId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Character");
                 });
@@ -3722,6 +3891,25 @@ namespace TrevizaniRoleplay.Infra.Migrations
                     b.Navigation("Company");
 
                     b.Navigation("ItemTemplate");
+                });
+
+            modelBuilder.Entity("TrevizaniRoleplay.Domain.Entities.CompanySafeMovement", b =>
+                {
+                    b.HasOne("TrevizaniRoleplay.Domain.Entities.Character", "Character")
+                        .WithMany()
+                        .HasForeignKey("CharacterId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("TrevizaniRoleplay.Domain.Entities.Company", "Company")
+                        .WithMany("SafeMovements")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Character");
+
+                    b.Navigation("Company");
                 });
 
             modelBuilder.Entity("TrevizaniRoleplay.Domain.Entities.CompanySell", b =>
@@ -3858,7 +4046,7 @@ namespace TrevizaniRoleplay.Infra.Migrations
                     b.HasOne("TrevizaniRoleplay.Domain.Entities.Dealership", "Dealership")
                         .WithMany()
                         .HasForeignKey("DealershipId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Dealership");
@@ -3896,7 +4084,8 @@ namespace TrevizaniRoleplay.Infra.Migrations
                 {
                     b.HasOne("TrevizaniRoleplay.Domain.Entities.Character", "Character")
                         .WithOne()
-                        .HasForeignKey("TrevizaniRoleplay.Domain.Entities.Faction", "CharacterId");
+                        .HasForeignKey("TrevizaniRoleplay.Domain.Entities.Faction", "CharacterId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Character");
                 });
@@ -3920,15 +4109,7 @@ namespace TrevizaniRoleplay.Infra.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("TrevizaniRoleplay.Domain.Entities.ItemTemplate", "ItemTemplate")
-                        .WithMany()
-                        .HasForeignKey("ItemTemplateId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.Navigation("FactionEquipment");
-
-                    b.Navigation("ItemTemplate");
                 });
 
             modelBuilder.Entity("TrevizaniRoleplay.Domain.Entities.FactionFrequency", b =>
@@ -3936,7 +4117,7 @@ namespace TrevizaniRoleplay.Infra.Migrations
                     b.HasOne("TrevizaniRoleplay.Domain.Entities.Faction", "Faction")
                         .WithMany()
                         .HasForeignKey("FactionId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Faction");
@@ -4200,6 +4381,11 @@ namespace TrevizaniRoleplay.Infra.Migrations
                         .HasForeignKey("OriginCharacterId")
                         .OnDelete(DeleteBehavior.Restrict);
 
+                    b.HasOne("TrevizaniRoleplay.Domain.Entities.User", "OriginUser")
+                        .WithMany()
+                        .HasForeignKey("OriginUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("TrevizaniRoleplay.Domain.Entities.Character", "TargetCharacter")
                         .WithMany()
                         .HasForeignKey("TargetCharacterId")
@@ -4207,7 +4393,20 @@ namespace TrevizaniRoleplay.Infra.Migrations
 
                     b.Navigation("OriginCharacter");
 
+                    b.Navigation("OriginUser");
+
                     b.Navigation("TargetCharacter");
+                });
+
+            modelBuilder.Entity("TrevizaniRoleplay.Domain.Entities.Notification", b =>
+                {
+                    b.HasOne("TrevizaniRoleplay.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("TrevizaniRoleplay.Domain.Entities.PhoneGroupUser", b =>
@@ -4504,9 +4703,13 @@ namespace TrevizaniRoleplay.Infra.Migrations
 
                     b.Navigation("Properties");
 
+                    b.Navigation("PropertiesAccess");
+
                     b.Navigation("Sessions");
 
                     b.Navigation("Vehicles");
+
+                    b.Navigation("VehiclesAccess");
                 });
 
             modelBuilder.Entity("TrevizaniRoleplay.Domain.Entities.Company", b =>
@@ -4514,6 +4717,8 @@ namespace TrevizaniRoleplay.Infra.Migrations
                     b.Navigation("Characters");
 
                     b.Navigation("Items");
+
+                    b.Navigation("SafeMovements");
 
                     b.Navigation("TuningPrices");
                 });
@@ -4550,6 +4755,8 @@ namespace TrevizaniRoleplay.Infra.Migrations
 
             modelBuilder.Entity("TrevizaniRoleplay.Domain.Entities.Property", b =>
                 {
+                    b.Navigation("CharactersAccess");
+
                     b.Navigation("Entrances");
 
                     b.Navigation("Furnitures");
@@ -4564,6 +4771,8 @@ namespace TrevizaniRoleplay.Infra.Migrations
 
             modelBuilder.Entity("TrevizaniRoleplay.Domain.Entities.Vehicle", b =>
                 {
+                    b.Navigation("CharactersAccess");
+
                     b.Navigation("Items");
                 });
 #pragma warning restore 612, 618

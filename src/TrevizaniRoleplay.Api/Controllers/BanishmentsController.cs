@@ -12,12 +12,12 @@ namespace TrevizaniRoleplay.Api.Controllers;
 [Route("banishments")]
 public class BanishmentsController(DatabaseContext context) : BaseController(context)
 {
-    [HttpGet, Authorize(Policy = PolicySettings.POLICY_SERVER_SUPPORT)]
+    [HttpGet, Authorize(Policy = PolicySettings.POLICY_TESTER)]
     public async Task<IEnumerable<BanishmentResponse>> Get()
     {
         var banishments = await context.Banishments
             .Include(x => x.Character)
-            .Include(x => x.User)
+                .ThenInclude(x => x!.User)
             .Include(x => x.StaffUser)
             .OrderByDescending(x => x.ExpirationDate)
             .ThenByDescending(x => x.RegisterDate)
@@ -28,15 +28,16 @@ public class BanishmentsController(DatabaseContext context) : BaseController(con
                 ExpirationDate = x.ExpirationDate,
                 Reason = x.Reason,
                 Character = x.Character!.Name,
-                User = $"{x.User!.Name} ({x.User.DiscordUsername})",
+                User = $"{x.Character!.User!.Name} ({x.Character!.User.DiscordUsername})",
                 UserStaff = $"{x.StaffUser!.Name} ({x.StaffUser.DiscordUsername})",
+                OnlyCharacterIsBanned = x.UserId == null,
             })
             .ToListAsync();
 
         return banishments;
     }
 
-    [HttpPost("unban"), Authorize(Policy = PolicySettings.POLICY_JUNIOR_SERVER_ADMIN)]
+    [HttpPost("unban"), Authorize(Policy = PolicySettings.POLICY_GAME_ADMIN)]
     public async Task Unban([FromBody] UnbanRequest request)
     {
         var banishment = await context.Banishments.FirstOrDefaultAsync(x => x.Id == request.Id)

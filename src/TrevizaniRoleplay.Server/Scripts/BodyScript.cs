@@ -43,7 +43,7 @@ public class BodyScript : Script
     [Command("arecolhercorpo")]
     public async Task CMD_arecolhercorpo(MyPlayer player)
     {
-        if (player.User.Staff < UserStaff.JuniorServerAdmin)
+        if (player.User.Staff < UserStaff.GameAdmin)
         {
             player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -68,14 +68,14 @@ public class BodyScript : Script
         body.RemoveIdentifier();
         Global.Bodies.Remove(body);
 
-        await Functions.SendServerMessage($"{player.User.Name} enviou o corpo de {body.Name} ({body.RegisterDate}) para o necrotério.", UserStaff.JuniorServerAdmin, false);
+        await Functions.SendServerMessage($"{player.User.Name} enviou o corpo de {body.Name} ({body.RegisterDate}) para o necrotério.", UserStaff.GameAdmin, false);
         await player.WriteLog(LogType.Staff, $"/arecolhercopo {body.Id} {body.Name}", null);
     }
 
     [Command("aremovercorpo")]
     public async Task CMD_aremovercorpo(MyPlayer player)
     {
-        if (player.User.Staff < UserStaff.ServerAdminI)
+        if (player.User.Staff < UserStaff.GameAdmin)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -99,7 +99,7 @@ public class BodyScript : Script
         body.RemoveIdentifier();
         Global.Bodies.Remove(body);
 
-        await Functions.SendServerMessage($"{player.User.Name} removeu o corpo de {body.Name} ({body.RegisterDate}).", UserStaff.JuniorServerAdmin, false);
+        await Functions.SendServerMessage($"{player.User.Name} removeu o corpo de {body.Name} ({body.RegisterDate}).", UserStaff.GameAdmin, false);
         await player.WriteLog(LogType.Staff, $"/aremovercorpo {Functions.Serialize(body)}", null);
     }
 

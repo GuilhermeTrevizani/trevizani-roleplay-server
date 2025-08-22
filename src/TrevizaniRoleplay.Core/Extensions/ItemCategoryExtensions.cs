@@ -10,10 +10,8 @@ public static class ItemCategoryExtensions
         return itemCategory switch
         {
             ItemCategory.Weapon => Resources.Weapon,
-            ItemCategory.PropertyKey => Resources.PropertyKey,
             ItemCategory.Money => Resources.Money,
             ItemCategory.Boombox => Resources.Boombox,
-            ItemCategory.VehicleKey => Resources.VehicleKey,
             ItemCategory.WalkieTalkie => Resources.WalkieTalkie,
             ItemCategory.Cellphone => Resources.Cellphone,
             ItemCategory.Drug => Resources.Drug,

@@ -1,7 +1,5 @@
 ﻿using GTANetworkAPI;
 using Microsoft.EntityFrameworkCore;
-using TrevizaniRoleplay.Core.Extensions;
-using TrevizaniRoleplay.Core.Models.Server;
 using TrevizaniRoleplay.Server.Extensions;
 using TrevizaniRoleplay.Server.Factories;
 using TrevizaniRoleplay.Server.Models;
@@ -13,7 +11,7 @@ public class StaffScript : Script
     [Command("pos", "/pos (x) (y) (z)")]
     public async Task CMD_pos(MyPlayer player, float x, float y, float z)
     {
-        if (player.User.Staff < UserStaff.JuniorServerAdmin)
+        if (player.User.Staff < UserStaff.GameAdmin)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -26,7 +24,7 @@ public class StaffScript : Script
     [Command("ooc", "/ooc (mensagem)", GreedyArg = true)]
     public async Task CMD_ooc(MyPlayer player, string message)
     {
-        if (player.User.Staff < UserStaff.JuniorServerAdmin)
+        if (player.User.Staff < UserStaff.GameAdmin)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -41,7 +39,7 @@ public class StaffScript : Script
     [Command("waypoint")]
     public static void CMD_waypoint(MyPlayer player)
     {
-        if (player.User.Staff < UserStaff.JuniorServerAdmin)
+        if (player.User.Staff < UserStaff.GameAdmin)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -53,7 +51,7 @@ public class StaffScript : Script
     [Command("limparchatgeral")]
     public async Task CMD_limparchatgeral(MyPlayer player)
     {
-        if (player.User.Staff < UserStaff.LeadServerAdmin)
+        if (player.User.Staff < UserStaff.HeadAdmin)
         {
             player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -106,13 +104,13 @@ public class StaffScript : Script
         vehicle.RepairEx();
         if (vehicle.SpawnType == MyVehicleSpawnType.Normal)
             await player.WriteLog(LogType.Staff, $"/areparar {vehicle.Identifier}", null);
-        await Functions.SendServerMessage($"{player.User.Name} reparou o veículo {vehicle.Identifier}.", UserStaff.JuniorServerAdmin, false);
+        await Functions.SendServerMessage($"{player.User.Name} reparou o veículo {vehicle.Identifier}.", UserStaff.GameAdmin, false);
     }
 
-    [Command("lsp", "/lsp (usuário) (quantidade)")]
-    public async Task CMD_lsp(MyPlayer player, string userName, int quantity)
+    [Command("pp", "/pp (usuário) (quantidade)")]
+    public async Task CMD_pp(MyPlayer player, string userName, int quantity)
     {
-        if (player.User.Staff < UserStaff.ServerManager)
+        if (player.User.Staff < UserStaff.Management)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -138,7 +136,7 @@ public class StaffScript : Script
         if (target is not null)
         {
             target.User = user;
-            target.SendMessage(MessageType.Success, $"{player.User!.Name} deu para você {quantity} LS Points.");
+            target.SendMessage(MessageType.Success, $"{player.User!.Name} deu para você {quantity} Premium Points.");
         }
         else
         {
@@ -146,14 +144,14 @@ public class StaffScript : Script
             await context.SaveChangesAsync();
         }
 
-        player.SendMessage(MessageType.Success, $"Você deu {quantity} LS Points para {user.Name}.");
-        await player.WriteLog(LogType.Staff, $"/lsp {user.Id} {user.Name} {quantity}", target);
+        player.SendMessage(MessageType.Success, $"Você deu {quantity} Premium Points para {user.Name}.");
+        await player.WriteLog(LogType.Staff, $"/pp {user.Id} {user.Name} {quantity}", target);
     }
 
     [Command("ir", "/ir (ID ou nome)")]
     public async Task CMD_ir(MyPlayer player, string idOrName)
     {
-        if (player.User.Staff < UserStaff.JuniorServerAdmin)
+        if (player.User.Staff < UserStaff.GameAdmin)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -172,7 +170,7 @@ public class StaffScript : Script
     [Command("trazer", "/trazer (ID ou nome)")]
     public async Task CMD_trazer(MyPlayer player, string idOrName)
     {
-        if (player.User.Staff < UserStaff.JuniorServerAdmin)
+        if (player.User.Staff < UserStaff.GameAdmin)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -191,7 +189,7 @@ public class StaffScript : Script
     [Command("tp", "/tp (ID ou nome) (ID ou nome)")]
     public async Task CMD_tp(MyPlayer player, string idOrName, string idOrNameDestino)
     {
-        if (player.User.Staff < UserStaff.JuniorServerAdmin)
+        if (player.User.Staff < UserStaff.GameAdmin)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -217,7 +215,7 @@ public class StaffScript : Script
     [Command("a", "/a (mensagem)", GreedyArg = true)]
     public async Task CMD_a(MyPlayer player, string message)
     {
-        if (player.User.Staff < UserStaff.JuniorServerAdmin)
+        if (player.User.Staff < UserStaff.GameAdmin)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -231,7 +229,7 @@ public class StaffScript : Script
 
         var sendMessage = $"[ADMIN CHAT] {player.User.Name} ({player.SessionId}): {message}";
 
-        foreach (var x in Global.SpawnedPlayers.Where(x => x.User.Staff >= UserStaff.JuniorServerAdmin && !x.StaffChatToggle))
+        foreach (var x in Global.SpawnedPlayers.Where(x => x.User.Staff >= UserStaff.GameAdmin && !x.StaffChatToggle))
             x.SendMessage(MessageType.None, sendMessage, Constants.STAFF_CHAT_COLOR);
 
         await player.WriteLog(LogType.StaffChat, message, null);
@@ -240,7 +238,7 @@ public class StaffScript : Script
     [Command("hs", "/hs (mensagem)", GreedyArg = true)]
     public async Task CMD_hs(MyPlayer player, string message)
     {
-        if (player.User.Staff < UserStaff.LeadServerAdmin)
+        if (player.User.Staff < UserStaff.HeadAdmin)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -254,7 +252,7 @@ public class StaffScript : Script
 
         var sendMessage = $"[HEAD CHAT] {player.User.Name} ({player.SessionId}): {message}";
 
-        foreach (var x in Global.SpawnedPlayers.Where(x => x.User.Staff >= UserStaff.LeadServerAdmin && !x.StaffChatToggle))
+        foreach (var x in Global.SpawnedPlayers.Where(x => x.User.Staff >= UserStaff.HeadAdmin && !x.StaffChatToggle))
             x.SendMessage(MessageType.None, sendMessage, "#2386c9");
 
         await player.WriteLog(LogType.StaffChat, message, null);
@@ -263,7 +261,7 @@ public class StaffScript : Script
     [Command("sc", "/sc (mensagem)", GreedyArg = true)]
     public async Task CMD_sc(MyPlayer player, string message)
     {
-        if (player.User.Staff < UserStaff.ServerSupport)
+        if (player.User.Staff < UserStaff.Tester)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -277,7 +275,7 @@ public class StaffScript : Script
 
         var sendMessage = $"[SUPPORT CHAT] {player.User.Name} ({player.SessionId}): {message}";
 
-        foreach (var x in Global.SpawnedPlayers.Where(x => x.User.Staff >= UserStaff.ServerSupport && !x.StaffChatToggle))
+        foreach (var x in Global.SpawnedPlayers.Where(x => x.User.Staff >= UserStaff.Tester && !x.StaffChatToggle))
             x.SendMessage(MessageType.None, sendMessage, "#86988b");
 
         await player.WriteLog(LogType.StaffChat, message, null);
@@ -286,7 +284,7 @@ public class StaffScript : Script
     [Command("kick", "/kick (ID ou nome) (motivo)", GreedyArg = true)]
     public async Task CMD_kick(MyPlayer player, string idOrName, string reason)
     {
-        if (player.User.Staff < UserStaff.JuniorServerAdmin)
+        if (player.User.Staff < UserStaff.GameAdmin)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -316,7 +314,7 @@ public class StaffScript : Script
     [Command("irveh", "/irveh (veículo)")]
     public async Task CMD_irveh(MyPlayer player, int id)
     {
-        if (player.User.Staff < UserStaff.JuniorServerAdmin)
+        if (player.User.Staff < UserStaff.GameAdmin)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -338,7 +336,7 @@ public class StaffScript : Script
     [Command("trazerveh", "/trazerveh (veículo)")]
     public async Task CMD_trazerveh(MyPlayer player, int id)
     {
-        if (player.User.Staff < UserStaff.JuniorServerAdmin)
+        if (player.User.Staff < UserStaff.GameAdmin)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -361,7 +359,7 @@ public class StaffScript : Script
     [Command("aduty", Aliases = ["atrabalho"])]
     public async Task CMD_aduty(MyPlayer player)
     {
-        if (player.User.Staff < UserStaff.JuniorServerAdmin)
+        if (player.User.Staff < UserStaff.GameAdmin)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -386,13 +384,13 @@ public class StaffScript : Script
         player.Invincible = player.OnAdminDuty;
         player.SetNametag();
         player.Emit("ToggleAduty", player.OnAdminDuty);
-        await Functions.SendServerMessage($"{player.User.Name} {(player.OnAdminDuty ? "entrou em" : "saiu de")} serviço administrativo.", UserStaff.JuniorServerAdmin, false);
+        await Functions.SendServerMessage($"{player.User.Name} {(player.OnAdminDuty ? "entrou em" : "saiu de")} serviço administrativo.", UserStaff.GameAdmin, false);
     }
 
     [Command("at", "/at (ID)")]
     public async Task CMD_at(MyPlayer player, int id)
     {
-        if (player.User.Staff < UserStaff.ServerSupport)
+        if (player.User.Staff < UserStaff.Tester)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -414,7 +412,7 @@ public class StaffScript : Script
 
         if (target == player)
         {
-            await Functions.SendServerMessage($"{player.User.Name} tentou aceitar o próprio SOS.", UserStaff.ServerSupport, false);
+            await Functions.SendServerMessage($"{player.User.Name} tentou aceitar o próprio SOS.", UserStaff.Tester, false);
             return;
         }
 
@@ -427,7 +425,7 @@ public class StaffScript : Script
 
         player.User.AddHelpRequestsAnswersQuantity();
 
-        await Functions.SendServerMessage($"{player.User.Name} está respondendo o {helpRequest.Type.GetDescription()} de {helpRequest.CharacterName} ({helpRequest.CharacterSessionId}) ({helpRequest.UserName}).", UserStaff.ServerSupport, false);
+        await Functions.SendServerMessage($"{player.User.Name} está respondendo o {helpRequest.Type.GetDescription()} de {helpRequest.CharacterName} ({helpRequest.CharacterSessionId}) ({helpRequest.UserName}).", UserStaff.Tester, false);
         player.LastPMSessionId = helpRequest.CharacterSessionId;
         target.SendMessage(MessageType.Success, $"{player.User.Name} atendeu o seu {helpRequest.Type.GetDescription()}: {helpRequest.Message}");
     }
@@ -435,7 +433,7 @@ public class StaffScript : Script
     [Command("ar", "/ar (ID)")]
     public async Task CMD_ar(MyPlayer player, int id)
     {
-        if (player.User.Staff < UserStaff.JuniorServerAdmin)
+        if (player.User.Staff < UserStaff.GameAdmin)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -457,7 +455,7 @@ public class StaffScript : Script
 
         if (target == player)
         {
-            await Functions.SendServerMessage($"{player.User.Name} tentou aceitar o próprio report.", UserStaff.ServerSupport, false);
+            await Functions.SendServerMessage($"{player.User.Name} tentou aceitar o próprio report.", UserStaff.Tester, false);
             return;
         }
 
@@ -470,7 +468,7 @@ public class StaffScript : Script
 
         player.User.AddHelpRequestsAnswersQuantity();
 
-        await Functions.SendServerMessage($"{player.User.Name} está respondendo o {helpRequest.Type.GetDescription()} de {helpRequest.CharacterName} ({helpRequest.CharacterSessionId}) ({helpRequest.UserName}).", UserStaff.JuniorServerAdmin, false);
+        await Functions.SendServerMessage($"{player.User.Name} está respondendo o {helpRequest.Type.GetDescription()} de {helpRequest.CharacterName} ({helpRequest.CharacterSessionId}) ({helpRequest.UserName}).", UserStaff.GameAdmin, false);
         player.LastPMSessionId = helpRequest.CharacterSessionId;
         target.SendMessage(MessageType.Success, $"{player.User.Name} atendeu o seu {helpRequest.Type.GetDescription()}: {helpRequest.Message}");
     }
@@ -478,7 +476,7 @@ public class StaffScript : Script
     [Command("listasos")]
     public static void CMD_listasos(MyPlayer player)
     {
-        if (player.User.Staff < UserStaff.ServerSupport)
+        if (player.User.Staff < UserStaff.Tester)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -501,7 +499,7 @@ public class StaffScript : Script
     [Command("listareport")]
     public static void CMD_listareport(MyPlayer player)
     {
-        if (player.User.Staff < UserStaff.JuniorServerAdmin)
+        if (player.User.Staff < UserStaff.GameAdmin)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -524,7 +522,7 @@ public class StaffScript : Script
     [Command("csos", "/csos (ID)")]
     public async Task CMD_csos(MyPlayer player, int id)
     {
-        if (player.User.Staff < UserStaff.ServerSupport)
+        if (player.User.Staff < UserStaff.Tester)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -551,13 +549,13 @@ public class StaffScript : Script
         await context.SaveChangesAsync();
 
         target.SendMessage(MessageType.Error, $"{player.User.Name} converteu o seu {HelpRequestType.SOS.GetDescription()} para um {helpRequest.Type.GetDescription()}.");
-        await Functions.SendServerMessage($"{player.User.Name} converteu o {HelpRequestType.SOS.GetDescription()} de {helpRequest.CharacterName} ({helpRequest.CharacterSessionId}) ({helpRequest.UserName}) para um {helpRequest.Type.GetDescription()}.", UserStaff.ServerSupport, false);
+        await Functions.SendServerMessage($"{player.User.Name} converteu o {HelpRequestType.SOS.GetDescription()} de {helpRequest.CharacterName} ({helpRequest.CharacterSessionId}) ({helpRequest.UserName}) para um {helpRequest.Type.GetDescription()}.", UserStaff.Tester, false);
     }
 
     [Command("creport", "/creport (ID)")]
     public async Task CMD_creport(MyPlayer player, int id)
     {
-        if (player.User.Staff < UserStaff.JuniorServerAdmin)
+        if (player.User.Staff < UserStaff.GameAdmin)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -584,13 +582,13 @@ public class StaffScript : Script
         await context.SaveChangesAsync();
 
         target.SendMessage(MessageType.Error, $"{player.User.Name} converteu o seu {HelpRequestType.Report.GetDescription()} para um {helpRequest.Type.GetDescription()}.");
-        await Functions.SendServerMessage($"{player.User.Name} converteu o {HelpRequestType.Report.GetDescription()} de {helpRequest.CharacterName} ({helpRequest.CharacterSessionId}) ({helpRequest.UserName}) para um {helpRequest.Type.GetDescription()}.", UserStaff.ServerSupport, false);
+        await Functions.SendServerMessage($"{player.User.Name} converteu o {HelpRequestType.Report.GetDescription()} de {helpRequest.CharacterName} ({helpRequest.CharacterSessionId}) ({helpRequest.UserName}) para um {helpRequest.Type.GetDescription()}.", UserStaff.Tester, false);
     }
 
     [Command("spec", "/spec (ID ou nome)")]
     public async Task CMD_spec(MyPlayer player, string idOrName)
     {
-        if (player.User.Staff < UserStaff.JuniorServerAdmin)
+        if (player.User.Staff < UserStaff.GameAdmin)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -647,19 +645,19 @@ public class StaffScript : Script
 
     private static UserStaff GetStaffSpec(UserStaff staff)
     {
-        if (staff >= UserStaff.ServerManager)
-            return UserStaff.ServerManager;
+        if (staff >= UserStaff.Management)
+            return UserStaff.Management;
 
-        if (staff >= UserStaff.LeadServerAdmin)
-            return UserStaff.LeadServerAdmin;
+        if (staff >= UserStaff.HeadAdmin)
+            return UserStaff.HeadAdmin;
 
-        return UserStaff.JuniorServerAdmin;
+        return UserStaff.GameAdmin;
     }
 
     [Command("specoff")]
     public static async Task CMD_specoff(MyPlayer player)
     {
-        if (player.User.Staff < UserStaff.JuniorServerAdmin)
+        if (player.User.Staff < UserStaff.GameAdmin)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -678,7 +676,7 @@ public class StaffScript : Script
     [Command("specs")]
     public async Task CMD_specs(MyPlayer player)
     {
-        if (player.User.Staff < UserStaff.JuniorServerAdmin)
+        if (player.User.Staff < UserStaff.GameAdmin)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -705,7 +703,7 @@ public class StaffScript : Script
     [Command("aferimentos", "/aferimentos (ID ou nome)")]
     public static void CMD_aferimentos(MyPlayer player, string idOrName)
     {
-        if (player.User.Staff < UserStaff.JuniorServerAdmin)
+        if (player.User.Staff < UserStaff.GameAdmin)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -737,7 +735,7 @@ public class StaffScript : Script
     [Command("aestacionar", "/aestacionar (veículo)")]
     public async Task CMD_aestacionar(MyPlayer player, int id)
     {
-        if (player.User.Staff < UserStaff.JuniorServerAdmin)
+        if (player.User.Staff < UserStaff.GameAdmin)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -753,21 +751,21 @@ public class StaffScript : Script
         if (vehicle.VehicleDB.CharacterId is not null && vehicle.VehicleDB.Items!.Any(x =>
             (x.GetCategory() == ItemCategory.Weapon && Functions.IsWeaponWithAmmo(x.GetItemType()))
                 || x.GetCategory() == ItemCategory.WeaponComponent
-                || Functions.CheckIfIsAmmo(x.GetCategory())
+                || GlobalFunctions.CheckIfIsAmmo(x.GetCategory())
                 || x.GetCategory() == ItemCategory.Drug))
         {
             player.SendMessage(MessageType.Error, "Você não pode estacionar o veículo com armas, componentes de armas, munições ou drogas.");
             return;
         }
 
-        await Functions.SendServerMessage($"{player.User.Name} estacionou o veículo {vehicle.Identifier}.", UserStaff.JuniorServerAdmin, false);
+        await Functions.SendServerMessage($"{player.User.Name} estacionou o veículo {vehicle.Identifier}.", UserStaff.GameAdmin, false);
         await vehicle.Park(player);
     }
 
     [Command("acurar", "/acurar (ID ou nome)")]
     public async Task CMD_acurar(MyPlayer player, string idOrName)
     {
-        if (player.User.Staff < UserStaff.JuniorServerAdmin)
+        if (player.User.Staff < UserStaff.GameAdmin)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -829,7 +827,7 @@ public class StaffScript : Script
     [Command("checarveh", "/checarveh (veículo)")]
     public async Task CMD_checarveh(MyPlayer player, int id)
     {
-        if (player.User.Staff < UserStaff.JuniorServerAdmin)
+        if (player.User.Staff < UserStaff.GameAdmin)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -857,7 +855,7 @@ public class StaffScript : Script
     [Command("proximo", "/proximo (distância)", Aliases = ["prox"])]
     public static void CMD_proximo(MyPlayer player, float distance)
     {
-        if (player.User.Staff < UserStaff.JuniorServerAdmin)
+        if (player.User.Staff < UserStaff.GameAdmin)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -1012,7 +1010,7 @@ public class StaffScript : Script
         try
         {
             var player = Functions.CastPlayer(playerParam);
-            if (player.User.Staff < UserStaff.JuniorServerAdmin)
+            if (player.User.Staff < UserStaff.GameAdmin)
             {
                 player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
@@ -1048,7 +1046,7 @@ public class StaffScript : Script
     [Command("raviso", "/raviso (nome do personagem)", GreedyArg = true)]
     public async Task CMD_raviso(MyPlayer player, string characterName)
     {
-        if (player.User.Staff < UserStaff.LeadServerAdmin)
+        if (player.User.Staff < UserStaff.HeadAdmin)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -1084,7 +1082,7 @@ public class StaffScript : Script
     [Command("ajail", "/ajail (ID ou nome) (minutos) (motivo)", GreedyArg = true)]
     public async Task CMD_ajail(MyPlayer player, string idOrName, int minutes, string reason)
     {
-        if (player.User.Staff < UserStaff.JuniorServerAdmin)
+        if (player.User.Staff < UserStaff.GameAdmin)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -1129,7 +1127,7 @@ public class StaffScript : Script
         try
         {
             var player = Functions.CastPlayer(playerParam);
-            if (player.User.Staff < UserStaff.JuniorServerAdmin)
+            if (player.User.Staff < UserStaff.GameAdmin)
             {
                 player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
@@ -1198,7 +1196,7 @@ public class StaffScript : Script
     [Command("rajail", "/rajail (nome do personagem)", GreedyArg = true)]
     public async Task CMD_rajail(MyPlayer player, string characterName)
     {
-        if (player.User.Staff < UserStaff.LeadServerAdmin)
+        if (player.User.Staff < UserStaff.HeadAdmin)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -1250,7 +1248,7 @@ public class StaffScript : Script
     [Command("vflip", "/vflip (veículo)")]
     public async Task CMD_vflip(MyPlayer player, int id)
     {
-        if (player.User.Staff < UserStaff.JuniorServerAdmin)
+        if (player.User.Staff < UserStaff.GameAdmin)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -1271,7 +1269,7 @@ public class StaffScript : Script
 
         vehicle.Rotation = new(0, vehicle.Rotation.Y, vehicle.Rotation.Z);
         await player.WriteLog(LogType.Staff, $"/vflip {vehicle.Identifier}", null);
-        await Functions.SendServerMessage($"{player.User.Name} descapotou o veículo {vehicle.Identifier}.", UserStaff.JuniorServerAdmin, false);
+        await Functions.SendServerMessage($"{player.User.Name} descapotou o veículo {vehicle.Identifier}.", UserStaff.GameAdmin, false);
     }
 
     [Command("amotor")]
@@ -1295,7 +1293,7 @@ public class StaffScript : Script
             return;
         }
 
-        await Functions.SendServerMessage($"{player.User.Name} {(vehicle.GetEngineStatus() ? "des" : string.Empty)}ligou o motor do veículo {vehicle.Identifier}.", UserStaff.JuniorServerAdmin, false);
+        await Functions.SendServerMessage($"{player.User.Name} {(vehicle.GetEngineStatus() ? "des" : string.Empty)}ligou o motor do veículo {vehicle.Identifier}.", UserStaff.GameAdmin, false);
         vehicle.SetEngineStatus(!vehicle.GetEngineStatus());
         await player.WriteLog(LogType.Staff, $"/amotor {vehicle.Identifier}", null);
     }
@@ -1324,7 +1322,7 @@ public class StaffScript : Script
         vehicle.SetFuel(vehicle.VehicleDB.GetMaxFuel());
 
         await player.WriteLog(LogType.Staff, $"/aabastecer {vehicle.Identifier}", null);
-        await Functions.SendServerMessage($"{player.User.Name} abasteceu o veículo {vehicle.Identifier}.", UserStaff.JuniorServerAdmin, false);
+        await Functions.SendServerMessage($"{player.User.Name} abasteceu o veículo {vehicle.Identifier}.", UserStaff.GameAdmin, false);
     }
 
     [Command("aveiculo", "/aveiculo (modelo)")]
@@ -1348,7 +1346,7 @@ public class StaffScript : Script
             return;
         }
 
-        if (!Functions.CheckIfVehicleExists(model))
+        if (!GlobalFunctions.CheckIfVehicleExists(model))
         {
             player.SendMessage(MessageType.Error, $"Modelo {model} não existe.");
             return;
@@ -1363,13 +1361,13 @@ public class StaffScript : Script
         player.SetIntoVehicleEx(vehicle, Constants.VEHICLE_SEAT_DRIVER);
         vehicle.SetEngineStatus(true);
         await player.WriteLog(LogType.Staff, $"/aveiculo {model}", null);
-        await Functions.SendServerMessage($"{player.User.Name} criou o veículo {model}.", UserStaff.JuniorServerAdmin, false);
+        await Functions.SendServerMessage($"{player.User.Name} criou o veículo {model}.", UserStaff.GameAdmin, false);
     }
 
     [Command("alteracoesplaca")]
     public async Task CMD_alteracoesplaca(MyPlayer player)
     {
-        if (player.User.Staff < UserStaff.SeniorServerAdmin)
+        if (player.User.Staff < UserStaff.LeadAdmin)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -1399,7 +1397,7 @@ public class StaffScript : Script
     [Command("aprovarplaca", "/aprovarplaca (placa)")]
     public async Task CMD_aprovarplaca(MyPlayer player, string plate)
     {
-        if (player.User.Staff < UserStaff.SeniorServerAdmin)
+        if (player.User.Staff < UserStaff.LeadAdmin)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -1455,14 +1453,14 @@ public class StaffScript : Script
             target.SendMessage(MessageType.Success, $"{player.User.Name} aprovou sua placa {plate.ToUpper()}.");
         }
 
-        await Functions.SendServerMessage($"{player.User.Name} aprovou a placa {plate.ToUpper()}.", UserStaff.SeniorServerAdmin, false);
+        await Functions.SendServerMessage($"{player.User.Name} aprovou a placa {plate.ToUpper()}.", UserStaff.LeadAdmin, false);
         await player.WriteLog(LogType.PlateChange, $"Aprovou placa {vehicle.Id} {vehicle.Model} {oldPlate.ToUpper()} > {plate.ToUpper()} de {vehicle.Character.Name}", null);
     }
 
     [Command("reprovarplaca", "/reprovarplaca (placa)")]
     public async Task CMD_reprovarplaca(MyPlayer player, string plate)
     {
-        if (player.User.Staff < UserStaff.SeniorServerAdmin)
+        if (player.User.Staff < UserStaff.LeadAdmin)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -1494,14 +1492,14 @@ public class StaffScript : Script
         var target = Global.SpawnedPlayers.FirstOrDefault(x => x.Character.Id == vehicle.CharacterId);
         target?.SendMessage(MessageType.Success, $"{player.User.Name} reprovou sua placa {plate.ToUpper()}.");
 
-        await Functions.SendServerMessage($"{player.User.Name} reprovou a placa {plate.ToUpper()}.", UserStaff.SeniorServerAdmin, false);
+        await Functions.SendServerMessage($"{player.User.Name} reprovou a placa {plate.ToUpper()}.", UserStaff.LeadAdmin, false);
         await player.WriteLog(LogType.PlateChange, $"Reprovou placa {vehicle.Id} {vehicle.Model} {plate.ToUpper()}", null);
     }
 
     [Command("usuario", "/usuario (nome)")]
     public async Task CMD_usuario(MyPlayer player, string name)
     {
-        if (player.User.Staff < UserStaff.JuniorServerAdmin)
+        if (player.User.Staff < UserStaff.GameAdmin)
         {
             player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -1575,7 +1573,7 @@ public class StaffScript : Script
         try
         {
             var player = Functions.CastPlayer(playerParam);
-            if (player.User.Staff < UserStaff.ServerManager)
+            if (player.User.Staff < UserStaff.Management)
             {
                 player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
@@ -1635,7 +1633,7 @@ public class StaffScript : Script
     [Command("checar", "/checar (ID ou nome)", GreedyArg = true)]
     public async Task CMD_checar(MyPlayer player, string idOrName)
     {
-        if (player.User.Staff < UserStaff.JuniorServerAdmin)
+        if (player.User.Staff < UserStaff.GameAdmin)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -1657,10 +1655,6 @@ public class StaffScript : Script
             player.SendMessage(MessageType.Error, $"Nenhum personagem encontrado com o nome {idOrName}.");
             return;
         }
-
-        var userPremium = character.User!.GetCurrentPremium();
-        if (userPremium != UserPremium.Gold)
-            userPremium = character.GetCurrentPremium();
 
         var banishment = await context.Banishments
             .Include(x => x.StaffUser)
@@ -1711,7 +1705,7 @@ public class StaffScript : Script
                 }),
                 Job = character.Job.GetDescription(),
                 character.RegisterDate,
-                Premium = userPremium.GetDescription(),
+                Premium = character.User!.GetCurrentPremium().GetDescription(),
                 character.ConnectedTime,
                 character.User.NameChanges,
                 character.User.PlateChanges,
@@ -1733,7 +1727,7 @@ public class StaffScript : Script
     [Command("ban", "/ban (ID ou nome) (dias [0 para permanente]) (motivo)", GreedyArg = true)]
     public async Task CMD_ban(MyPlayer player, string idOrName, int days, string reason)
     {
-        if (player.User.Staff < UserStaff.JuniorServerAdmin)
+        if (player.User.Staff < UserStaff.GameAdmin)
         {
             player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -1767,7 +1761,7 @@ public class StaffScript : Script
 
         await target.Save();
         var strBan = days == 0 ? "permanentemente" : $"por {days} dia{(days > 1 ? "s" : string.Empty)}";
-        await Functions.SendServerMessage($"{player.User.Name} baniu {target.Character.Name} ({target.User.Name}) {strBan}. Motivo: {reason}", UserStaff.JuniorServerAdmin, false);
+        await Functions.SendServerMessage($"{player.User.Name} baniu {target.Character.Name} ({target.User.Name}) {strBan}. Motivo: {reason}", UserStaff.GameAdmin, false);
         target.KickEx($"{player.User.Name} baniu você {strBan}. Motivo: {reason}");
     }
 
@@ -1777,7 +1771,7 @@ public class StaffScript : Script
         try
         {
             var player = Functions.CastPlayer(playerParam);
-            if (player.User.Staff < UserStaff.JuniorServerAdmin)
+            if (player.User.Staff < UserStaff.GameAdmin)
             {
                 player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
@@ -2048,7 +2042,7 @@ public class StaffScript : Script
         try
         {
             var player = Functions.CastPlayer(playerParam);
-            if (player.User.Staff < UserStaff.LeadServerAdmin)
+            if (player.User.Staff < UserStaff.HeadAdmin)
             {
                 player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
@@ -2107,7 +2101,7 @@ public class StaffScript : Script
     [Command("aviso", "/aviso (ID ou nome) (motivo)", GreedyArg = true)]
     public async Task CMD_aviso(MyPlayer player, string idOrName, string reason)
     {
-        if (player.User.Staff < UserStaff.JuniorServerAdmin)
+        if (player.User.Staff < UserStaff.GameAdmin)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -2142,7 +2136,7 @@ public class StaffScript : Script
         try
         {
             var player = Functions.CastPlayer(playerParam);
-            if (player.User.Staff < UserStaff.JuniorServerAdmin)
+            if (player.User.Staff < UserStaff.GameAdmin)
             {
                 player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
@@ -2201,7 +2195,7 @@ public class StaffScript : Script
     [Command("deletarsangue", "/deletarsangue (distância)")]
     public async Task CMD_deletarsangue(MyPlayer player, int distance)
     {
-        if (player.User.Staff < UserStaff.JuniorServerAdmin)
+        if (player.User.Staff < UserStaff.GameAdmin)
         {
             player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -2234,13 +2228,13 @@ public class StaffScript : Script
         context.Items.RemoveRange(items);
         await context.SaveChangesAsync();
         await player.WriteLog(LogType.Staff, $"/deletarsangue {distance} {Functions.Serialize(items)}", null);
-        await Functions.SendServerMessage($"{player.User.Name} removeu {items.Count} amostra(s) de sangue.", UserStaff.JuniorServerAdmin, true);
+        await Functions.SendServerMessage($"{player.User.Name} removeu {items.Count} amostra(s) de sangue.", UserStaff.GameAdmin, true);
     }
 
     [Command("deletarcapsulas", "/deletarcapsulas (distância)")]
     public async Task CMD_deletarcapsulas(MyPlayer player, int distance)
     {
-        if (player.User.Staff < UserStaff.JuniorServerAdmin)
+        if (player.User.Staff < UserStaff.GameAdmin)
         {
             player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -2258,7 +2252,7 @@ public class StaffScript : Script
             return;
         }
 
-        var items = Global.Items.Where(x => Functions.CheckIfIsBulletShell(x.GetCategory())
+        var items = Global.Items.Where(x => GlobalFunctions.CheckIfIsBulletShell(x.GetCategory())
             && x.Dimension == player.GetDimension()
             && player.GetPosition().DistanceTo(new(x.PosX, x.PosY, x.PosZ)) <= distance)
             .ToList();
@@ -2273,7 +2267,7 @@ public class StaffScript : Script
         context.Items.RemoveRange(items);
         await context.SaveChangesAsync();
         await player.WriteLog(LogType.Staff, $"/deletarcapsulas {distance} {Functions.Serialize(items)}", null);
-        await Functions.SendServerMessage($"{player.User.Name} removeu {items.Count} cápsula(s).", UserStaff.JuniorServerAdmin, true);
+        await Functions.SendServerMessage($"{player.User.Name} removeu {items.Count} cápsula(s).", UserStaff.GameAdmin, true);
     }
 
     Task<int> CountWarnsInLastMonth(Guid userId)
@@ -2290,7 +2284,7 @@ public class StaffScript : Script
     [Command("irls")]
     public async Task CMD_irls(MyPlayer player)
     {
-        if (player.User.Staff < UserStaff.JuniorServerAdmin)
+        if (player.User.Staff < UserStaff.GameAdmin)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -2309,7 +2303,7 @@ public class StaffScript : Script
     [Command("aspawn", "/aspawn (placa)")]
     public async Task CMD_aspawn(MyPlayer player, string plate)
     {
-        if (player.User.Staff < UserStaff.SeniorServerAdmin)
+        if (player.User.Staff < UserStaff.LeadAdmin)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -2337,13 +2331,13 @@ public class StaffScript : Script
 
         var spawnedVehicle = await vehicle.Spawnar(player);
         await Functions.SendServerMessage($"{player.User.Name} spawnou o veículo {spawnedVehicle.Identifier} (ID: {spawnedVehicle.Id}).",
-            UserStaff.JuniorServerAdmin, false);
+            UserStaff.GameAdmin, false);
     }
 
     [Command("setvw", "/setvw (ID ou nome) (VW)")]
     public async Task CMD_setvw(MyPlayer player, string idOrName, uint vw)
     {
-        if (player.User.Staff < UserStaff.JuniorServerAdmin)
+        if (player.User.Staff < UserStaff.GameAdmin)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -2368,7 +2362,7 @@ public class StaffScript : Script
     [Command("idade", "/idade (ID ou nome) (idade)")]
     public async Task CMD_idade(MyPlayer player, string idOrName, int age)
     {
-        if (player.User.Staff < UserStaff.ServerAdminII)
+        if (player.User.Staff < UserStaff.GameAdmin)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -2401,7 +2395,7 @@ public class StaffScript : Script
     [Command("debug")]
     public static void CMD_debug(MyPlayer player)
     {
-        if (player.User.Staff < UserStaff.JuniorServerAdmin)
+        if (player.User.Staff < UserStaff.GameAdmin)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -2421,7 +2415,7 @@ public class StaffScript : Script
     [Command("audios")]
     public static void CMD_audios(MyPlayer player)
     {
-        if (player.User.Staff < UserStaff.JuniorServerAdmin)
+        if (player.User.Staff < UserStaff.GameAdmin)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -2442,7 +2436,7 @@ public class StaffScript : Script
     [Command("congelar", "/congelar (ID ou nome)", GreedyArg = true)]
     public async Task CMD_congelar(MyPlayer player, string idOrName)
     {
-        if (player.User.Staff < UserStaff.JuniorServerAdmin)
+        if (player.User.Staff < UserStaff.GameAdmin)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -2468,7 +2462,7 @@ public class StaffScript : Script
     [Command("fixpos", "/fixpos (nome do personagem)", GreedyArg = true)]
     public async Task CMD_fixpos(MyPlayer player, string name)
     {
-        if (player.User.Staff < UserStaff.JuniorServerAdmin)
+        if (player.User.Staff < UserStaff.GameAdmin)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -2498,7 +2492,7 @@ public class StaffScript : Script
     [Command("vida", "/vida (ID ou nome) (vida)")]
     public async Task CMD_vida(MyPlayer player, string idOrName, int health)
     {
-        if (player.User.Staff < UserStaff.ServerAdminI)
+        if (player.User.Staff < UserStaff.GameAdmin)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -2529,14 +2523,14 @@ public class StaffScript : Script
 
         target.SetHealth(health);
         target.SendMessage(MessageType.Success, $"{player.User.Name} alterou sua vida para {health}.");
-        await Functions.SendServerMessage($"{player.User.Name} alterou a vida de {target.Character.Name} para {health}.", UserStaff.JuniorServerAdmin, false);
+        await Functions.SendServerMessage($"{player.User.Name} alterou a vida de {target.Character.Name} para {health}.", UserStaff.GameAdmin, false);
         await player.WriteLog(LogType.Staff, $"/vida {health}", target);
     }
 
     [Command("colete", "/colete (ID ou nome) (colete)")]
     public async Task CMD_colete(MyPlayer player, string idOrName, int armor)
     {
-        if (player.User.Staff < UserStaff.ServerAdminII)
+        if (player.User.Staff < UserStaff.GameAdmin)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -2567,7 +2561,7 @@ public class StaffScript : Script
 
         target.SetArmor(armor);
         target.SendMessage(MessageType.Success, $"{player.User.Name} alterou seu colete para {armor}.");
-        await Functions.SendServerMessage($"{player.User.Name} alterou o colete de {target.Character.Name} para {armor}.", UserStaff.JuniorServerAdmin, false);
+        await Functions.SendServerMessage($"{player.User.Name} alterou o colete de {target.Character.Name} para {armor}.", UserStaff.GameAdmin, false);
         await player.WriteLog(LogType.Staff, $"/colete {armor}", target);
     }
 
@@ -2577,7 +2571,7 @@ public class StaffScript : Script
         player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
         return;
 
-        if (player.User.Staff < UserStaff.ServerManager)
+        if (player.User.Staff < UserStaff.Management)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -2604,7 +2598,7 @@ public class StaffScript : Script
         try
         {
             var target = Global.SpawnedPlayers.FirstOrDefault(x => x.Id == targetId);
-            if (target is null || target.User.Staff < UserStaff.JuniorServerAdmin)
+            if (target is null || target.User.Staff < UserStaff.GameAdmin)
                 return;
 
             target.Emit("GetScreenStaff", screen, index, length);
@@ -2618,7 +2612,7 @@ public class StaffScript : Script
     [Command("blocktogstaff")]
     public async Task CMD_blocktogstaff(MyPlayer player)
     {
-        if (player.User.Staff < UserStaff.LeadServerAdmin)
+        if (player.User.Staff < UserStaff.HeadAdmin)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -2633,18 +2627,18 @@ public class StaffScript : Script
         Global.StaffToggleBlocked = !Global.StaffToggleBlocked;
         if (Global.StaffToggleBlocked)
         {
-            foreach (var target in Global.AllPlayers.Where(x => x.User?.Staff < UserStaff.ServerManager))
+            foreach (var target in Global.AllPlayers.Where(x => x.User?.Staff < UserStaff.Management))
                 target.StaffChatToggle = target.StaffToggle = false;
         }
 
-        await Functions.SendServerMessage($"{player.User.Name} {(!Global.StaffToggleBlocked ? "des" : string.Empty)}bloqueou os togs administrativo.", UserStaff.JuniorServerAdmin, false);
+        await Functions.SendServerMessage($"{player.User.Name} {(!Global.StaffToggleBlocked ? "des" : string.Empty)}bloqueou os togs administrativo.", UserStaff.GameAdmin, false);
         await player.WriteLog(LogType.Staff, "/blocktogstaff", null);
     }
 
     [Command("anametag")]
     public async Task CMD_anametag(MyPlayer player)
     {
-        if (player.User.Staff < UserStaff.JuniorServerAdmin)
+        if (player.User.Staff < UserStaff.GameAdmin)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -2658,14 +2652,14 @@ public class StaffScript : Script
 
         player.Anametag = !player.Anametag;
         player.Emit("ToggleAnametag", player.Anametag);
-        await Functions.SendServerMessage($"{player.User.Name} {(!player.Anametag ? "des" : string.Empty)}ativou a nametag à distância.", UserStaff.JuniorServerAdmin, false);
+        await Functions.SendServerMessage($"{player.User.Name} {(!player.Anametag ? "des" : string.Empty)}ativou a nametag à distância.", UserStaff.GameAdmin, false);
         await player.WriteLog(LogType.Staff, $"/anametag {player.Anametag}", null);
     }
 
     [Command("checarafk", "/checarafk (ID ou nome)")]
     public static void CMD_checarafk(MyPlayer player, string idOrName)
     {
-        if (player.User.Staff < UserStaff.JuniorServerAdmin)
+        if (player.User.Staff < UserStaff.GameAdmin)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -2693,7 +2687,7 @@ public class StaffScript : Script
     [Command("afks")]
     public static void CMD_afks(MyPlayer player)
     {
-        if (player.User.Staff < UserStaff.JuniorServerAdmin)
+        if (player.User.Staff < UserStaff.GameAdmin)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -2720,7 +2714,7 @@ public class StaffScript : Script
     [Command("lobby")]
     public static void CMD_lobby(MyPlayer player)
     {
-        if (player.User.Staff < UserStaff.LeadServerAdmin)
+        if (player.User.Staff < UserStaff.HeadAdmin)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -2747,7 +2741,7 @@ public class StaffScript : Script
     [Command("mascarados")]
     public static void CMD_mascarados(MyPlayer player)
     {
-        if (player.User.Staff < UserStaff.JuniorServerAdmin)
+        if (player.User.Staff < UserStaff.GameAdmin)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -2774,7 +2768,7 @@ public class StaffScript : Script
     [Command("nome", "/nome (ID ou nome) (novo nome)", GreedyArg = true)]
     public async Task CMD_nome(MyPlayer player, string idOrName, string newName)
     {
-        if (player.User.Staff < UserStaff.ServerManager)
+        if (player.User.Staff < UserStaff.Management)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -2801,7 +2795,227 @@ public class StaffScript : Script
         target.Character.SetName(newName);
         await target.Save();
         target.SendMessage(MessageType.Success, $"{player.User.Name} alterou seu nome para {target.Character.Name}.");
-        await Functions.SendServerMessage($"{player.User.Name} alterou o nome de {oldName} para {target.Character.Name}.", UserStaff.ServerManager, false);
+        await Functions.SendServerMessage($"{player.User.Name} alterou o nome de {oldName} para {target.Character.Name}.", UserStaff.Management, false);
         await player.WriteLog(LogType.Staff, $"/nome {oldName} {target.Character.Name}", target);
+    }
+
+    [Command("setfaccao", "/setfaccao (ID ou nome) (nome da facção)", GreedyArg = true)]
+    public async Task CMD_setfaccao(MyPlayer player, string idOrName, string factionName)
+    {
+        if (!player.StaffFlags.Contains(StaffFlag.Factions))
+        {
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
+            return;
+        }
+
+        var target = player.GetCharacterByIdOrName(idOrName);
+        if (target is null)
+            return;
+
+        if (target.Character.FactionId.HasValue)
+        {
+            player.SendMessage(MessageType.Error, "Jogador já está em uma facção.");
+            return;
+        }
+
+        var faction = Global.Factions.FirstOrDefault(x => x.Name.ToLower() == factionName.ToLower());
+        if (faction is null)
+        {
+            player.SendMessage(MessageType.Error, $"Facção {factionName} não existe.");
+            return;
+        }
+
+        var rank = Global.FactionsRanks.Where(x => x.FactionId == faction.Id).MinBy(x => x.Position);
+        if (rank is null)
+        {
+            player.SendMessage(MessageType.Error, $"Facção {factionName} não possui ranks.");
+            return;
+        }
+
+        target.Character.SetFaction(faction.Id, rank.Id, faction.Type == FactionType.Criminal);
+
+        if (faction.Type != FactionType.Criminal)
+            target.OnDuty = false;
+
+        target.SendFactionMessage($"{target.Character.Name} entrou na facção.");
+        await player.Save();
+        await player.WriteLog(LogType.Staff, $"/setfaccao {factionName}", target);
+        await Functions.SendServerMessage($"{player.User.Name} setou {target.Character.Name} na facção {faction.Name}.", UserStaff.GameAdmin, false);
+    }
+
+    [Command("atunar")]
+    public static void CMD_atunar(MyPlayer player)
+    {
+        if (!player.StaffFlags.Contains(StaffFlag.Factions))
+        {
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
+            return;
+        }
+
+        if (!player.OnAdminDuty)
+        {
+            player.SendMessage(MessageType.Error, Resources.YouAreNotOnAdministrativeDuty);
+            return;
+        }
+
+        Functions.CMDTuning(player, null, null, true);
+    }
+
+    [Command("empregos")]
+    public static void CMD_empregos(MyPlayer player)
+    {
+        if (player.User.Staff < UserStaff.Management)
+        {
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
+            return;
+        }
+
+        player.Emit("StaffJob:Show", GetJobsJson());
+    }
+
+    [RemoteEvent(nameof(StaffJobSave))]
+    public async Task StaffJobSave(Player playerParam, string jsonString)
+    {
+        try
+        {
+            var player = Functions.CastPlayer(playerParam);
+            if (player.User.Staff < UserStaff.Management)
+            {
+                player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
+                return;
+            }
+
+            var request = Functions.Deserialize<JobRequest>(jsonString);
+
+            if (request.Salary <= 0)
+            {
+                player.SendNotification(NotificationType.Error, "Salário deve ser maior que 0.");
+                return;
+            }
+
+            if (request.BlipType < 1 || request.BlipType > Constants.MAX_BLIP_TYPE)
+            {
+                player.SendNotification(NotificationType.Error, string.Format("Tipo do Blip deve ser entre 1 e {0}.", Constants.MAX_BLIP_TYPE));
+                return;
+            }
+
+            if (request.BlipColor < 1 || request.BlipColor > 85)
+            {
+                player.SendNotification(NotificationType.Error, "Cor do Blip deve ser entre 1 e 85.");
+                return;
+            }
+
+            request.BlipName ??= string.Empty;
+            if (request.BlipName.Length < 1 || request.BlipName.Length > 100)
+            {
+                player.SendNotification(NotificationType.Error, "Nome do Blip deve ter entre 1 e 100 caracteres.");
+                return;
+            }
+
+            if (!string.IsNullOrWhiteSpace(request.VehicleRentModel) && !GlobalFunctions.CheckIfVehicleExists(request.VehicleRentModel))
+            {
+                player.SendNotification(NotificationType.Error, $"Veículo {request.VehicleRentModel} não existe.");
+                return;
+            }
+
+            if (request.VehicleRentValue < 0)
+            {
+                player.SendNotification(NotificationType.Error, "Valor Aluguel deve ser maior ou igual a 0.");
+                return;
+            }
+
+            var job = Global.Jobs.FirstOrDefault(x => x.Id == request.Id);
+            if (job is null)
+            {
+                player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
+                return;
+            }
+
+            job.Update(request.PosX, request.PosY, request.PosZ, request.Salary,
+                request.BlipType, request.BlipColor, request.BlipName,
+                request.VehicleRentModel, request.VehicleRentValue,
+                request.VehicleRentPosX, request.VehicleRentPosY, request.VehicleRentPosZ,
+                request.VehicleRentRotR, request.VehicleRentRotP, request.VehicleRentRotY);
+
+            var context = Functions.GetDatabaseContext();
+            context.Jobs.Update(job);
+            await context.SaveChangesAsync();
+
+            job.CreateIdentifier();
+
+            await player.WriteLog(LogType.Staff, $"Gravar Emprego | {Functions.Serialize(job)}", null);
+            player.SendNotification(NotificationType.Success, "Emprego editado.");
+
+            var json = GetJobsJson();
+            foreach (var target in Global.SpawnedPlayers.Where(x => x.User.Staff == UserStaff.Management))
+                target.Emit("StaffJob:Update", json);
+        }
+        catch (Exception ex)
+        {
+            Functions.GetException(ex);
+        }
+    }
+
+    private static string GetJobsJson()
+    {
+        return Functions.Serialize(Global.Jobs
+            .Select(x => new
+            {
+                x.Id,
+                Name = x.CharacterJob.GetDescription(),
+                x.PosX,
+                x.PosY,
+                x.PosZ,
+                x.Salary,
+                x.BlipType,
+                x.BlipColor,
+                x.BlipName,
+                x.VehicleRentModel,
+                x.VehicleRentValue,
+                x.VehicleRentPosX,
+                x.VehicleRentPosY,
+                x.VehicleRentPosZ,
+                x.VehicleRentRotR,
+                x.VehicleRentRotP,
+                x.VehicleRentRotY,
+            })
+            .OrderBy(x => x.Name));
+    }
+
+    [Command("testarefeito", "/testarefeito (nome da droga)", GreedyArg = true)]
+    public static async Task CMD_testarefeito(MyPlayer player, string drugName)
+    {
+        if (player.User.Staff < UserStaff.GameAdmin)
+        {
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
+            return;
+        }
+
+        var itemTemplate = Global.ItemsTemplates.FirstOrDefault(x => x.Name.ToLower() == drugName.ToLower());
+
+        var drug = Global.Drugs.FirstOrDefault(x => x.ItemTemplateId == itemTemplate?.Id);
+        if (drug is null)
+        {
+            player.SendMessage(MessageType.Error, $"Droga {drugName} não existe.");
+            return;
+        }
+
+        player.SetDrugEffect(drug.ShakeGameplayCamName, drug.ShakeGameplayCamIntensity, drug.TimecycModifier, drug.AnimpostFXName);
+        await player.WriteLog(LogType.Staff, $"/testarefeito {drugName}", null);
+        player.SendMessage(MessageType.Success, $"Você está testando os efeitos da droga {drugName}.");
+    }
+
+    [Command("pararefeito")]
+    public static async Task CMD_pararefeito(MyPlayer player)
+    {
+        if (player.User.Staff < UserStaff.GameAdmin)
+        {
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
+            return;
+        }
+
+        player.ClearDrugEffect();
+        await player.WriteLog(LogType.Staff, "/pararefeito", null);
+        player.SendMessage(MessageType.Success, "Você parou de testar os efeitos da droga.");
     }
 }

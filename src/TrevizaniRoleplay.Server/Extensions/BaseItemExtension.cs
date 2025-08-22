@@ -41,10 +41,14 @@ public static class BaseItemExtension
 
     public static string GetExtra(this BaseItem baseItem)
     {
+        var category = baseItem.GetItemTemplate().Category;
+
+        if (category == ItemCategory.Boombox)
+            return $"Alcance: <strong>{baseItem.GetItemType():N0}</strong>";
+
         if (string.IsNullOrWhiteSpace(baseItem.Extra))
             return string.Empty;
 
-        var category = baseItem.GetItemTemplate().Category;
         if (category == ItemCategory.Weapon)
         {
             var extra = Functions.Deserialize<WeaponItem>(baseItem.Extra);
@@ -53,9 +57,6 @@ public static class BaseItemExtension
 
             return $"Número de Série: <strong>{extra.SerialNumber}</strong>";
         }
-
-        if (category == ItemCategory.PropertyKey || category == ItemCategory.VehicleKey)
-            return $"Fechadura: <strong>{baseItem.Subtype}</strong>";
 
         if (category == ItemCategory.WalkieTalkie)
         {
@@ -66,7 +67,7 @@ public static class BaseItemExtension
         if (category == ItemCategory.Cellphone)
             return $"Número: <strong>{baseItem.Subtype}</strong>";
 
-        if (Functions.CheckIfIsBulletShell(category))
+        if (GlobalFunctions.CheckIfIsBulletShell(category))
             return $"Temperatura: <strong>{Functions.GetBulletShellTemperature(baseItem.Extra)}</strong>";
 
         if (category == ItemCategory.WeaponComponent)
@@ -84,10 +85,7 @@ public static class BaseItemExtension
     public static bool GetIsStack(this BaseItem baseItem)
     {
         var category = baseItem.GetCategory();
-        return category == ItemCategory.Money || category == ItemCategory.Drug
-            || category == ItemCategory.VehiclePart || category == ItemCategory.PickLock
-            || category == ItemCategory.Food || category == ItemCategory.Display
-            || category == ItemCategory.Bandage || Functions.CheckIfIsAmmo(category);
+        return GlobalFunctions.CheckIfIsStack(category);
     }
 
     public static bool GetIsUsable(this BaseItem baseItem)
@@ -96,7 +94,7 @@ public static class BaseItemExtension
         return category == ItemCategory.Drug || category == ItemCategory.Weapon
             || category == ItemCategory.WalkieTalkie || category == ItemCategory.Cellphone
             || category == ItemCategory.Food || category == ItemCategory.FishingRod
-            || category == ItemCategory.Bandage || Functions.CheckIfIsAmmo(category)
+            || category == ItemCategory.Bandage || GlobalFunctions.CheckIfIsAmmo(category)
             || category == ItemCategory.WeaponComponent;
     }
 }

@@ -24,7 +24,7 @@ public class PoliceSpikeStripScript : Script
         var vehicle = Global.Vehicles.Where(x => x.GetDimension() == player.GetDimension()
             && player.GetPosition().DistanceTo(x.GetPosition()) <= Constants.RP_DISTANCE)
             .MinBy(x => player.GetPosition().DistanceTo(x.GetPosition()));
-        if (vehicle is null || vehicle.DoorsStates[5])
+        if (vehicle is null || vehicle.DoorsStates[Constants.VEHICLE_DOOR_TRUNK])
         {
             player.SendMessage(MessageType.Error, "Você não está próximo de um veículo com o porta-malas aberto.");
             return;
@@ -129,7 +129,7 @@ public class PoliceSpikeStripScript : Script
         var vehicle = Global.Vehicles.Where(x => x.GetDimension() == player.GetDimension()
             && player.GetPosition().DistanceTo(x.GetPosition()) <= Constants.RP_DISTANCE)
             .MinBy(x => player.GetPosition().DistanceTo(x.GetPosition()));
-        if (vehicle is null || vehicle.DoorsStates[5])
+        if (vehicle is null || vehicle.DoorsStates[Constants.VEHICLE_DOOR_TRUNK])
         {
             player.SendMessage(MessageType.Error, "Você não está próximo de um veículo com o porta-malas aberto.");
             return;

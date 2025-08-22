@@ -25,9 +25,8 @@ public class FactionEquipment : BaseEntity
         Items = [];
     }
 
-    public void Update(Guid factionId, string name, bool propertyOrVehicle, bool swat, bool upr)
+    public void Update(string name, bool propertyOrVehicle, bool swat, bool upr)
     {
-        FactionId = factionId;
         Name = name;
         PropertyOrVehicle = propertyOrVehicle;
         SWAT = swat;

@@ -14,7 +14,7 @@ namespace TrevizaniRoleplay.Api.Controllers;
 [Route("applications")]
 public class ApplicationsController(DatabaseContext context) : BaseController(context)
 {
-    [HttpGet, Authorize(Policy = PolicySettings.POLICY_SERVER_SUPPORT)]
+    [HttpGet, Authorize(Policy = PolicySettings.POLICY_TESTER)]
     public async Task<IEnumerable<ApplicationListResponse>> GetAll()
     {
         var apps = (await context.Characters
@@ -34,7 +34,7 @@ public class ApplicationsController(DatabaseContext context) : BaseController(co
         });
     }
 
-    [HttpGet("current"), Authorize(Policy = PolicySettings.POLICY_SERVER_SUPPORT)]
+    [HttpGet("current"), Authorize(Policy = PolicySettings.POLICY_TESTER)]
     public async Task<ApplicationResponse> GetCurrent()
     {
         static ApplicationResponse ConvertResponse(Character app)
@@ -81,7 +81,7 @@ public class ApplicationsController(DatabaseContext context) : BaseController(co
         throw new ArgumentException("Nenhuma aplicação está aguardando avaliação.");
     }
 
-    [HttpPost("accept"), Authorize(Policy = PolicySettings.POLICY_SERVER_SUPPORT)]
+    [HttpPost("accept"), Authorize(Policy = PolicySettings.POLICY_TESTER)]
     public async Task Accept()
     {
         var app = await context.Characters
@@ -92,18 +92,21 @@ public class ApplicationsController(DatabaseContext context) : BaseController(co
         app.AcceptAplication(UserId);
         context.Characters.Update(app);
 
+        var notification = new Notification(app.User!.Id, $"A aplicação do seu personagem {app.Name} foi aceita.");
+        await context.Notifications.AddAsync(notification);
+
         var ucpAction = new UCPAction();
         ucpAction.Create(UCPActionType.SendDiscordMessage, UserId, Serialize(new UCPActionSendDiscordMessageRequest
         {
             DiscordUserId = Convert.ToUInt64(app.User!.DiscordId),
-            Message = $"A aplicação do seu personagem **{app.Name}** foi aceita.",
+            Message = notification.Message,
         }));
         await context.UCPActions.AddAsync(ucpAction);
 
         await context.SaveChangesAsync();
     }
 
-    [HttpPost("deny"), Authorize(Policy = PolicySettings.POLICY_SERVER_SUPPORT)]
+    [HttpPost("deny"), Authorize(Policy = PolicySettings.POLICY_TESTER)]
     public async Task Deny([FromBody] DenyApplicationRequest request)
     {
         if (request.Reason.Length < 1 || request.Reason.Length > 1000)
@@ -117,11 +120,14 @@ public class ApplicationsController(DatabaseContext context) : BaseController(co
         app.RejectApplication(UserId, request.Reason);
         context.Characters.Update(app);
 
+        var notification = new Notification(app.User!.Id, $"A aplicação do seu personagem {app.Name} foi negada.");
+        await context.Notifications.AddAsync(notification);
+
         var ucpAction = new UCPAction();
         ucpAction.Create(UCPActionType.SendDiscordMessage, UserId, Serialize(new UCPActionSendDiscordMessageRequest
         {
             DiscordUserId = Convert.ToUInt64(app.User!.DiscordId),
-            Message = $"A aplicação do seu personagem **{app.Name}** foi negada. Motivo: **{app.RejectionReason}**",
+            Message = notification.Message,
         }));
         await context.UCPActions.AddAsync(ucpAction);
 

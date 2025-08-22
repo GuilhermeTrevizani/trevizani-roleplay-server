@@ -6,6 +6,7 @@ using TrevizaniRoleplay.Core.Models.Requests;
 using TrevizaniRoleplay.Core.Models.Responses;
 using TrevizaniRoleplay.Core.Models.Server;
 using TrevizaniRoleplay.Core.Models.Settings;
+using TrevizaniRoleplay.Core.Services;
 using TrevizaniRoleplay.Domain.Entities;
 using TrevizaniRoleplay.Domain.Enums;
 using TrevizaniRoleplay.Infra.Data;
@@ -15,7 +16,7 @@ namespace TrevizaniRoleplay.Api.Controllers;
 [Route("parameters")]
 public class ParametersController(DatabaseContext context) : BaseController(context)
 {
-    [HttpGet("who-can-login"), Authorize(Policy = PolicySettings.POLICY_SERVER_MANAGER)]
+    [HttpGet("who-can-login"), Authorize(Policy = PolicySettings.POLICY_MANAGEMENT)]
     public IEnumerable<SelectOptionResponse> GetWhoCanLogin()
     {
         return Enum.GetValues<WhoCanLogin>()
@@ -27,7 +28,7 @@ public class ParametersController(DatabaseContext context) : BaseController(cont
            .OrderBy(x => x.Label);
     }
 
-    [HttpGet, Authorize(Policy = PolicySettings.POLICY_SERVER_MANAGER)]
+    [HttpGet, Authorize(Policy = PolicySettings.POLICY_MANAGEMENT)]
     public async Task<Parameter> Get()
     {
         var parameter = await context.Parameters.FirstOrDefaultAsync()
@@ -51,19 +52,7 @@ public class ParametersController(DatabaseContext context) : BaseController(cont
         return parameter;
     }
 
-    private static bool CheckIfWeaponExists(string model)
-    {
-        return Enum.TryParse(model, true, out WeaponModel _);
-    }
-
-    private static bool CheckIfIsAmmo(ItemCategory itemCategory)
-    {
-        return itemCategory == ItemCategory.PistolAmmo || itemCategory == ItemCategory.ShotgunAmmo
-            || itemCategory == ItemCategory.AssaultRifleAmmo || itemCategory == ItemCategory.LightMachineGunAmmo
-            || itemCategory == ItemCategory.SniperRifleAmmo || itemCategory == ItemCategory.SubMachineGunAmmo;
-    }
-
-    [HttpPut, Authorize(Policy = PolicySettings.POLICY_SERVER_MANAGER)]
+    [HttpPut, Authorize(Policy = PolicySettings.POLICY_MANAGEMENT)]
     public async Task Put([FromBody] ParametersRequest parameter)
     {
         var parameters = await context.Parameters.FirstOrDefaultAsync()
@@ -100,7 +89,7 @@ public class ParametersController(DatabaseContext context) : BaseController(cont
         var weaponsInfos = Deserialize<List<WeaponInfo>>(parameter.WeaponsInfosJSON)!;
         foreach (var weaponInfo in weaponsInfos)
         {
-            if (!CheckIfWeaponExists(weaponInfo.Name))
+            if (!GlobalFunctions.CheckIfWeaponExists(weaponInfo.Name))
                 throw new ArgumentException($"Arma {weaponInfo.Name} não encontrada.");
 
             if (weaponInfo.Recoil < 0)
@@ -119,7 +108,7 @@ public class ParametersController(DatabaseContext context) : BaseController(cont
                     .FirstOrDefault(x => x.Name.ToLower() == weaponInfo.AmmoItemTemplateName.ToLower())
                     ?? throw new ArgumentException($"Munição {weaponInfo.AmmoItemTemplateName} não encontrada.");
 
-                if (!CheckIfIsAmmo(ammoItemTemplate.Category))
+                if (!GlobalFunctions.CheckIfIsAmmo(ammoItemTemplate.Category))
                     throw new ArgumentException($"Item {weaponInfo.AmmoItemTemplateName} não é uma munição.");
 
                 weaponInfo.AmmoItemTemplateId = ammoItemTemplate.Id;
@@ -143,8 +132,8 @@ public class ParametersController(DatabaseContext context) : BaseController(cont
         var oldParameter = Serialize(parameters);
         parameters.Update(parameter.HospitalValue, parameter.BarberValue,
             parameter.ClothesValue, parameter.DriverLicenseBuyValue, parameter.Paycheck, parameter.DriverLicenseRenewValue,
-            parameter.AnnouncementValue, parameter.ExtraPaymentGarbagemanValue, parameter.Blackout, parameter.KeyValue,
-            parameter.LockValue, parameter.IPLsJSON ?? "[]", parameter.TattooValue, parameter.CooldownDismantleHours,
+            parameter.AnnouncementValue, parameter.ExtraPaymentGarbagemanValue, parameter.Blackout,
+            parameter.IPLsJSON ?? "[]", parameter.TattooValue, parameter.CooldownDismantleHours,
             parameter.PropertyRobberyConnectedTime, parameter.CooldownPropertyRobberyRobberHours, parameter.CooldownPropertyRobberyPropertyHours,
             parameter.PoliceOfficersPropertyRobbery, parameter.InitialTimeCrackDen, parameter.EndTimeCrackDen, parameter.FirefightersBlockHeal,
             parameter.FuelValue, parameter.PropertyProtectionLevelPercentageValue,
@@ -156,7 +145,7 @@ public class ParametersController(DatabaseContext context) : BaseController(cont
             parameter.WeaponsInfosJSON, parameter.BodyPartsDamagesJSON, parameter.WeaponLicenseMonths, parameter.WeaponLicenseMaxWeapon, parameter.WeaponLicenseMaxAmmo,
             parameter.WeaponLicenseMaxAttachment, parameter.WeaponLicensePurchaseDaysInterval, parameter.PremiumItemsJSON,
             parameter.AudioRadioStationsJSON, parameter.UnemploymentAssistance, parameter.PremiumPointPackagesJSON,
-            parameter.MOTD);
+            parameter.MOTD, parameter.EntranceBenefitValue, parameter.EntranceBenefitCooldownUsers, parameter.EntranceBenefitCooldownHours);
 
         context.Parameters.Update(parameters);
 
@@ -166,8 +155,6 @@ public class ParametersController(DatabaseContext context) : BaseController(cont
 
         await context.SaveChangesAsync();
 
-        var user = await context.Users.FirstOrDefaultAsync(x => x.Id == UserId);
-
-        await WriteLog(LogType.Staff, $"Parâmetros | {user!.Name} | {oldParameter} | {Serialize(parameters)}");
+        await WriteLog(LogType.Staff, $"Parâmetros | {oldParameter} | {Serialize(parameters)}");
     }
 }

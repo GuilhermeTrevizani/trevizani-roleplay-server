@@ -11,6 +11,6 @@ public class DealershipVehicleMap : IEntityTypeConfiguration<DealershipVehicle>
         builder.ToTable("DealershipsVehicles");
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Model).HasMaxLength(50);
-        builder.HasOne(x => x.Dealership).WithMany().HasForeignKey(x => x.DealershipId);
+        builder.HasOne(x => x.Dealership).WithMany().HasForeignKey(x => x.DealershipId).OnDelete(DeleteBehavior.Restrict);
     }
 }

@@ -15,7 +15,7 @@ namespace TrevizaniRoleplay.Api.Controllers;
 [Route("characters")]
 public class CharactersController(DatabaseContext context) : BaseController(context)
 {
-    [HttpGet("patrimony"), Authorize(Policy = PolicySettings.POLICY_SERVER_MANAGER)]
+    [HttpGet("patrimony"), Authorize(Policy = PolicySettings.POLICY_MANAGEMENT)]
     public async Task<IEnumerable<CharacterPatrimonyResponse>> GetPatrimony()
     {
         var characters = await context.Characters
@@ -119,20 +119,14 @@ public class CharactersController(DatabaseContext context) : BaseController(cont
         var response = new MyCharactersResponse
         {
             Characters = await context.Characters
-            .Where(x => x.UserId == UserId
-                && x.NameChangeStatus != CharacterNameChangeStatus.Done
-                && !x.DeletedDate.HasValue)
+            .WhereActive()
+            .Where(x => x.UserId == UserId)
             .OrderBy(x => x.Name)
             .Select(x => new MyCharactersResponse.Character
             {
                 Id = x.Id,
                 Name = x.Name,
                 LastAccessDate = x.LastAccessDate,
-                CanApplyNamechange = user!.NameChanges > 0
-                    && x.NameChangeStatus == CharacterNameChangeStatus.Allowed
-                    && string.IsNullOrWhiteSpace(x.RejectionReason)
-                    && x.EvaluatorStaffUserId.HasValue,
-                CanResendApplication = !string.IsNullOrWhiteSpace(x.RejectionReason),
                 Status = x.GetStatus(),
                 DeathReason = x.DeathReason,
             })
@@ -140,7 +134,7 @@ public class CharactersController(DatabaseContext context) : BaseController(cont
         };
 
         var parameter = await context.Parameters.FirstOrDefaultAsync();
-        if (parameter!.WhoCanLogin == WhoCanLogin.OnlyStaff && user!.Staff < UserStaff.ServerSupport)
+        if (parameter!.WhoCanLogin == WhoCanLogin.OnlyStaff && user!.Staff < UserStaff.Tester)
             response.CreateCharacterWarning = "Apenas staff pode criar personagens no momento.";
         else if (response.Characters.Count() >= user!.CharacterSlots)
             response.CreateCharacterWarning = "Você não possui slot de personagens.";
@@ -148,31 +142,75 @@ public class CharactersController(DatabaseContext context) : BaseController(cont
         return response;
     }
 
-    [HttpGet("create-character-info/{id}")]
-    public async Task<CreateCharacterInfoResponse> GetCreateCharacterInfo(Guid id)
+    [HttpGet("mine/{id}")]
+    public async Task<CharacterResponse> GetById(Guid id)
     {
+        var user = await context.Users.FirstOrDefaultAsync(x => x.Id == UserId);
+
         var character = await context.Characters
             .Include(x => x.EvaluatorStaffUser)
+            .Include(x => x.Faction)
+            .Include(x => x.FactionRank)
+            .Include(x => x.Vehicles!.Where(x => !x.Sold))
+            .ThenInclude(x => x.CharactersAccess!)
+                .ThenInclude(x => x.Character)
+            .Include(x => x.Properties!)
+            .ThenInclude(x => x.CharactersAccess!)
+                .ThenInclude(x => x.Character)
+            .AsSplitQuery()
             .FirstOrDefaultAsync(x => x.Id == id && x.UserId == UserId && !x.DeletedDate.HasValue)
             ??
             throw new ArgumentException("Personagem não encontrado.");
 
-        if (character.Connected)
-            throw new ArgumentException("Personagem está conectado no servidor.");
-
-        var user = await context.Users.FirstOrDefaultAsync(x => x.Id == UserId)!;
-        if (string.IsNullOrWhiteSpace(character.RejectionReason)
-            && user!.NameChanges == 0)
-            throw new ArgumentException("Personagem não foi rejeitado e você não possui mudanças de nome.");
+        var companies = await context.Companies
+            .Include(x => x.Characters)
+            .Where(x => x.CharacterId == character.Id || x.Characters!.Any(y => y.CharacterId == character.Id))
+            .ToListAsync();
 
         return new()
         {
+            Id = character.Id,
             Name = character.Name,
             Age = character.Age,
             History = character.History,
             RejectionReason = character.RejectionReason,
             Sex = character.Sex,
             Staffer = character.EvaluatorStaffUser?.Name,
+            SexDescription = character.Sex.GetDescription(),
+            CanApplyNamechange = user!.NameChanges > 0
+                    && character.NameChangeStatus == CharacterNameChangeStatus.Allowed
+                    && string.IsNullOrWhiteSpace(character.RejectionReason)
+                    && character.EvaluatorStaffUserId.HasValue,
+            CanResendApplication = !string.IsNullOrWhiteSpace(character.RejectionReason),
+            Attributes = character.Attributes,
+            RegisterDate = character.RegisterDate,
+            ConnectedTime = character.ConnectedTime,
+            Cellphone = character.Cellphone,
+            Bank = character.Bank,
+            FactionName = character.Faction?.Name,
+            FactionRankName = character.FactionRank?.Name,
+            Job = character.Job.GetDescription(),
+            Vehicles = character.Vehicles!.Select(x => new CharacterResponse.Vehicle
+            {
+                Id = x.Id,
+                Model = x.Model,
+                Plate = x.Plate,
+                CharactersWithAccess = [.. x.CharactersAccess!.Select(y => y.Character!.Name).Order()]
+            }),
+            Properties = character.Properties!.Select(x => new CharacterResponse.Property
+            {
+                Id = x.Id,
+                Number = x.Number,
+                Address = x.FormatedAddress,
+                CharactersWithAccess = [.. x.CharactersAccess!.Select(y => y.Character!.Name).Order()]
+            }),
+            Companies = companies.Select(x => new CharacterResponse.Company
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Safe = x.Safe,
+                HasSafeAccess = HasCompanySafeAccess(x, character.Id)
+            })
         };
     }
 
@@ -193,14 +231,14 @@ public class CharactersController(DatabaseContext context) : BaseController(cont
         var user = await context.Users.FirstOrDefaultAsync(x => x.Id == UserId)!;
 
         var parameter = await context.Parameters.FirstOrDefaultAsync();
-        if (parameter!.WhoCanLogin == WhoCanLogin.OnlyStaff && user!.Staff < UserStaff.ServerSupport)
+        if (parameter!.WhoCanLogin == WhoCanLogin.OnlyStaff && user!.Staff < UserStaff.Tester)
             throw new ArgumentException("Apenas staff pode criar personagens no momento.");
 
         var isNew = true;
         Character? oldCharacter = null;
         if (request.Id.HasValue)
         {
-            oldCharacter = await context.Characters.FirstOrDefaultAsync(x => x.Id == request.Id && !x.DeletedDate.HasValue);
+            oldCharacter = await context.Characters.FirstOrDefaultAsync(x => x.Id == request.Id && !x.DeletedDate.HasValue && x.UserId == user!.Id);
             if (oldCharacter is null)
                 throw new ArgumentException("Personagem antigo não encontrado.");
 
@@ -211,6 +249,9 @@ public class CharactersController(DatabaseContext context) : BaseController(cont
             {
                 if (oldCharacter.NameChangeStatus != CharacterNameChangeStatus.Allowed)
                     throw new ArgumentException("Você não pode alterar o nome desse personagem.");
+
+                if (user!.NameChanges == 0)
+                    throw new ArgumentException("Você não possui mudanças de nome.");
             }
             else
             {
@@ -246,14 +287,14 @@ public class CharactersController(DatabaseContext context) : BaseController(cont
             bankAccount++;
             character.Create(request.Name, request.Age, request.History, request.Sex,
                 UserId, Ip, model, Constants.MAX_HEALTH,
-                user.Staff >= UserStaff.JuniorServerAdmin ? user.Id : null,
+                user.Staff >= UserStaff.GameAdmin ? user.Id : null,
                 bankAccount, bloodType, initialHelpHours,
                 Constants.INITIAL_SPAWN_POSITION_X, Constants.INITIAL_SPAWN_POSITION_Y, Constants.INITIAL_SPAWN_POSITION_Z);
             if (oldCharacter is not null)
             {
                 character.SetBank(oldCharacter!.Bank);
-                character.SetPremiumDate(oldCharacter.Premium, oldCharacter.PremiumValidDate);
             }
+
             await context.Characters.AddAsync(character);
 
             if (oldCharacter is null)

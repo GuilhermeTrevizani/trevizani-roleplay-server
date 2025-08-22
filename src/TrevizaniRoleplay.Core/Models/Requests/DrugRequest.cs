@@ -1,4 +1,4 @@
-﻿namespace TrevizaniRoleplay.Server.Models;
+﻿namespace TrevizaniRoleplay.Core.Models.Requests;
 
 public class DrugRequest
 {
@@ -8,9 +8,9 @@ public class DrugRequest
     public float GarbageCollectorMultiplier { get; set; }
     public float TruckerMultiplier { get; set; }
     public int MinutesDuration { get; set; }
-    public string Warn { get; set; } = string.Empty;
-    public string ShakeGameplayCamName { get; set; } = string.Empty;
+    public string Warn { get; set; } = default!;
+    public string ShakeGameplayCamName { get; set; } = default!;
     public float ShakeGameplayCamIntensity { get; set; }
-    public string TimecycModifier { get; set; } = string.Empty;
-    public string AnimpostFXName { get; set; } = string.Empty;
+    public string TimecycModifier { get; set; } = default!;
+    public string AnimpostFXName { get; set; } = default!;
 }

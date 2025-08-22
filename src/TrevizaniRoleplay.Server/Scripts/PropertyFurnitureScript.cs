@@ -307,7 +307,7 @@ public class PropertyFurnitureScript : Script
         }
     }
 
-    private async Task<int> GetMaxFurnitures(Property property, bool interior)
+    private static async Task<int> GetMaxFurnitures(Property property, bool interior)
     {
         var userPremium = await property.GetOwnerPremium();
 
@@ -316,7 +316,7 @@ public class PropertyFurnitureScript : Script
         {
             maxFurnitures = userPremium.Item1 switch
             {
-                UserPremium.Gold => 1000,
+                UserPremium.Gold => 1_000,
                 UserPremium.Silver => 600,
                 UserPremium.Bronze => 300,
                 _ => 100,

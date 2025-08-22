@@ -1,5 +1,4 @@
 ﻿using GTANetworkAPI;
-using TrevizaniRoleplay.Core.Extensions;
 using TrevizaniRoleplay.Server.Extensions;
 using TrevizaniRoleplay.Server.Factories;
 using TrevizaniRoleplay.Server.Models;
@@ -162,7 +161,7 @@ public class JobScript : Script
             }
             else
             {
-                await player.LeaveDuty();
+                player.LeaveDuty();
             }
 
             player.SetOutfit();
@@ -243,19 +242,19 @@ public class JobScript : Script
 
             if (company is null)
             {
-                player.SendNotification(NotificationType.Error, "Nenhuma loja de conveniência encontrada em 50 metros. Por favor, reporte o bug.");
+                player.SendMessage(MessageType.Error, "Nenhuma loja de conveniência encontrada em 50 metros. Por favor, reporte o bug.");
                 return;
             }
 
             if (Global.Companies.Any(x => x.Id != company.Id && x.EmployeeOnDuty == player.Character.Id))
             {
-                player.SendNotification(NotificationType.Error, "Você já está em serviço em outra loja de conveniência.");
+                player.SendMessage(MessageType.Error, "Você já está em serviço em outra loja de conveniência.");
                 return;
             }
 
             if (!player.OnDuty && company.EmployeeOnDuty.HasValue)
             {
-                player.SendNotification(NotificationType.Error, $"{company.Name} já possui um funcionário em serviço.");
+                player.SendMessage(MessageType.Error, $"{company.Name} já possui um funcionário em serviço.");
                 return;
             }
 
@@ -266,6 +265,6 @@ public class JobScript : Script
             return;
         }
 
-        player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
+        player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
     }
 }

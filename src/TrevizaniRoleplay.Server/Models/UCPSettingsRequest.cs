@@ -4,4 +4,4 @@ public record UCPSettingsRequest(bool TimeStampToggle, bool AnnouncementToggle, 
     bool FactionChatToggle, bool StaffChatToggle, int ChatFontType, int ChatLines, int ChatFontSize,
     bool FactionToggle, bool VehicleTagToggle, string ChatBackgroundColor, bool ShowNametagId,
     bool AmbientSoundToggle, int FreezingTimePropertyEntrance, bool ShowOwnNametag, bool StaffToggle,
-    bool FactionWalkieTalkieToggle, UserReceiveSMSDiscord ReceiveSMSDiscord);
+    bool FactionWalkieTalkieToggle, UserReceiveSMSDiscord ReceiveSMSDiscord, bool ReceiveNotificationsOnDiscord);

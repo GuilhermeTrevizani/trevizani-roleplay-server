@@ -28,7 +28,6 @@ public class Vehicle : BaseEntity
     public bool Sold { get; private set; }
     public string DamagesJSON { get; private set; } = "[]";
     public float BodyHealth { get; private set; } = 1000;
-    public uint LockNumber { get; private set; }
     public byte ProtectionLevel { get; private set; }
     public bool XMR { get; private set; }
     public string ModsJSON { get; private set; } = "[]";
@@ -56,6 +55,7 @@ public class Vehicle : BaseEntity
     public uint Dimension { get; private set; }
     public bool Drift { get; private set; }
     public string Description { get; private set; } = string.Empty;
+    public bool Spawned { get; private set; }
 
     [JsonIgnore]
     public Character? Character { get; private set; }
@@ -68,6 +68,9 @@ public class Vehicle : BaseEntity
 
     [NotMapped]
     public bool ExemptInsurance => FactionId.HasValue;
+
+    [JsonIgnore]
+    public ICollection<CharacterVehicle>? CharactersAccess { get; set; }
 
     public void Create(string model, string plate, byte color1R, byte color1G, byte color1B, byte color2R, byte color2G, byte color2B)
     {
@@ -119,11 +122,6 @@ public class Vehicle : BaseEntity
     public void SetOwner(Guid characterId)
     {
         CharacterId = characterId;
-    }
-
-    public void SetLockNumber(uint value)
-    {
-        LockNumber = value;
     }
 
     public void SetPlate(string plate)
@@ -196,5 +194,10 @@ public class Vehicle : BaseEntity
     public void SetDescription(string description)
     {
         Description = description;
+    }
+
+    public void SetSpawned(bool spawned)
+    {
+        Spawned = spawned;
     }
 }

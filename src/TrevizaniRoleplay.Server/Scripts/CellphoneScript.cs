@@ -319,7 +319,7 @@ public class CellphoneScript : Script
             return;
         }
 
-        var minutes = player.GetCurrentPremium() switch
+        var minutes = player.User.GetCurrentPremium() switch
         {
             UserPremium.Gold => 5,
             UserPremium.Silver => 10,
@@ -341,7 +341,7 @@ public class CellphoneScript : Script
         message = Functions.CheckFinalDot(message);
         foreach (var target in Global.SpawnedPlayers.Where(x => !x.User.AnnouncementToggle))
             target.SendMessage(MessageType.None, $"[ANÚNCIO] {message} [CONTATO: {player.Character.Cellphone}]", Constants.ANNOUNCEMENT_COLOR);
-        await Functions.SendServerMessage($"{player.Character.Name} ({player.SessionId}) ({player.User.Name}) enviou o anúncio.", UserStaff.JuniorServerAdmin, false);
+        await Functions.SendServerMessage($"{player.Character.Name} ({player.SessionId}) ({player.User.Name}) enviou o anúncio.", UserStaff.GameAdmin, false);
 
         Global.Announcements.Add(new()
         {
@@ -641,102 +641,102 @@ public class CellphoneScript : Script
         }
     }
 
+    [Command("eloc", "/eloc (número ou nome do contato)")]
+    public async Task CMD_eloc(MyPlayer player, string numberOrName)
+    {
+        if (player.Character.Cellphone == 0)
+        {
+            player.SendMessage(MessageType.Error, Resources.YouDontHaveAnEquippedCellphone);
+            return;
+        }
+
+        if (player.IsActionsBlocked())
+        {
+            player.SendMessage(MessageType.Error, Resources.YouCanNotDoThisBecauseYouAreHandcuffedInjuredOrBeingCarried);
+            return;
+        }
+
+        if (player.Character.JailFinalDate.HasValue)
+        {
+            player.SendMessage(MessageType.Error, "Você não pode fazer isso pois está preso.");
+            return;
+        }
+
+        if (player.CellphoneItem.FlightMode)
+        {
+            player.SendMessage(MessageType.Error, "Seu celular está em modo avião.");
+            return;
+        }
+
+        var context = Functions.GetDatabaseContext();
+        if (!uint.TryParse(numberOrName, out uint number) || number == 0)
+        {
+            if (Guid.TryParse(numberOrName, out Guid phoneGroupId))
+            {
+                var phoneGroup = Global.PhonesGroups.FirstOrDefault(x => x.Id == phoneGroupId);
+                if (phoneGroup is null)
+                {
+                    player.SendMessage(MessageType.Error, "Grupo não encontrado.");
+                    return;
+                }
+
+                if (!phoneGroup.Users!.Any(x => x.Number == player.Character.Cellphone))
+                {
+                    player.SendMessage(MessageType.Error, "Você não está no grupo.");
+                    return;
+                }
+
+                var phoneMessageGroup = new PhoneMessage();
+                phoneMessageGroup.CreateLocationToGroup(player.Character.Cellphone, phoneGroup.Id, player.ICPosition.X, player.ICPosition.Y);
+
+                await Functions.SendSMS(player,
+                    phoneGroup.Users!.Where(x => x.Number != player.Character.Cellphone).Select(x => x.Number).ToArray(),
+                    phoneMessageGroup);
+
+                return;
+            }
+
+            var contact = player.Contacts.FirstOrDefault(x => x.Name.ToLower().Contains(numberOrName.ToLower()));
+            if (contact is null)
+            {
+                player.SendMessage(MessageType.Error, $"Nenhum contato encontrado contendo {numberOrName}.");
+                return;
+            }
+
+            number = contact.Number;
+        }
+
+        if (number <= 0)
+        {
+            player.SendMessage(MessageType.Error, "Número inválido.");
+            return;
+        }
+
+        if (number == player.Character.Cellphone)
+        {
+            player.SendMessage(MessageType.Error, "Você não pode enviar uma localização para você mesmo.");
+            return;
+        }
+
+        if (player.Contacts.Any(x => x.Number == number && x.Blocked))
+        {
+            player.SendMessage(MessageType.Error, "Você bloqueou esse contato.");
+            return;
+        }
+
+        var phoneMessage = new PhoneMessage();
+        phoneMessage.CreateLocationToContact(player.Character.Cellphone, number, player.ICPosition.X, player.ICPosition.Y);
+
+        await Functions.SendSMS(player, [number], phoneMessage);
+    }
+
     [RemoteEvent(nameof(SendCellphoneLocation))]
     public async Task SendCellphoneLocation(Player playerParam, string numberOrName)
     {
         try
         {
             var player = Functions.CastPlayer(playerParam);
-            if (player.Character.Cellphone == 0)
-            {
-                player.SendMessage(MessageType.Error, Resources.YouDontHaveAnEquippedCellphone);
-                return;
-            }
-
-            if (player.IsActionsBlocked())
-            {
-                player.SendMessage(MessageType.Error, Resources.YouCanNotDoThisBecauseYouAreHandcuffedInjuredOrBeingCarried);
-                return;
-            }
-
-            if (player.Character.JailFinalDate.HasValue)
-            {
-                player.SendMessage(MessageType.Error, "Você não pode fazer isso pois está preso.");
-                return;
-            }
-
-            if (player.CellphoneItem.FlightMode)
-            {
-                player.SendMessage(MessageType.Error, "Seu celular está em modo avião.");
-                return;
-            }
-
-            var context = Functions.GetDatabaseContext();
-            if (!uint.TryParse(numberOrName, out uint number) || number == 0)
-            {
-                if (Guid.TryParse(numberOrName, out Guid phoneGroupId))
-                {
-                    var phoneGroup = Global.PhonesGroups.FirstOrDefault(x => x.Id == phoneGroupId);
-                    if (phoneGroup is null)
-                    {
-                        player.SendMessage(MessageType.Error, "Grupo não encontrado.");
-                        return;
-                    }
-
-                    if (!phoneGroup.Users!.Any(x => x.Number == player.Character.Cellphone))
-                    {
-                        player.SendMessage(MessageType.Error, "Você não está no grupo.");
-                        return;
-                    }
-
-                    var phoneMessageGroup = new PhoneMessage();
-                    phoneMessageGroup.CreateLocationToGroup(player.Character.Cellphone, phoneGroup.Id, player.ICPosition.X, player.ICPosition.Y);
-
-                    await Functions.SendSMS(player,
-                        phoneGroup.Users!.Where(x => x.Number != player.Character.Cellphone).Select(x => x.Number).ToArray(),
-                        phoneMessageGroup);
-
-                    return;
-                }
-
-                var contact = player.Contacts.FirstOrDefault(x => x.Name.ToLower().Contains(numberOrName.ToLower()));
-                if (contact is null)
-                {
-                    player.SendMessage(MessageType.Error, $"Nenhum contato encontrado contendo {numberOrName}.");
-                    return;
-                }
-
-                number = contact.Number;
-            }
-
-            if (number == player.Character.Cellphone)
-            {
-                player.SendMessage(MessageType.Error, "Você não pode enviar um SMS para você mesmo.");
-                return;
-            }
-
-            if (number <= 0)
-            {
-                player.SendMessage(MessageType.Error, "Número inválido.");
-                return;
-            }
-
-            if (number == player.Character.Cellphone)
-            {
-                player.SendMessage(MessageType.Error, "Você não pode enviar uma localização para você mesmo.");
-                return;
-            }
-
-            if (player.Contacts.Any(x => x.Number == number && x.Blocked))
-            {
-                player.SendMessage(MessageType.Error, "Você bloqueou esse contato.");
-                return;
-            }
-
-            var phoneMessage = new PhoneMessage();
-            phoneMessage.CreateLocationToContact(player.Character.Cellphone, number, player.ICPosition.X, player.ICPosition.Y);
-
-            await Functions.SendSMS(player, [number], phoneMessage);
+            await CMD_eloc(player, numberOrName);
         }
         catch (Exception ex)
         {
@@ -1323,5 +1323,18 @@ public class CellphoneScript : Script
         {
             Functions.GetException(ex);
         }
+    }
+
+    [Command("vivavoz")]
+    public static void CMD_vivavoz(MyPlayer player)
+    {
+        if (player.PhoneCall.Type != PhoneCallType.Answered)
+        {
+            player.SendMessage(MessageType.Error, "Você não está em uma ligação.");
+            return;
+        }
+
+        player.CellphoneSpeakers = !player.CellphoneSpeakers;
+        player.SendMessage(MessageType.Success, $"Viva voz {(!player.CellphoneSpeakers ? "des" : string.Empty)}ativado.");
     }
 }

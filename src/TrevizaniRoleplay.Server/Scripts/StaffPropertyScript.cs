@@ -295,8 +295,7 @@ public class StaffPropertyScript : Script
             {
                 request.ExitPosition = GetExitPositionByInterior(propertyInterior);
 
-                property.Create(Global.Properties.Select(x => x.LockNumber).DefaultIfEmpty(0u).Max() + 1,
-                    propertyInterior, request.EntrancePosition.X, request.EntrancePosition.Y, request.EntrancePosition.Z,
+                property.Create(propertyInterior, request.EntrancePosition.X, request.EntrancePosition.Y, request.EntrancePosition.Z,
                     request.Dimension, request.Value, request.ExitPosition.X, request.ExitPosition.Y, request.ExitPosition.Z, request.Address,
                     Global.Properties.Select(x => x.Number).DefaultIfEmpty(0u).Max() + 1,
                     faction?.Id, request.Name, parentProperty?.Id,
@@ -366,8 +365,8 @@ public class StaffPropertyScript : Script
         }
     }
 
-    [Command("aarmazenamento")]
-    public static void CMD_aarmazenamento(MyPlayer player)
+    [Command("apinv")]
+    public static void CMD_apinv(MyPlayer player)
     {
         if (!player.StaffFlags.Contains(StaffFlag.Properties))
         {

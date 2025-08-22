@@ -1,4 +1,5 @@
 ﻿using GTANetworkAPI;
+using Microsoft.EntityFrameworkCore;
 using TrevizaniRoleplay.Server.Factories;
 using TrevizaniRoleplay.Server.Models;
 
@@ -6,11 +7,6 @@ namespace TrevizaniRoleplay.Server.Extensions;
 
 public static class VehicleExtension
 {
-    public static int GetMaxFuel(this Domain.Entities.Vehicle vehicle)
-    {
-        return 100;
-    }
-
     public static async Task<MyVehicle> Spawnar(this Domain.Entities.Vehicle vehicle, MyPlayer? player)
     {
         var veh = Functions.CreateVehicle(vehicle.Model,
@@ -39,13 +35,18 @@ public static class VehicleExtension
                 NAPI.Vehicle.SetVehicleEngineHealth(veh, veh.VehicleDB.EngineHealth);
                 NAPI.Vehicle.SetVehicleBodyHealth(veh, veh.VehicleDB.BodyHealth);
             });
+
+            veh.VehicleDB.SetSpawned(true);
+            var context = Functions.GetDatabaseContext();
+            context.Vehicles.Update(veh.VehicleDB);
+            await context.SaveChangesAsync();
         }
 
         veh.Timer.Elapsed += (o, e) =>
         {
             try
             {
-                Functions.ConsoleLog($"Vehicle Timer {veh.Identifier}");
+                Functions.ConsoleLog($"Vehicle Timer {veh.Identifier} Start");
                 if (veh.RentExpirationDate.HasValue)
                 {
                     if (veh.RentExpirationDate.Value < DateTime.Now)
@@ -69,6 +70,10 @@ public static class VehicleExtension
             {
                 Functions.GetException(ex);
             }
+            finally
+            {
+                Functions.ConsoleLog($"Vehicle Timer {veh.Identifier} End");
+            }
         };
         veh.Timer.Start();
 
@@ -76,5 +81,19 @@ public static class VehicleExtension
             await player.WriteLog(LogType.SpawnVehicle, $"{vehicle.Id} - {vehicle.Model} - {vehicle.Plate}", null);
 
         return veh;
+    }
+
+    public static async Task ChangeOwner(this Domain.Entities.Vehicle vehicle, Guid characterId)
+    {
+        vehicle.SetOwner(characterId);
+
+        var context = Functions.GetDatabaseContext();
+
+        await context.CharactersVehicles
+            .Where(x => x.VehicleId == vehicle.Id)
+            .ExecuteDeleteAsync();
+
+        foreach (var player in Global.SpawnedPlayers)
+            player.VehiclesAccess.RemoveAll(x => x == vehicle.Id);
     }
 }

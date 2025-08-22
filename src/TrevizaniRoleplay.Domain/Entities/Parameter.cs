@@ -15,9 +15,6 @@ public class Parameter : BaseEntity
     public int AnnouncementValue { get; private set; } = 1;
     public int ExtraPaymentGarbagemanValue { get; private set; } = 1;
     public bool Blackout { get; private set; }
-    public DateTime? InactivePropertiesDate { get; private set; }
-    public int KeyValue { get; private set; } = 1;
-    public int LockValue { get; private set; } = 1;
     public string IPLsJSON { get; private set; } = "[]";
     public int TattooValue { get; private set; } = 1;
     public int CooldownDismantleHours { get; private set; }
@@ -56,12 +53,10 @@ public class Parameter : BaseEntity
     public string AudioRadioStationsJSON { get; private set; } = "[]";
     public int UnemploymentAssistance { get; private set; }
     public string PremiumPointPackagesJSON { get; private set; } = "[]";
-    public string MOTD { get; set; } = string.Empty;
-
-    public void SetInactivePropertiesDate()
-    {
-        InactivePropertiesDate = DateTime.Now.AddDays(1);
-    }
+    public string MOTD { get; private set; } = string.Empty;
+    public uint EntranceBenefitValue { get; private set; }
+    public uint EntranceBenefitCooldownUsers { get; private set; }
+    public uint EntranceBenefitCooldownHours { get; private set; }
 
     public void SetMaxCharactersOnline(int value)
     {
@@ -70,7 +65,7 @@ public class Parameter : BaseEntity
 
     public void Update(int hospitalValue, int barberValue, int clothesValue, int driverLicenseBuyValue,
         int paycheck, int driverLicenseRenewValue, int announcementValue, int extraPaymentGarbagemanValue, bool blackout,
-        int keyValue, int lockValue, string iplsJSON, int tattooValue, int cooldownDismantleHours,
+        string iplsJSON, int tattooValue, int cooldownDismantleHours,
         int propertyRobberyConnectedTime, int cooldownPropertyRobberyRobberHours, int cooldownPropertyRobberyPropertyHours,
         int policeOfficersPropertyRobbery, byte initialTimeCrackDen, byte endTimeCrackDen, int firefightersBlockHeal,
         int fuelValue, float propertyProtectionLevelPercentageValue, float vehicleDismantlingPercentageValue,
@@ -81,7 +76,7 @@ public class Parameter : BaseEntity
         string weaponsInfosJSON, string bodyPartsDamagesJSON, int weaponLicenseMonths, int weaponLicenseMaxWeapon,
         int weaponLicenseMaxAmmo, int weaponLicenseMaxAttachment, int weaponLicensePurchaseDaysInterval,
         string premiumItemsJSON, string audioRadioStationsJson, int unemploymentAssistance, string premiumPointPackagesJSON,
-        string motd)
+        string motd, uint entranceBenefitValue, uint entranceBenefitCooldownUsers, uint entranceBenefitCooldownHours)
     {
         HospitalValue = hospitalValue;
         BarberValue = barberValue;
@@ -92,8 +87,6 @@ public class Parameter : BaseEntity
         AnnouncementValue = announcementValue;
         ExtraPaymentGarbagemanValue = extraPaymentGarbagemanValue;
         Blackout = blackout;
-        KeyValue = keyValue;
-        LockValue = lockValue;
         IPLsJSON = iplsJSON;
         TattooValue = tattooValue;
         CooldownDismantleHours = cooldownDismantleHours;
@@ -134,6 +127,9 @@ public class Parameter : BaseEntity
         UnemploymentAssistance = unemploymentAssistance;
         PremiumPointPackagesJSON = premiumPointPackagesJSON;
         MOTD = motd;
+        EntranceBenefitValue = entranceBenefitValue;
+        EntranceBenefitCooldownUsers = entranceBenefitCooldownUsers;
+        EntranceBenefitCooldownHours = entranceBenefitCooldownHours;
     }
 
     public void SetBodyPartsDamagesJSON(string bodyPartsDamagesJSON)

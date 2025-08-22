@@ -1,7 +1,6 @@
 ﻿using GTANetworkAPI;
 using Microsoft.EntityFrameworkCore;
 using System.Text.RegularExpressions;
-using TrevizaniRoleplay.Core.Extensions;
 using TrevizaniRoleplay.Server.Extensions;
 using TrevizaniRoleplay.Server.Models;
 
@@ -47,20 +46,18 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
 
     public string StaffColor => User.Staff switch
     {
-        UserStaff.ServerSupport => "#86988b",
-        UserStaff.JuniorServerAdmin => "#31834f",
-        UserStaff.ServerAdminI => "#31834f",
-        UserStaff.ServerAdminII => "#31834f",
-        UserStaff.SeniorServerAdmin => "#15ad18",
-        UserStaff.LeadServerAdmin => "#2386c9",
-        UserStaff.ServerManager => "#ee7824",
-        UserStaff.HeadServerDeveloper => "#fdb515",
+        UserStaff.Tester => "#955D41",
+        UserStaff.GameAdmin => "#5B737B",
+        UserStaff.LeadAdmin => "#009900",
+        UserStaff.HeadAdmin => "#1D84BD",
+        UserStaff.Management => "#CA4D4D",
+        UserStaff.Founder => "#F1C40F",
         _ => string.Empty,
     };
 
     public bool Wounded => Wounds.Count > 0 || GetHealth() != MaxHealth || Character.Wound != CharacterWound.None;
 
-    public List<Property> Properties => Global.Properties.Where(x => x.CharacterId == Character.Id).ToList();
+    public List<Property> Properties => [.. Global.Properties.Where(x => x.CharacterId == Character.Id)];
 
     public bool Masked { get; set; }
 
@@ -146,7 +143,7 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
 
     public Spot? RadarSpot { get; set; }
 
-    public List<Company> Companies => Global.Companies.Where(x => x.CharacterId == Character.Id || x.Characters!.Any(y => y.CharacterId == Character.Id)).ToList();
+    public List<Company> Companies => [.. Global.Companies.Where(x => x.CharacterId == Character.Id || x.Characters!.Any(y => y.CharacterId == Character.Id))];
 
     public VehicleTuning? VehicleTuning { get; set; }
 
@@ -157,7 +154,7 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
 
     public bool NoClip { get; set; }
 
-    public int MaxOutfit => GetCurrentPremium() switch
+    public int MaxOutfit => User.GetCurrentPremium() switch
     {
         UserPremium.Gold => 30,
         UserPremium.Silver => 20,
@@ -187,10 +184,7 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
 
     public Dealership? TestDriveDealership { get; set; }
 
-    public int? HotwireWords { get; set; }
-    public string? HotwireWord { get; set; }
     public MyVehicle? HotwireVehicle { get; set; }
-    public CancellationTokenSource? HotwireCancellationTokenSource { get; set; }
 
     public bool HasSpikeStrip { get; set; }
 
@@ -201,7 +195,7 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
     public bool Fishing { get; set; }
 
     /// <summary>
-    /// Jogador que está carregando este jogador
+    /// Player who is carrying this player
     /// </summary>
     public uint? PlayerCarrying { get; set; }
 
@@ -314,6 +308,28 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
 
     public ushort? DismantlingVehicleId { get; set; }
 
+    public bool CellphoneSpeakers { get; set; }
+
+    /// <summary>
+    /// Vehicles that player has access to
+    /// </summary>
+    public List<Guid> VehiclesAccess { get; set; } = [];
+
+    /// <summary>
+    /// Properties that player has access to
+    /// </summary>
+    public List<Guid> PropertiesAccess { get; set; } = [];
+
+    /// <summary>
+    /// Player will drop items on death
+    /// </summary>
+    public bool DropItemsOnDeath => !(OnDuty && Faction?.Type == FactionType.Police);
+
+    /// <summary>
+    /// Weapons that player has equipped by faction
+    /// </summary>
+    public List<uint> FactionEquippedWeapons { get; set; } = [];
+
     public string GetCellphoneContactName(uint number)
     {
         var contact = Contacts.FirstOrDefault(x => x.Number == number);
@@ -354,7 +370,7 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
                     currentItem.SetQuantity(currentItem.Quantity + item.Quantity);
                     context.CharactersItems.Update(currentItem);
 
-                    if (currentItem.InUse && Functions.CheckIfIsAmmo(currentItem.GetCategory()))
+                    if (currentItem.InUse && GlobalFunctions.CheckIfIsAmmo(currentItem.GetCategory()))
                     {
                         var weapon = Items.FirstOrDefault(x => x.InUse && x.GetCategory() == ItemCategory.Weapon
                             && Functions.GetAmmoItemTemplateIdByWeapon(x.GetItemType()) == currentItem.ItemTemplateId);
@@ -383,7 +399,7 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
                 else if (category == ItemCategory.Weapon)
                     item.SetExtra(Functions.Serialize(new WeaponItem
                     {
-                        Id = item.OnlyOnDuty ? Guid.Empty : await Functions.GetNewWeaponId(),
+                        Id = await Functions.GetNewWeaponId(),
                     }));
                 else if (category == ItemCategory.WeaponComponent)
                     item.SetExtra(Functions.Serialize(new WeaponComponentItem()));
@@ -595,8 +611,6 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
     {
         Functions.RunOnMainThread(() =>
         {
-            var extra = Functions.Deserialize<WeaponItem>(item.Extra!);
-
             var weapon = item.GetItemType();
             var ammoItemTemplateId = Functions.GetAmmoItemTemplateIdByWeapon(weapon);
             var ammoItem = Items.FirstOrDefault(x => x.InUse && x.ItemTemplateId == ammoItemTemplateId);
@@ -615,13 +629,7 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
         Functions.RunOnMainThread(() =>
         {
             var weaponType = item.GetItemType();
-            var weapon = (WeaponHash)weaponType;
-            var isCurrentWeapon = CurrentWeapon == weapon;
-            SetWeaponAmmo(weapon, 0);
-            RemoveWeapon(weapon);
-            Emit("RemoveWeapon", weaponType);
-            if (isCurrentWeapon)
-                SetCurrentWeapon((uint)WeaponModel.Fist);
+            RemoveWeaponEx((WeaponHash)weaponType);
 
             var ammoItem = Items.FirstOrDefault(x => x.ItemTemplateId == Functions.GetAmmoItemTemplateIdByWeapon(weaponType));
             ammoItem?.SetInUse(false);
@@ -646,7 +654,7 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
     public async Task SpawnEx()
     {
         if (Global.Parameter.WhoCanLogin == WhoCanLogin.OnlyStaff
-            && User.Staff < UserStaff.ServerSupport)
+            && User.Staff < UserStaff.Tester)
         {
             SendNotification(NotificationType.Error, "Apenas staff pode logar no momento.");
             await ListCharacters(string.Empty, string.Empty);
@@ -654,7 +662,7 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
         }
 
         if (Global.Parameter.WhoCanLogin == WhoCanLogin.OnlyStaffOrUsersWithPremiumPoints
-            && User.Staff < UserStaff.ServerSupport && User.PremiumPoints == 0)
+            && User.Staff < UserStaff.Tester && User.PremiumPoints == 0)
         {
             SendNotification(NotificationType.Error, "Apenas staff ou usuários que possuam LS Points podem logar no momento.");
             await ListCharacters(string.Empty, string.Empty);
@@ -679,7 +687,7 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
         SendMessage(MessageType.None, $"Olá {{{Constants.MAIN_COLOR}}}{User.Name}{{#FFFFFF}}, que bom te ver por aqui! Seu último login foi em {{{Constants.MAIN_COLOR}}}{Character.LastAccessDate}{{#FFFFFF}}.");
         SendMessage(MessageType.None, $"Seu ID é {{{Constants.MAIN_COLOR}}}{SessionId}{{#FFFFFF}}.");
 
-        if (GetCurrentPremium() == UserPremium.None)
+        if (User.GetCurrentPremium() == UserPremium.None)
             User.SetPMToggle(false);
 
         SetNametag();
@@ -708,16 +716,20 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
 
         FollowingTransmission = Global.TransmissionActive;
 
-        var fines = await context.Fines.CountAsync(x => x.CharacterId == Character.Id && !x.PaymentDate.HasValue);
-        if (fines > 0)
-        {
-            var strFines = fines > 1 ? "s" : string.Empty;
-            SendMessage(MessageType.Error, $"Você possui {fines} multa{strFines} pendente{strFines}.");
-        }
-
         if (Character.DriverLicenseValidDate.HasValue &&
             (Character.DriverLicenseValidDate ?? DateTime.MinValue).Date < DateTime.Now.Date)
             SendMessage(MessageType.Error, $"Sua licença de motorista está vencida.");
+
+        var notificationsUnread = await context.Notifications.CountAsync(x => x.UserId == User.Id && !x.ReadDate.HasValue);
+        if (notificationsUnread > 0)
+        {
+            var messageNotificationsUnread = notificationsUnread == 1 ?
+                "notificação não lida"
+                :
+                "notificações não lidas";
+
+            SendMessage(MessageType.Error, $"Você possui {notificationsUnread} {messageNotificationsUnread}. Use /notificacoes para visualizar.");
+        }
 
         foreach (var x in Global.Spotlights)
             Emit("Spotlight:Add", x.Id, x.Position, x.Direction,
@@ -759,7 +771,7 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
         if (Character.Wound != CharacterWound.None)
             SetWound(true);
 
-        if (User.Staff >= UserStaff.SeniorServerAdmin
+        if (User.Staff >= UserStaff.LeadAdmin
             && await context.Vehicles.AnyAsync(x => !string.IsNullOrWhiteSpace(x.NewPlate)))
             SendMessage(MessageType.Error, "Existem solicitações de alterações de placa. Use /alteracoesplaca.");
 
@@ -774,7 +786,7 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
         {
             try
             {
-                Functions.ConsoleLog($"Player Timer {Character.Name}");
+                Functions.ConsoleLog($"Player Timer {Character.Name} Start");
 
                 if (GetDimension() == 0)
                     SetHour(DateTime.Now.Hour);
@@ -797,6 +809,10 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
             {
                 ex.Source = Character.Id.ToString();
                 Functions.GetException(ex);
+            }
+            finally
+            {
+                Functions.ConsoleLog($"Player Timer {Character.Name} End");
             }
         };
         Timer.Start();
@@ -871,20 +887,22 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
         SetSharedDataEx(Constants.PLAYER_META_DATA_INJURED, (int)Character.Wound);
         Emit("DeathPage:ShowServer", (int)Character.Wound);
 
-        var droppableCategories = new List<ItemCategory> {
+        if (DropItemsOnDeath)
+        {
+            var droppableCategories = new List<ItemCategory> {
                 ItemCategory.Weapon,
                 ItemCategory.Drug,
                 ItemCategory.WeaponComponent,
             };
-        var itemsToRemove = Items.Where(x => (droppableCategories.Contains(x.GetCategory())
-            || Functions.CheckIfIsAmmo(x.GetCategory()))
-            && !x.OnlyOnDuty)
-            .ToList();
-        if (itemsToRemove.Count > 0)
-        {
-            SendMessage(MessageType.Title, "Se você morrer, perderá os seguintes itens! Tire uma screenshot caso precise para um refundo.");
-            foreach (var itemToRemove in itemsToRemove)
-                SendMessage(MessageType.Title, $"{itemToRemove.Quantity}x {itemToRemove.GetName()}");
+            var itemsToRemove = Items.Where(x => droppableCategories.Contains(x.GetCategory())
+                || GlobalFunctions.CheckIfIsAmmo(x.GetCategory()))
+                .ToList();
+            if (itemsToRemove.Count > 0)
+            {
+                SendMessage(MessageType.Title, "Se você morrer, perderá os itens abaixo! Tire uma screenshot caso precise para um refundo.");
+                foreach (var itemToRemove in itemsToRemove)
+                    SendMessage(MessageType.Title, $"{itemToRemove.Quantity}x {itemToRemove.GetName()}");
+            }
         }
     }
 
@@ -1114,11 +1132,11 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
                 if (property is not null)
                 {
                     var pos = property.GetExitPosition();
-                    players.AddRange(Global.SpawnedPlayers.Where(x => x.GetDimension() == property.Number).Select(x => new
+                    players.AddRange([.. Global.SpawnedPlayers.Where(x => x.GetDimension() == property.Number).Select(x => new
                     {
                         Player = x,
                         Distance = pos.DistanceTo(x.GetPosition()),
-                    }).Where(x => x.Distance <= range).ToList());
+                    }).Where(x => x.Distance <= range)]);
                 }
             }
             else
@@ -1127,16 +1145,16 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
                 if (property is not null)
                 {
                     var pos = property.GetEntrancePosition();
-                    players.AddRange(Global.SpawnedPlayers.Select(x => new
+                    players.AddRange([.. Global.SpawnedPlayers.Select(x => new
                     {
                         Player = x,
                         Distance = pos.DistanceTo(x.GetPosition()),
-                    }).Where(x => x.Distance <= range / 2).ToList());
+                    }).Where(x => x.Distance <= range / 2)]);
                 }
             }
         }
 
-        players = players.DistinctBy(x => x.Player).ToList();
+        players = [.. players.DistinctBy(x => x.Player)];
 
         destination ??= string.Empty;
         if (!string.IsNullOrWhiteSpace(destination))
@@ -1269,7 +1287,7 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
         var context = Functions.GetDatabaseContext();
         var log = new Log();
         log.Create(type, description,
-            Character?.Id, RealIp, RealSocialClubName,
+            Character?.Id, RealIp, RealSocialClubName, User?.Id,
             target?.Character?.Id, target?.RealIp ?? string.Empty, target?.RealSocialClubName ?? string.Empty);
         await context.Logs.AddAsync(log);
         await context.SaveChangesAsync();
@@ -1309,7 +1327,7 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
                 FactionDutySession.End();
                 context.Sessions.Update(FactionDutySession);
                 await context.SaveChangesAsync();
-                await LeaveDuty();
+                LeaveDuty();
             }
 
             if (AdminDutySession is not null)
@@ -1337,9 +1355,6 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
 
             CancellationTokenSourceAceitarHospital?.Cancel();
             CancellationTokenSourceAceitarHospital = null;
-
-            HotwireCancellationTokenSource?.Cancel();
-            HotwireCancellationTokenSource = null;
 
             CollectSpots.ForEach(x => x.RemoveIdentifier());
 
@@ -1430,6 +1445,7 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
                 CurrentPhoneChat = null;
                 RobberingPropertyId = null;
                 DismantlingVehicleId = null;
+                VehiclesAccess = PropertiesAccess = [];
 
                 EndHotwire();
                 Emit("DeathPage:CloseServer");
@@ -1524,7 +1540,7 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
     public async Task<CharacterInfoResponse> Paycheck(bool preview)
     {
         var context = Functions.GetDatabaseContext();
-        var propertyTaxPercentage = GetCurrentPremium() switch
+        var propertyTaxPercentage = User.GetCurrentPremium() switch
         {
             UserPremium.Gold => 0.08,
             UserPremium.Silver => 0.10,
@@ -1533,7 +1549,7 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
         };
         propertyTaxPercentage /= 100;
 
-        var vehicleTaxPercentage = GetCurrentPremium() switch
+        var vehicleTaxPercentage = User.GetCurrentPremium() switch
         {
             UserPremium.Gold => 0.03,
             UserPremium.Silver => 0.05,
@@ -1940,7 +1956,7 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
             else if (player.WalkieTalkieItem.Channel5 == channel)
                 slotPlayer = 5;
 
-            player.SendMessage(MessageType.None, $"[S: {slotPlayer} | CH: {channelName}] {formattedMessage}", slotPlayer == 1 ? "#FFFF9B" : "#9e8d66");
+            player.SendMessage(MessageType.None, $"[S: {slotPlayer} | CH: {channelName}] {formattedMessage}", slotPlayer == 1 ? "#FFEC8B" : "#A39759");
         }
 
         SendMessageToNearbyPlayers(message, MessageCategory.WalkieTalkie);
@@ -2008,6 +2024,26 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
             {
                 SendMessage(MessageType.Error, Resources.YouCanNotExecuteThisCommandBecauseYouAreSeriouslyInjured);
                 return;
+            }
+
+            if (inventoryShowType == InventoryShowType.Default)
+            {
+                var vehicle = GetVehicle();
+                var property = GetDimension() != 0
+                    ? Global.Properties.FirstOrDefault(x => x.Number == GetDimension())
+                    : null;
+
+                if (vehicle is not null && vehicle.HasStorage && vehicle.CanAccess(this))
+                {
+                    vehicle.ShowInventory(this, false);
+                    return;
+                }
+                else if (property is not null && property.RobberyValue == 0
+                    && (property.CanAccess(this) || (Faction?.Type == FactionType.Police && OnDuty)))
+                {
+                    property.ShowInventory(this, false);
+                    return;
+                }
             }
 
             InventoryShowType = inventoryShowType;
@@ -2088,7 +2124,7 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
         if (itemTemplateId == new Guid(Constants.MONEY_ITEM_TEMPLATE_ID))
             UpdateMoneyHUD();
 
-        if (item.InUse && Functions.CheckIfIsAmmo(item.GetCategory()))
+        if (item.InUse && GlobalFunctions.CheckIfIsAmmo(item.GetCategory()))
         {
             var weapon = Items.FirstOrDefault(x => x.InUse && x.GetCategory() == ItemCategory.Weapon
                 && Functions.GetAmmoItemTemplateIdByWeapon(x.GetItemType()) == item.ItemTemplateId);
@@ -2332,6 +2368,8 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
 
         AddPhoneCall(PhoneCall);
 
+        CellphoneSpeakers = false;
+
         var target = Global.SpawnedPlayers.FirstOrDefault(x => x != this && (x.PhoneCall.Number == Character.Cellphone || x.PhoneCall.Origin == Character.Cellphone));
         if (target is not null)
         {
@@ -2351,6 +2389,8 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
                 target.PlayPhoneBaseAnimation();
 
             target.Emit("PhonePage:EndCallServer");
+
+            target.CellphoneSpeakers = false;
         }
 
         PhoneCall = new();
@@ -2507,11 +2547,7 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
 
     public void EndHotwire()
     {
-        HotwireCancellationTokenSource?.Cancel();
-        HotwireCancellationTokenSource = null;
         HotwireVehicle = null;
-        HotwireWords = null;
-        HotwireWord = null;
     }
 
     public void NametagsConfig() => Emit("nametags:Config", User.ShowNametagId, User.ShowOwnNametag);
@@ -2576,7 +2612,7 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
     public void CheckAttachedWeapon(uint currentWeapon)
     {
         var weaponOnBody = Items.FirstOrDefault(x => x.InUse && x.GetCategory() == ItemCategory.Weapon
-            && Global.WeaponsInfos.FirstOrDefault(y => y.Name == Functions.GetWeaponName(x.GetItemType()))?.AttachToBody == true);
+            && Global.WeaponsInfos.FirstOrDefault(y => y.Name == GlobalFunctions.GetWeaponName(x.GetItemType()))?.AttachToBody == true);
         if (weaponOnBody is null || weaponOnBody.GetItemType() == currentWeapon)
         {
             if (!string.IsNullOrWhiteSpace(AttachedWeapon))
@@ -2589,7 +2625,7 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
         }
 
         var weaponBody = Functions.Deserialize<List<WeaponBody>>(Character.WeaponsBodyJSON)
-            .FirstOrDefault(x => x.Name == Functions.GetWeaponName(weaponOnBody.GetItemType()));
+            .FirstOrDefault(x => x.Name == GlobalFunctions.GetWeaponName(weaponOnBody.GetItemType()));
         weaponBody = Functions.CheckDefaultWeaponBody(weaponBody);
 
         AttachedWeapon = weaponOnBody.GetObjectName();
@@ -2600,13 +2636,13 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
                 new(weaponBody.RotR, weaponBody.RotP, weaponBody.RotY));
     }
 
-    public async Task LeaveDuty()
+    public void LeaveDuty()
     {
-        await RemoveItem(Items.Where(x => x.OnlyOnDuty && !x.GetIsStack()));
-        foreach (var stackedItem in Items.Where(x => x.OnlyOnDuty && x.GetIsStack()).ToList())
-            await RemoveStackedItem(stackedItem.ItemTemplateId, stackedItem.Quantity);
         if (Faction?.HasDuty ?? false)
+        {
+            RemoveFactionEquippedWeapons();
             SetArmor(0);
+        }
     }
 
     public void AddBank(int value)
@@ -2622,14 +2658,6 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
     }
 
     private void UpdateBankHUD() => Emit("HUDPage:UpdateBank", Character.Bank);
-
-    public UserPremium GetCurrentPremium()
-    {
-        if (User.Premium == UserPremium.Gold)
-            return User.GetCurrentPremium();
-
-        return Character.GetCurrentPremium();
-    }
 
     public async Task<(bool, string)> CheckDiscordBooster()
     {
@@ -2718,7 +2746,18 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
         }));
 
     public void SendCellphoneCallMessage(string origin, string message)
-        => SendMessage(MessageType.None, $"{origin} diz (celular): {message}", Constants.CELLPHONE_MAIN_COLOR);
+    {
+        SendMessage(MessageType.None, $"{origin} diz (celular): {message}", Constants.CELLPHONE_MAIN_COLOR);
+
+        if (CellphoneSpeakers)
+        {
+            var nearPlayers = Global.SpawnedPlayers
+                .Where(x => x != this && CheckIfTargetIsCloseIC(x, Constants.RP_DISTANCE))
+                .ToList();
+            foreach (var player in nearPlayers)
+                player.SendMessage(MessageType.None, $"{ICName} (viva-voz): {message}");
+        }
+    }
 
     public void PlayPhoneCallAnimation()
         => PlayAnimation("cellphone@", "cellphone_call_listen_base", (int)(AnimationFlags.Loop | AnimationFlags.OnlyAnimateUpperBody | AnimationFlags.AllowPlayerControl), true);
@@ -2760,12 +2799,12 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
 
     public void AddWeaponComponent(uint weapon, uint component)
     {
-        // TODO
+        Emit("AddWeaponComponent", weapon, component);
     }
 
     public void RemoveWeaponComponent(uint weapon, uint component)
     {
-        // TODO
+        Emit("RemoveWeaponComponent", weapon, component);
     }
 
     public bool HasWeapon(uint weapon) =>
@@ -2918,6 +2957,35 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
         Functions.RunOnMainThread(() =>
         {
             Kick(message);
+        });
+    }
+
+    public MyVehicle? GetVehicle()
+    {
+        return Functions.RunOnMainThread(() => Vehicle as MyVehicle);
+    }
+
+    public void RemoveWeaponEx(WeaponHash weapon)
+    {
+        Functions.RunOnMainThread(() =>
+        {
+            var isCurrentWeapon = CurrentWeapon == weapon;
+            SetWeaponAmmo(weapon, 0);
+            RemoveWeapon(weapon);
+            Emit("RemoveWeapon", (uint)weapon);
+            if (isCurrentWeapon)
+                SetCurrentWeapon((uint)WeaponModel.Fist);
+        });
+    }
+
+    public void RemoveFactionEquippedWeapons()
+    {
+        Functions.RunOnMainThread(() =>
+        {
+            foreach (var equippedWeapon in FactionEquippedWeapons)
+                RemoveWeaponEx((WeaponHash)equippedWeapon);
+
+            FactionEquippedWeapons = [];
         });
     }
 }

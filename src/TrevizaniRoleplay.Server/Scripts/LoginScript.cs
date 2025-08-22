@@ -68,7 +68,7 @@ public class LoginScript : Script
                 var hasUsers = await context.Users.AnyAsync();
                 user = new();
                 user.Create(res.Id, res.Username, res.Global_Name, player.RealIp,
-                    hasUsers ? UserStaff.None : UserStaff.HeadServerDeveloper,
+                    hasUsers ? UserStaff.None : UserStaff.Founder,
                     hasUsers ? "[]" : Functions.Serialize(Enum.GetValues<StaffFlag>()));
                 await context.Users.AddAsync(user);
                 await context.SaveChangesAsync();
@@ -139,6 +139,17 @@ public class LoginScript : Script
         try
         {
             var player = Functions.CastPlayer(playerParam);
+
+            if (Global.DiscordClient is not null)
+            {
+                var guild = Global.DiscordClient.GetGuild(Global.MainDiscordGuild);
+                if (guild is null || guild.GetUser(Convert.ToUInt64(player.User.DiscordId)) is null)
+                {
+                    player.SendNotification(NotificationType.Error, "Você não está em nosso Discord principal. Você pode encontrar o convite no UCP.");
+                    return;
+                }
+            }
+
             var context = Functions.GetDatabaseContext();
             var id = idString.ToGuid();
             var character = await context.Characters
@@ -213,6 +224,8 @@ public class LoginScript : Script
             player.Wounds = Functions.Deserialize<List<Wound>>(player.Character.WoundsJSON);
             player.Items = await context.CharactersItems.Where(x => x.CharacterId == player.Character.Id).ToListAsync();
             player.FactionFlags = Functions.Deserialize<List<FactionFlag>>(player.Character.FactionFlagsJSON);
+            player.PropertiesAccess = await context.CharactersProperties.Where(x => x.CharacterId == player.Character.Id).Select(x => x.PropertyId).ToListAsync();
+            player.VehiclesAccess = await context.CharactersVehicles.Where(x => x.CharacterId == player.Character.Id).Select(x => x.VehicleId).ToListAsync();
             player.SetOutfit();
 
             if (!string.IsNullOrWhiteSpace(player.Character.PersonalizationJSON))

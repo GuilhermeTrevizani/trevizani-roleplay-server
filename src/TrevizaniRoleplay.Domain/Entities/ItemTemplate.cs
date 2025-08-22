@@ -7,11 +7,11 @@ public class ItemTemplate : BaseEntity
     public ItemCategory Category { get; private set; }
     public uint Type { get; private set; }
     public string Name { get; private set; } = string.Empty;
-    public float Weight { get; private set; }
+    public uint Weight { get; private set; }
     public string Image { get; private set; } = string.Empty;
     public string ObjectModel { get; private set; } = string.Empty;
 
-    public void Create(ItemCategory itemCategory, uint type, string name, float weight, string image, string objectModel)
+    public void Create(ItemCategory itemCategory, uint type, string name, uint weight, string image, string objectModel)
     {
         Category = itemCategory;
         Type = type;
@@ -26,7 +26,7 @@ public class ItemTemplate : BaseEntity
         Id = id;
     }
 
-    public void Update(uint type, string name, float weight, string image, string objectModel)
+    public void Update(uint type, string name, uint weight, string image, string objectModel)
     {
         Type = type;
         Name = name;

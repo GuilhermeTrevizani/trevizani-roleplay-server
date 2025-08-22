@@ -11,7 +11,7 @@ public class StaffInfoScript : Script
     [Command("ainfos")]
     public async Task CMD_ainfos(MyPlayer player)
     {
-        if (player.User.Staff < UserStaff.JuniorServerAdmin)
+        if (player.User.Staff < UserStaff.GameAdmin)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -31,7 +31,7 @@ public class StaffInfoScript : Script
             if (info is null)
                 return;
 
-            if (player.User.Staff < UserStaff.JuniorServerAdmin)
+            if (player.User.Staff < UserStaff.GameAdmin)
             {
                 player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
@@ -56,7 +56,7 @@ public class StaffInfoScript : Script
             if (info is null)
                 return;
 
-            if (player.User.Staff < UserStaff.JuniorServerAdmin)
+            if (player.User.Staff < UserStaff.GameAdmin)
             {
                 player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;

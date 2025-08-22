@@ -14,4 +14,9 @@ public static class VehicleExtensions
             insurance = $"{Resources.Until} {vehicle.InsuranceDate}";
         return insurance;
     }
+
+    public static int GetMaxFuel(this Vehicle vehicle)
+    {
+        return 100;
+    }
 }

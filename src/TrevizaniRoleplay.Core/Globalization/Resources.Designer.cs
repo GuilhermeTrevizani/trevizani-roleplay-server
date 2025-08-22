@@ -241,6 +241,15 @@ namespace TrevizaniRoleplay.Core.Globalization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bleeding.
+        /// </summary>
+        public static string Bleeding {
+            get {
+                return ResourceManager.GetString("Bleeding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Blips.
         /// </summary>
         public static string Blips {
@@ -376,6 +385,15 @@ namespace TrevizaniRoleplay.Core.Globalization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Character {0} not found..
+        /// </summary>
+        public static string CharacterNotFound {
+            get {
+                return ResourceManager.GetString("CharacterNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Character Slot.
         /// </summary>
         public static string CharacterSlot {
@@ -417,6 +435,15 @@ namespace TrevizaniRoleplay.Core.Globalization {
         public static string ClothesStore {
             get {
                 return ResourceManager.GetString("ClothesStore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cold.
+        /// </summary>
+        public static string Cold {
+            get {
+                return ResourceManager.GetString("Cold", resourceCulture);
             }
         }
         
@@ -507,6 +534,24 @@ namespace TrevizaniRoleplay.Core.Globalization {
         public static string DeliverItem {
             get {
                 return ResourceManager.GetString("DeliverItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Deposit.
+        /// </summary>
+        public static string Deposit {
+            get {
+                return ResourceManager.GetString("Deposit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Description must not exceed 100 characters..
+        /// </summary>
+        public static string DescriptionMustNotExceed100Characters {
+            get {
+                return ResourceManager.GetString("DescriptionMustNotExceed100Characters", resourceCulture);
             }
         }
         
@@ -907,6 +952,15 @@ namespace TrevizaniRoleplay.Core.Globalization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Founder.
+        /// </summary>
+        public static string Founder {
+            get {
+                return ResourceManager.GetString("Founder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Frame.
         /// </summary>
         public static string Frame {
@@ -939,6 +993,15 @@ namespace TrevizaniRoleplay.Core.Globalization {
         public static string Furnitures {
             get {
                 return ResourceManager.GetString("Furnitures", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Game Admin.
+        /// </summary>
+        public static string GameAdmin {
+            get {
+                return ResourceManager.GetString("GameAdmin", resourceCulture);
             }
         }
         
@@ -1060,11 +1123,11 @@ namespace TrevizaniRoleplay.Core.Globalization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Head Server Developer.
+        ///   Looks up a localized string similar to Head Admin.
         /// </summary>
-        public static string HeadServerDeveloper {
+        public static string HeadAdmin {
             get {
-                return ResourceManager.GetString("HeadServerDeveloper", resourceCulture);
+                return ResourceManager.GetString("HeadAdmin", resourceCulture);
             }
         }
         
@@ -1222,29 +1285,11 @@ namespace TrevizaniRoleplay.Core.Globalization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Jobs.
-        /// </summary>
-        public static string Jobs {
-            get {
-                return ResourceManager.GetString("Jobs", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Judiciary.
         /// </summary>
         public static string Judiciary {
             get {
                 return ResourceManager.GetString("Judiciary", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Junior Server Admin.
-        /// </summary>
-        public static string JuniorServerAdmin {
-            get {
-                return ResourceManager.GetString("JuniorServerAdmin", resourceCulture);
             }
         }
         
@@ -1258,11 +1303,11 @@ namespace TrevizaniRoleplay.Core.Globalization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Lead Server Admin.
+        ///   Looks up a localized string similar to Lead Admin.
         /// </summary>
-        public static string LeadServerAdmin {
+        public static string LeadAdmin {
             get {
-                return ResourceManager.GetString("LeadServerAdmin", resourceCulture);
+                return ResourceManager.GetString("LeadAdmin", resourceCulture);
             }
         }
         
@@ -1317,6 +1362,15 @@ namespace TrevizaniRoleplay.Core.Globalization {
         public static string ManageItems {
             get {
                 return ResourceManager.GetString("ManageItems", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Management.
+        /// </summary>
+        public static string Management {
+            get {
+                return ResourceManager.GetString("Management", resourceCulture);
             }
         }
         
@@ -1717,15 +1771,6 @@ namespace TrevizaniRoleplay.Core.Globalization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Property Key.
-        /// </summary>
-        public static string PropertyKey {
-            get {
-                return ResourceManager.GetString("PropertyKey", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Property Sell.
         /// </summary>
         public static string PropertySell {
@@ -1929,42 +1974,6 @@ namespace TrevizaniRoleplay.Core.Globalization {
         public static string SellPropertyFurniture {
             get {
                 return ResourceManager.GetString("SellPropertyFurniture", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Senior Server Admin.
-        /// </summary>
-        public static string SeniorServerAdmin {
-            get {
-                return ResourceManager.GetString("SeniorServerAdmin", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Server Admin I.
-        /// </summary>
-        public static string ServerAdminI {
-            get {
-                return ResourceManager.GetString("ServerAdminI", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Server Admin II.
-        /// </summary>
-        public static string ServerAdminII {
-            get {
-                return ResourceManager.GetString("ServerAdminII", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Server Manager.
-        /// </summary>
-        public static string ServerManager {
-            get {
-                return ResourceManager.GetString("ServerManager", resourceCulture);
             }
         }
         
@@ -2221,6 +2230,15 @@ namespace TrevizaniRoleplay.Core.Globalization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tester.
+        /// </summary>
+        public static string Tester {
+            get {
+                return ResourceManager.GetString("Tester", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tire Smoke Color.
         /// </summary>
         public static string TireSmokeColor {
@@ -2347,29 +2365,11 @@ namespace TrevizaniRoleplay.Core.Globalization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vehicle Destruction.
-        /// </summary>
-        public static string VehicleDestruction {
-            get {
-                return ResourceManager.GetString("VehicleDestruction", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Vehicle Dismantling.
         /// </summary>
         public static string VehicleDismantling {
             get {
                 return ResourceManager.GetString("VehicleDismantling", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Vehicle Key.
-        /// </summary>
-        public static string VehicleKey {
-            get {
-                return ResourceManager.GetString("VehicleKey", resourceCulture);
             }
         }
         
@@ -2406,15 +2406,6 @@ namespace TrevizaniRoleplay.Core.Globalization {
         public static string VehicleRelease {
             get {
                 return ResourceManager.GetString("VehicleRelease", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Vehicles.
-        /// </summary>
-        public static string Vehicles {
-            get {
-                return ResourceManager.GetString("Vehicles", resourceCulture);
             }
         }
         
@@ -2473,6 +2464,15 @@ namespace TrevizaniRoleplay.Core.Globalization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Warm.
+        /// </summary>
+        public static string Warm {
+            get {
+                return ResourceManager.GetString("Warm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Warn.
         /// </summary>
         public static string Warn {
@@ -2523,6 +2523,15 @@ namespace TrevizaniRoleplay.Core.Globalization {
         public static string WindowTint {
             get {
                 return ResourceManager.GetString("WindowTint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Withdraw.
+        /// </summary>
+        public static string Withdraw {
+            get {
+                return ResourceManager.GetString("Withdraw", resourceCulture);
             }
         }
         
@@ -2608,7 +2617,7 @@ namespace TrevizaniRoleplay.Core.Globalization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You are not the driver of the vehicle..
+        ///   Looks up a localized string similar to You&apos;re not the driver of the vehicle..
         /// </summary>
         public static string YouAreNotTheDriverOfTheVehicle {
             get {
@@ -2617,7 +2626,16 @@ namespace TrevizaniRoleplay.Core.Globalization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You are not the owner of the vehicle..
+        ///   Looks up a localized string similar to You&apos;re not the owner of the property..
+        /// </summary>
+        public static string YouAreNotTheOwnerOfTheProperty {
+            get {
+                return ResourceManager.GetString("YouAreNotTheOwnerOfTheProperty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You&apos;re not the owner of the vehicle..
         /// </summary>
         public static string YouAreNotTheOwnerOfTheVehicle {
             get {

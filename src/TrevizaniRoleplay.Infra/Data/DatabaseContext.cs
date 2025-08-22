@@ -15,6 +15,8 @@ public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbCont
     public DbSet<BodyItem> BodiesItems { get; set; }
     public DbSet<Character> Characters { get; set; }
     public DbSet<CharacterItem> CharactersItems { get; set; }
+    public DbSet<CharacterProperty> CharactersProperties { get; set; }
+    public DbSet<CharacterVehicle> CharactersVehicles { get; set; }
     public DbSet<CrackDen> CrackDens { get; set; }
     public DbSet<CrackDenItem> CrackDensItems { get; set; }
     public DbSet<CrackDenSell> CrackDensSells { get; set; }
@@ -22,6 +24,7 @@ public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbCont
     public DbSet<Company> Companies { get; set; }
     public DbSet<CompanyCharacter> CompaniesCharacters { get; set; }
     public DbSet<CompanyItem> CompaniesItems { get; set; }
+    public DbSet<CompanySafeMovement> CompaniesSafesMovements { get; set; }
     public DbSet<CompanySell> CompaniesSells { get; set; }
     public DbSet<CompanyTuningPrice> CompaniesTuningPrices { get; set; }
     public DbSet<Confiscation> Confiscations { get; set; }
@@ -55,6 +58,7 @@ public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbCont
     public DbSet<Jail> Jails { get; set; }
     public DbSet<Job> Jobs { get; set; }
     public DbSet<Log> Logs { get; set; }
+    public DbSet<Notification> Notifications { get; set; }
     public DbSet<Parameter> Parameters { get; set; }
     public DbSet<PhoneCall> PhonesCalls { get; set; }
     public DbSet<PhoneContact> PhonesContacts { get; set; }
@@ -70,6 +74,7 @@ public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbCont
     public DbSet<PropertyItem> PropertiesItems { get; set; }
     public DbSet<Punishment> Punishments { get; set; }
     public DbSet<SeizedVehicle> SeizedVehicles { get; set; }
+    public DbSet<ServerStatistic> ServerStatistics { get; set; }
     public DbSet<Session> Sessions { get; set; }
     public DbSet<Smuggler> Smugglers { get; set; }
     public DbSet<Spot> Spots { get; set; }

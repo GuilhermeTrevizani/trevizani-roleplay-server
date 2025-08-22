@@ -143,7 +143,7 @@ public class BankScript : Script
             if (player.User.Id == target.UserId)
             {
                 player.SendMessage(MessageType.Error, "Você não pode fazer uma transferência para outro personagem que seja seu.");
-                await Functions.SendServerMessage($"{player.Character.Name} tentou fazer uma transferência para {target.Name} (mesmo usuário).", UserStaff.JuniorServerAdmin, true);
+                await Functions.SendServerMessage($"{player.Character.Name} tentou fazer uma transferência para {target.Name} (mesmo usuário).", UserStaff.GameAdmin, true);
                 return;
             }
 

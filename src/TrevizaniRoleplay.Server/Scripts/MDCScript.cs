@@ -1,7 +1,5 @@
 ﻿using GTANetworkAPI;
 using Microsoft.EntityFrameworkCore;
-using TrevizaniRoleplay.Core.Extensions;
-using TrevizaniRoleplay.Core.Models.Server;
 using TrevizaniRoleplay.Server.Extensions;
 using TrevizaniRoleplay.Server.Factories;
 using TrevizaniRoleplay.Server.Models;
@@ -16,15 +14,6 @@ public class MDCScript : Script
         if (player.Faction?.HasMDC != true)
         {
             player.SendMessage(MessageType.Error, "Você não está em uma facção habilitada.");
-            return;
-        }
-
-        var property = Global.Properties.FirstOrDefault(x => x.Number == player.GetDimension());
-        if (property?.FactionId != player.Character.FactionId
-            && !(Global.Vehicles.FirstOrDefault(x => x == player.Vehicle)?.VehicleDB?.FactionId == player.Character.FactionId
-                && (player.VehicleSeat == Constants.VEHICLE_SEAT_DRIVER || player.VehicleSeat == Constants.VEHICLE_SEAT_PASSENGER_FRONT_RIGHT)))
-        {
-            player.SendMessage(MessageType.Error, "Você não está em uma propriedade da sua facção ou em um veículo da sua facção nos bancos dianteiros.");
             return;
         }
 
@@ -696,7 +685,9 @@ public class MDCScript : Script
 
             var context = Functions.GetDatabaseContext();
             var id = idString.ToGuid();
-            var character = await context.Characters.FirstOrDefaultAsync(x => x.Id == id);
+            var character = await context.Characters
+                .Include(x => x.User)
+                .FirstOrDefaultAsync(x => x.Id == id);
             if (character is null)
             {
                 player.SendNotification(NotificationType.Error, Resources.RecordNotFound);
@@ -754,14 +745,7 @@ public class MDCScript : Script
                     character.SetDriverLicenseBlockedDate(driverLicenseBlockedDate);
             }
 
-            var targetCellphone = character.Cellphone;
-            if (targetCellphone != 0)
-            {
-                var phoneMessage = new PhoneMessage();
-                phoneMessage.CreateTextToContact(targetCellphone, Constants.EMERGENCY_NUMBER, $"Você foi multado em ${value:N0}.");
-
-                await Functions.SendSMS(null, [targetCellphone], phoneMessage);
-            }
+            await Functions.SendNotification(character.User!, $"Você foi multado em ${value:N0}.");
 
             player.SendNotification(NotificationType.Success, $"Você multou {nome} por ${value:N0}.");
 
@@ -1204,7 +1188,7 @@ public class MDCScript : Script
             }
 
             var ilegalItems = new List<ItemCategory> { ItemCategory.Weapon, ItemCategory.WalkieTalkie, ItemCategory.Drug, ItemCategory.WeaponComponent };
-            if (target.Items.Any(x => ilegalItems.Contains(x.GetCategory()) || Functions.CheckIfIsAmmo(x.GetCategory())))
+            if (target.Items.Any(x => ilegalItems.Contains(x.GetCategory()) || GlobalFunctions.CheckIfIsAmmo(x.GetCategory())))
             {
                 player.SendNotification(NotificationType.Error, "Jogador está com itens ilegais.");
                 return;

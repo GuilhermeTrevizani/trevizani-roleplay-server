@@ -90,7 +90,7 @@ public static class PropertyExtension
         return property.CharacterId == player.Character.Id
             || (property.FactionId.HasValue && property.FactionId == player.Character.FactionId)
             || (property.CompanyId.HasValue && player.Companies.Any(y => y.Id == property.CompanyId))
-            || player.Items.Any(x => x.GetCategory() == ItemCategory.PropertyKey && x.Subtype == property.LockNumber);
+            || player.PropertiesAccess.Contains(property.Id);
     }
 
     public static async Task ActivateProtection(this Property property)
@@ -105,7 +105,7 @@ public static class PropertyExtension
             if (targetCellphone != 0)
             {
                 var phoneMessage = new PhoneMessage();
-                phoneMessage.CreateTextToContact(targetCellphone, Constants.EMERGENCY_NUMBER,
+                phoneMessage.CreateTextToContact(Constants.EMERGENCY_NUMBER, targetCellphone,
                     $"O alarme de {property.FormatedAddress} foi acionado.");
 
                 await Functions.SendSMS(null, [targetCellphone], phoneMessage);
@@ -186,10 +186,22 @@ public static class PropertyExtension
                     linkedProperty.RemoveOwner();
                 else
                     linkedProperty.SetOwner(characterId.Value);
+
                 linkedProperty.CreateIdentifier();
+
+                await context.CharactersProperties
+                    .Where(x => x.PropertyId == linkedProperty.Id)
+                    .ExecuteDeleteAsync();
             }
             context.Properties.UpdateRange(linkedProperties);
         }
+
+        await context.CharactersProperties
+            .Where(x => x.PropertyId == property.Id)
+            .ExecuteDeleteAsync();
+
+        foreach (var player in Global.SpawnedPlayers)
+            player.PropertiesAccess.RemoveAll(x => x == property.Id);
 
         await context.SaveChangesAsync();
     }
@@ -218,11 +230,7 @@ public static class PropertyExtension
         if (character is null)
             return new(UserPremium.None, 0);
 
-        var userPremium = character.User!.GetCurrentPremium();
-        if (userPremium != UserPremium.Gold)
-            userPremium = character.GetCurrentPremium();
-
-        return new(userPremium, character.User.ExtraInteriorFurnitureSlots);
+        return new(character.User!.GetCurrentPremium(), character.User.ExtraInteriorFurnitureSlots);
     }
 
     public static Vector3 GetEntrancePosition(this Property property)

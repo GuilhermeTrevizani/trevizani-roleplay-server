@@ -1,5 +1,4 @@
 ﻿using GTANetworkAPI;
-using TrevizaniRoleplay.Core.Models.Server;
 using TrevizaniRoleplay.Server.Extensions;
 using TrevizaniRoleplay.Server.Factories;
 using TrevizaniRoleplay.Server.Models;
@@ -56,102 +55,6 @@ public class PropertyScript : Script
 
     [Command("pvendergoverno")]
     public async Task CMD_pvendergoverno(MyPlayer player) => await CMDVenderPropriedadeGoverno(player, false);
-
-    [Command("armazenamento")]
-    public static void CMD_armazenamento(MyPlayer player)
-    {
-        var property = Global.Properties.FirstOrDefault(x => x.Number == player.GetDimension());
-        if (property is null)
-        {
-            player.SendMessage(MessageType.Error, "Você não está no interior de uma propriedade.");
-            return;
-        }
-
-        if (!property.CanAccess(player)
-            && !(player.Faction?.Type == FactionType.Police && player.OnDuty))
-        {
-            player.SendMessage(MessageType.Error, "Você não possui acesso a esta propriedade.");
-            return;
-        }
-
-        if (property.RobberyValue > 0)
-        {
-            player.SendMessage(MessageType.Error, Resources.PropertyHasBeenStolen);
-            return;
-        }
-
-        property.ShowInventory(player, false);
-    }
-
-    [Command("pfechadura")]
-    public async Task CMD_pfechadura(MyPlayer player)
-    {
-        var property = Global.Properties
-            .FirstOrDefault(x => x.CharacterId == player.Character.Id && x.Number == player.GetDimension());
-        if (property is null)
-        {
-            player.SendMessage(MessageType.Error, Resources.YouAreNotOnYourOwnProperty);
-            return;
-        }
-
-        if (property.RobberyValue > 0)
-        {
-            player.SendMessage(MessageType.Error, Resources.PropertyHasBeenStolen);
-            return;
-        }
-
-        if (player.Money < Global.Parameter.LockValue)
-        {
-            player.SendMessage(MessageType.Error, string.Format(Resources.YouDontHaveEnoughMoney, Global.Parameter.LockValue));
-            return;
-        }
-
-        property.SetLockNumber(Global.Properties.Select(x => x.LockNumber).DefaultIfEmpty(0u).Max() + 1);
-        var context = Functions.GetDatabaseContext();
-        context.Properties.Update(property);
-        await context.SaveChangesAsync();
-
-        await player.RemoveMoney(Global.Parameter.LockValue);
-
-        player.SendMessage(MessageType.Success, $"Você trocou a fechadura de {property.FormatedAddress} por ${Global.Parameter.LockValue:N0}.");
-    }
-
-    [Command("pchave")]
-    public async Task CMD_pchave(MyPlayer player)
-    {
-        var property = Global.Properties
-            .FirstOrDefault(x => x.CharacterId == player.Character.Id && x.Number == player.GetDimension());
-        if (property is null)
-        {
-            player.SendMessage(MessageType.Error, Resources.YouAreNotOnYourOwnProperty);
-            return;
-        }
-
-        if (property.RobberyValue > 0)
-        {
-            player.SendMessage(MessageType.Error, Resources.PropertyHasBeenStolen);
-            return;
-        }
-
-        if (player.Money < Global.Parameter.KeyValue)
-        {
-            player.SendMessage(MessageType.Error, string.Format(Resources.YouDontHaveEnoughMoney, Global.Parameter.KeyValue));
-            return;
-        }
-
-        var characterItem = new CharacterItem();
-        characterItem.Create(new Guid(Constants.PROPERTY_KEY_ITEM_TEMPLATE_ID), property.LockNumber, 1, null);
-        var res = await player.GiveItem(characterItem);
-        if (!string.IsNullOrWhiteSpace(res))
-        {
-            player.SendMessage(MessageType.Error, res);
-            return;
-        }
-
-        await player.RemoveMoney(Global.Parameter.KeyValue);
-
-        player.SendMessage(MessageType.Success, $"Você criou uma cópia da chave de {property.FormatedAddress} por ${Global.Parameter.KeyValue:N0}.");
-    }
 
     [Command("pupgrade")]
     public static void CMD_pupgrade(MyPlayer player)
@@ -256,7 +159,7 @@ public class PropertyScript : Script
         var attempts = 1;
 
         player.Emit("PickLock:Start", difficulty, pins, attempts, "Property");
-        await Functions.SendServerMessage($"{player.Character.Name} ({player.SessionId}) começou a arrombar a propriedade {property.FormatedAddress}.", UserStaff.JuniorServerAdmin, false);
+        await Functions.SendServerMessage($"{player.Character.Name} ({player.SessionId}) começou a arrombar a propriedade {property.FormatedAddress}.", UserStaff.GameAdmin, false);
     }
 
     [Command("roubarpropriedade")]
@@ -301,7 +204,7 @@ public class PropertyScript : Script
             return;
         }
 
-        await Functions.SendServerMessage($"{player.Character.Name} ({player.SessionId}) começou a roubar a propriedade {property.FormatedAddress}.", UserStaff.JuniorServerAdmin, false);
+        await Functions.SendServerMessage($"{player.Character.Name} ({player.SessionId}) começou a roubar a propriedade {property.FormatedAddress}.", UserStaff.GameAdmin, false);
         await property.ActivateProtection();
 
         var waitSeconds = property.ProtectionLevel switch
@@ -658,7 +561,7 @@ public class PropertyScript : Script
                 return;
             }
 
-            await Functions.SendServerMessage($"{player.Character.Name} ({player.SessionId}) começou a arrombar a propriedade {property.FormatedAddress}.", UserStaff.JuniorServerAdmin, false);
+            await Functions.SendServerMessage($"{player.Character.Name} ({player.SessionId}) começou a arrombar a propriedade {property.FormatedAddress}.", UserStaff.GameAdmin, false);
             await property.ActivateProtection();
 
             player.ToggleGameControls(false);
@@ -759,7 +662,7 @@ public class PropertyScript : Script
 
         var audioSpot = property.GetAudioSpot();
         player.Emit("PropertyBoombox", item!.Id.ToString(), audioSpot?.Source ?? string.Empty, audioSpot?.Volume ?? 1,
-            player.GetCurrentPremium() != UserPremium.None, Functions.Serialize(Global.AudioRadioStations.OrderBy(x => x.Name)));
+            player.User.GetCurrentPremium() != UserPremium.None, Functions.Serialize(Global.AudioRadioStations.OrderBy(x => x.Name)));
     }
 
     [RemoteEvent(nameof(ConfirmPropertyBoombox))]
@@ -978,8 +881,8 @@ public class PropertyScript : Script
         }
     }
 
-    [Command("ptempo", "/ptempo (tempo)", Aliases = ["pweather"])]
-    public async Task CMD_ptempo(MyPlayer player, uint weather)
+    [Command("ptempo", "/ptempo (tempo)")]
+    public async Task CMD_ptempo(MyPlayer player, int weather)
     {
         var property = Global.Properties.FirstOrDefault(x => x.Number == player.GetDimension());
         if (property is null)
@@ -1017,10 +920,12 @@ public class PropertyScript : Script
         foreach (var target in Global.SpawnedPlayers.Where(x => x.GetDimension() == player.GetDimension()))
             target.SyncWeather(weatherType);
 
+        await player.WriteLog(LogType.General, $"/ptempo {property.Number} {weatherType}", null);
         player.SendMessage(MessageType.Success, $"Você alterou o clima da propriedade para {weatherType}.");
+
     }
 
-    [Command("phora", "/phora (hora)", Aliases = ["ptime"])]
+    [Command("phora", "/phora (hora)")]
     public async Task CMD_phora(MyPlayer player, byte hour)
     {
         var property = Global.Properties.FirstOrDefault(x => x.Number == player.GetDimension());
@@ -1058,6 +963,7 @@ public class PropertyScript : Script
         foreach (var target in Global.SpawnedPlayers.Where(x => x.GetDimension() == player.GetDimension()))
             target.SetHour(hour);
 
+        await player.WriteLog(LogType.General, $"/phora {property.Number} {hour}", null);
         player.SendMessage(MessageType.Success, $"Você alterou a hora da propriedade para {hour}.");
     }
 

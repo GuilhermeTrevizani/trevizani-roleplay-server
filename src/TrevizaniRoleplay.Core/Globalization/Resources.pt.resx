@@ -192,9 +192,6 @@
   <data name="Items" xml:space="preserve">
     <value>Itens</value>
   </data>
-  <data name="Jobs" xml:space="preserve">
-    <value>Empregos</value>
-  </data>
   <data name="Man" xml:space="preserve">
     <value>Homem</value>
   </data>
@@ -257,9 +254,6 @@
   </data>
   <data name="VehiclePriceNotConfigured" xml:space="preserve">
     <value>Preço do veículo não configurado. Por favor, reporte o bug.</value>
-  </data>
-  <data name="Vehicles" xml:space="preserve">
-    <value>Veículos</value>
   </data>
   <data name="VehicleSell" xml:space="preserve">
     <value>Venda de Veículo</value>
@@ -368,12 +362,6 @@
   </data>
   <data name="VehiclePart" xml:space="preserve">
     <value>Parte de Veículo</value>
-  </data>
-  <data name="VehicleKey" xml:space="preserve">
-    <value>Chave de Veículo</value>
-  </data>
-  <data name="PropertyKey" xml:space="preserve">
-    <value>Chave de Propriedade</value>
   </data>
   <data name="BloodSample" xml:space="preserve">
     <value>Amostra de Sangue</value>
@@ -565,31 +553,10 @@
     <value>Ban</value>
   </data>
   <data name="Warn" xml:space="preserve">
-    <value>Aviso</value>
+    <value>Morna</value>
   </data>
   <data name="Ajail" xml:space="preserve">
     <value>Ajail</value>
-  </data>
-  <data name="JuniorServerAdmin" xml:space="preserve">
-    <value>Junior Server Admin</value>
-  </data>
-  <data name="ServerAdminI" xml:space="preserve">
-    <value>Server Admin I</value>
-  </data>
-  <data name="ServerAdminII" xml:space="preserve">
-    <value>Server Admin II</value>
-  </data>
-  <data name="SeniorServerAdmin" xml:space="preserve">
-    <value>Senior Server Admin</value>
-  </data>
-  <data name="LeadServerAdmin" xml:space="preserve">
-    <value>Lead Server Admin</value>
-  </data>
-  <data name="ServerManager" xml:space="preserve">
-    <value>Server Manager</value>
-  </data>
-  <data name="HeadServerDeveloper" xml:space="preserve">
-    <value>Head Server Developer</value>
   </data>
   <data name="InviteMember" xml:space="preserve">
     <value>Convidar Membro</value>
@@ -737,9 +704,6 @@
   </data>
   <data name="PrivateMessages" xml:space="preserve">
     <value>Mensagens Privadas</value>
-  </data>
-  <data name="VehicleDestruction" xml:space="preserve">
-    <value>Destruição de Veículo</value>
   </data>
   <data name="Mask" xml:space="preserve">
     <value>Máscara</value>
@@ -995,5 +959,47 @@
   </data>
   <data name="DiscordClientSecretIsNotConfigured" xml:space="preserve">
     <value>Discord Client Secret não está configurado no conf.json</value>
+  </data>
+  <data name="GameAdmin" xml:space="preserve">
+    <value>Game Admin</value>
+  </data>
+  <data name="Tester" xml:space="preserve">
+    <value>Tester</value>
+  </data>
+  <data name="HeadAdmin" xml:space="preserve">
+    <value>Head Admin</value>
+  </data>
+  <data name="LeadAdmin" xml:space="preserve">
+    <value>Lead Admin</value>
+  </data>
+  <data name="Management" xml:space="preserve">
+    <value>Management</value>
+  </data>
+  <data name="Founder" xml:space="preserve">
+    <value>Founder</value>
+  </data>
+  <data name="Withdraw" xml:space="preserve">
+    <value>Saque</value>
+  </data>
+  <data name="Deposit" xml:space="preserve">
+    <value>Depósito</value>
+  </data>
+  <data name="CharacterNotFound" xml:space="preserve">
+    <value>Personagem {0} não encontrado.</value>
+  </data>
+  <data name="YouAreNotTheOwnerOfTheProperty" xml:space="preserve">
+    <value>Você não é o dono da propriedade.</value>
+  </data>
+  <data name="DescriptionMustNotExceed100Characters" xml:space="preserve">
+    <value>Descrição deve ter no máximo 100 caracteres.</value>
+  </data>
+  <data name="Bleeding" xml:space="preserve">
+    <value>Sangramento</value>
+  </data>
+  <data name="Warm" xml:space="preserve">
+    <value>Morna</value>
+  </data>
+  <data name="Cold" xml:space="preserve">
+    <value>Fria</value>
   </data>
 </root>

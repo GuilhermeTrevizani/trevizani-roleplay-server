@@ -1,6 +1,5 @@
 ﻿using GTANetworkAPI;
 using Microsoft.EntityFrameworkCore;
-using TrevizaniRoleplay.Core.Extensions;
 using TrevizaniRoleplay.Server.Extensions;
 using TrevizaniRoleplay.Server.Factories;
 using TrevizaniRoleplay.Server.Models;
@@ -497,7 +496,7 @@ public class CompanyScript : Script
             }
 
             var quantity = 1;
-            value *= 1;
+            value *= quantity;
 
             var costPrice = companyItem.CostPrice * quantity;
 
@@ -508,7 +507,7 @@ public class CompanyScript : Script
             }
 
             var context = Functions.GetDatabaseContext();
-            var isAmmo = Functions.CheckIfIsAmmo(itemTemplate.Category);
+            var isAmmo = GlobalFunctions.CheckIfIsAmmo(itemTemplate.Category);
             if ((itemTemplate.Category == ItemCategory.Weapon && Functions.IsWeaponWithAmmo(itemTemplate.Type))
                 || itemTemplate.Category == ItemCategory.WeaponComponent
                 || isAmmo)
@@ -532,7 +531,7 @@ public class CompanyScript : Script
                 {
                     var weaponsToCheck = Global.WeaponsInfos
                         .Where(x => x.AmmoItemTemplateId.HasValue)
-                        .Select(x => Functions.GetWeaponType(x.Name))
+                        .Select(x => GlobalFunctions.GetWeaponType(x.Name))
                         .ToList();
 
                     itemCount = await context.CompaniesSells.Where(x => x.CharacterId == player.Character.Id
@@ -609,10 +608,10 @@ public class CompanyScript : Script
             await context.SaveChangesAsync();
 
             var safeValue = value - costPrice;
-            if (safeValue > 0)
-                company.DepositSafe(safeValue);
 
-            await player.WriteLog(LogType.Company, $"Comprar Item Empresa {company.Id} {company.Name} {itemTemplate.Id} {itemTemplate.Name} {value} {costPrice} {safeValue}", null);
+            if (safeValue > 0)
+                await company.MovementSafe(player, player.Character.Id, FinancialTransactionType.Deposit, Convert.ToUInt32(safeValue), $"Compra de {quantity}x {itemTemplate.Name}. Preço de Custo: ${costPrice:N0}, Preço de Venda: ${value:N0}");
+
             player.SendNotification(NotificationType.Success, $"Você comprou {quantity}x {itemTemplate.Name} por ${value:N0}.");
         }
         catch (Exception ex)
@@ -622,7 +621,7 @@ public class CompanyScript : Script
     }
 
     [RemoteEvent(nameof(CompanySafeWithdraw))]
-    public async Task CompanySafeWithdraw(Player playerParam, string idString, int value)
+    public async Task CompanySafeWithdraw(Player playerParam, string idString, uint value)
     {
         try
         {
@@ -652,18 +651,15 @@ public class CompanyScript : Script
             }
 
             var context = Functions.GetDatabaseContext();
-            var res = await player.GiveMoney(value);
+            var res = await player.GiveMoney(Convert.ToInt32(value));
             if (!string.IsNullOrWhiteSpace(res))
             {
                 player.SendNotification(NotificationType.Error, res);
                 return;
             }
 
-            company.WithdrawSafe(value);
-            context.Companies.Update(company);
-            await context.SaveChangesAsync();
+            await company.MovementSafe(player, player.Character.Id, FinancialTransactionType.Withdraw, value, string.Empty);
 
-            await player.WriteLog(LogType.Company, $"Sacar Cofre {company.Id} {company.Name} {value}", null);
             player.SendNotification(NotificationType.Success, $"Você sacou ${value:N0} do cofre de {company.Name}.");
             player.Emit("Company:Show", GetCompaniesJsonByCharacter(player));
         }

@@ -37,7 +37,7 @@ public class User : BaseEntity
     public bool ShowNametagId { get; private set; } = true;
     public int PremiumPoints { get; private set; }
     public int NumberChanges { get; private set; }
-    public int CharacterSlots { get; private set; } = 3;
+    public int CharacterSlots { get; private set; } = 2;
     public int ExtraInteriorFurnitureSlots { get; private set; }
     public int ExtraOutfitSlots { get; private set; }
     public DateTime? DiscordBoosterDate { get; private set; }
@@ -46,6 +46,7 @@ public class User : BaseEntity
     public int FreezingTimePropertyEntrance { get; private set; } = 3;
     public bool ShowOwnNametag { get; private set; }
     public UserReceiveSMSDiscord ReceiveSMSDiscord { get; private set; } = UserReceiveSMSDiscord.All;
+    public bool ReceiveNotificationsOnDiscord { get; private set; } = true;
 
     [JsonIgnore]
     public ICollection<Character>? Characters { get; private set; }
@@ -77,27 +78,6 @@ public class User : BaseEntity
     {
         Premium = premium;
         PremiumValidDate = (PremiumValidDate > DateTime.Now && Premium == premium ? PremiumValidDate.Value : DateTime.Now).AddDays(30);
-
-        NameChanges += premium switch
-        {
-            UserPremium.Gold => 1,
-            UserPremium.Silver => 1,
-            _ => 0,
-        };
-
-        NumberChanges += premium switch
-        {
-            UserPremium.Gold => 2,
-            UserPremium.Silver => 2,
-            _ => 1,
-        };
-
-        PlateChanges += premium switch
-        {
-            UserPremium.Gold => 2,
-            UserPremium.Silver => 2,
-            _ => 1,
-        };
     }
 
     public void AddCharacterApplicationsQuantity()
@@ -134,7 +114,7 @@ public class User : BaseEntity
         bool factionChatToggle, int chatFontType, int chatLines, int chatFontSize,
         bool factionToggle, bool vehicleTagToggle, string chatBackgroundColor, bool showNametagId,
         bool ambientSoundToggle, int freezingTimePropertyEntrance, bool showOwnNametag,
-        UserReceiveSMSDiscord receiveSMSDiscord)
+        UserReceiveSMSDiscord receiveSMSDiscord, bool receiveNotificationsOnDiscord)
     {
         TimeStampToggle = timeStampToggle;
         AnnouncementToggle = announcementToggle;
@@ -151,6 +131,7 @@ public class User : BaseEntity
         FreezingTimePropertyEntrance = freezingTimePropertyEntrance;
         ShowOwnNametag = showOwnNametag;
         ReceiveSMSDiscord = receiveSMSDiscord;
+        ReceiveNotificationsOnDiscord = receiveNotificationsOnDiscord;
     }
 
     public void SetStaff(UserStaff staff, string staffFlagsJson)

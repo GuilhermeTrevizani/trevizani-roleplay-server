@@ -145,7 +145,7 @@ public class PremiumController(DatabaseContext context,
         await context.SaveChangesAsync();
     }
 
-    [HttpGet("purchases"), Authorize(Policy = PolicySettings.POLICY_SERVER_MANAGER)]
+    [HttpGet("purchases"), Authorize(Policy = PolicySettings.POLICY_MANAGEMENT)]
     public async Task<IEnumerable<PremiumPointPurchaseResponse>> GetStaffers()
     {
         return await context.PremiumPointPurchases

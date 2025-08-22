@@ -10,13 +10,11 @@ public static class StaffFlagExtensions
         {
             StaffFlag.Events => Globalization.Resources.Events,
             StaffFlag.Doors => Globalization.Resources.Doors,
-            StaffFlag.Jobs => Globalization.Resources.Jobs,
             StaffFlag.Factions => Globalization.Resources.Factions,
             StaffFlag.FactionsStorages => Globalization.Resources.FactionsStorages,
             StaffFlag.Properties => Globalization.Resources.Properties,
             StaffFlag.Spots => Globalization.Resources.Spots,
             StaffFlag.Blips => Globalization.Resources.Blips,
-            StaffFlag.Vehicles => Globalization.Resources.Vehicles,
             StaffFlag.CK => Globalization.Resources.CK,
             StaffFlag.GiveItem => Globalization.Resources.GiveItem,
             StaffFlag.CrackDens => Globalization.Resources.CrackDens,

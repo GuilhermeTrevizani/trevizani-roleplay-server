@@ -18,6 +18,9 @@ public class Company : BaseEntity
     public byte BlipColor { get; private set; }
     public CompanyType Type { get; private set; }
     public int Safe { get; private set; }
+    public bool EntranceBenefit { get; private set; }
+    public DateTime? EntranceBenefitCooldown { get; private set; }
+    public string EntranceBenefitUsersJson { get; private set; } = "[]";
 
     [JsonIgnore]
     public Character? Character { get; private set; }
@@ -34,8 +37,11 @@ public class Company : BaseEntity
     [JsonIgnore]
     public ICollection<CompanyTuningPrice>? TuningPrices { get; private set; }
 
+    [JsonIgnore]
+    public ICollection<CompanySafeMovement>? SafeMovements { get; private set; }
+
     public void Create(string name, float posX, float posY, float posZ, int weekRentValue, CompanyType type,
-        ushort blipType, byte blipColor)
+        ushort blipType, byte blipColor, bool entranceBenefit)
     {
         Name = name;
         PosX = posX;
@@ -48,10 +54,11 @@ public class Company : BaseEntity
         Characters = [];
         Items = [];
         TuningPrices = [];
+        EntranceBenefit = entranceBenefit;
     }
 
     public void Update(string name, float posX, float posY, float posZ, int weekRentValue, CompanyType type,
-        ushort blipType, byte blipColor)
+        ushort blipType, byte blipColor, bool entranceBenefit)
     {
         Name = name;
         PosX = posX;
@@ -61,6 +68,7 @@ public class Company : BaseEntity
         Type = type;
         BlipType = blipType;
         BlipColor = blipColor;
+        EntranceBenefit = entranceBenefit;
     }
 
     public void Rent(Guid characterId)
@@ -105,5 +113,11 @@ public class Company : BaseEntity
     public void SetCharacterId(Guid characterId)
     {
         CharacterId = characterId;
+    }
+
+    public void SetEntranceBenefit(DateTime? entranceBenefitCooldown, string entranceBenefitUsersJson)
+    {
+        EntranceBenefitCooldown = entranceBenefitCooldown;
+        EntranceBenefitUsersJson = entranceBenefitUsersJson;
     }
 }

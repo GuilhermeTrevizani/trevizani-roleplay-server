@@ -9,7 +9,7 @@ public class DebugScript : Script
     [Command("x")]
     public static void CMD_x(MyPlayer player)
     {
-        if (player.User.Staff < Domain.Enums.UserStaff.JuniorServerAdmin)
+        if (player.User.Staff < UserStaff.GameAdmin)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -23,7 +23,7 @@ public class DebugScript : Script
     [Command("x2", "/x2 (component) (drawable) (texture)")]
     public static void CMD_x2(MyPlayer player, int component, int drawable, int texture)
     {
-        if (player.User.Staff < Domain.Enums.UserStaff.HeadServerDeveloper)
+        if (player.User.Staff < UserStaff.Founder)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -37,7 +37,7 @@ public class DebugScript : Script
     [Command("x3", "/x3 (component) (drawable) (texture)")]
     public static void CMD_x3(MyPlayer player, int component, int drawable, int texture)
     {
-        if (player.User.Staff < Domain.Enums.UserStaff.HeadServerDeveloper)
+        if (player.User.Staff < UserStaff.Founder)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -51,7 +51,7 @@ public class DebugScript : Script
     [Command("x4", "/x4 (collection) (overlay)")]
     public static void CMD_x4(MyPlayer player, string collection, string overlay)
     {
-        if (player.User.Staff < Domain.Enums.UserStaff.HeadServerDeveloper)
+        if (player.User.Staff < UserStaff.Founder)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;

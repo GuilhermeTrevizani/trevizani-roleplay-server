@@ -4,7 +4,6 @@ using System.Reflection;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using TrevizaniRoleplay.Core.Models.Server;
 using TrevizaniRoleplay.Server.Factories;
 using TrevizaniRoleplay.Server.Models;
 
@@ -12,7 +11,7 @@ namespace TrevizaniRoleplay.Server;
 
 public sealed class Global
 {
-    public static Color MainRgba { get; } = new Color(242, 121, 178, 75);
+    public static Color MainRgba { get; } = new Color(16, 151, 230, 75);
 
     public static Parameter Parameter { get; set; } = default!;
 
@@ -40,11 +39,11 @@ public sealed class Global
 
     public static List<Spotlight> Spotlights { get; set; } = [];
 
-    public static IEnumerable<MyPlayer> AllPlayers { get => NAPI.Pools.GetAllPlayers().Cast<MyPlayer>(); }
+    public static IEnumerable<MyPlayer> AllPlayers => NAPI.Pools.GetAllPlayers().Cast<MyPlayer>();
 
-    public static IEnumerable<MyPlayer> SpawnedPlayers { get => AllPlayers.Where(x => x.Character?.PersonalizationStep == CharacterPersonalizationStep.Ready); }
+    public static IEnumerable<MyPlayer> SpawnedPlayers => AllPlayers.Where(x => x.Character?.PersonalizationStep == CharacterPersonalizationStep.Ready);
 
-    public static IEnumerable<MyVehicle> Vehicles { get => NAPI.Pools.GetAllVehicles().Cast<MyVehicle>(); }
+    public static IEnumerable<MyVehicle> Vehicles => NAPI.Pools.GetAllVehicles().Cast<MyVehicle>();
 
     public static List<FactionUnit> FactionsUnits { get; set; } = [];
 
@@ -124,174 +123,6 @@ public sealed class Global
 
     public static List<VehicleDismantlingPartsChance> VehicleDismantlingPartsChances { get; set; } = [];
 
-    public static List<string> WordsToShuffle => [
-        "abacaxi",
-        "amigos",
-        "banana",
-        "beleza",
-        "cachorro",
-        "cidade",
-        "coração",
-        "cozinha",
-        "diamante",
-        "escola",
-        "família",
-        "futebol",
-        "galeria",
-        "jardim",
-        "lagoa",
-        "livro",
-        "morango",
-        "natureza",
-        "oculista",
-        "pássaro",
-        "praia",
-        "programa",
-        "sabedoria",
-        "salgado",
-        "semente",
-        "solista",
-        "tendência",
-        "universo",
-        "valente",
-        "verdura",
-        "viver",
-        "alegria",
-        "animais",
-        "árvore",
-        "atletas",
-        "beleza",
-        "caderno",
-        "caneta",
-        "carro",
-        "cereal",
-        "conselho",
-        "desafio",
-        "escritor",
-        "esporte",
-        "feijão",
-        "festa",
-        "história",
-        "instante",
-        "jornal",
-        "justiça",
-        "ketchup",
-        "leitura",
-        "mestre",
-        "mirante",
-        "notícia",
-        "oculista",
-        "paciência",
-        "panela",
-        "pintura",
-        "quadro",
-        "receita",
-        "restaurante",
-        "sabão",
-        "segredo",
-        "sentido",
-        "sereno",
-        "tabela",
-        "televisão",
-        "tenda",
-        "trabalho",
-        "vacina",
-        "vela",
-        "verdade",
-        "viagem",
-        "zona",
-        "aventura",
-        "benefício",
-        "bento",
-        "biscoito",
-        "cartaz",
-        "celebrar",
-        "cultura",
-        "desenho",
-        "diversão",
-        "espetacular",
-        "futuro",
-        "globo",
-        "idioma",
-        "infra",
-        "kitten",
-        "letra",
-        "máquina",
-        "moderno",
-        "moradia",
-        "natureza",
-        "oficina",
-        "pessoa",
-        "razão",
-        "retrato",
-        "semanal",
-        "sociedade",
-        "sonho",
-        "táxi",
-        "vaca",
-        "viver",
-        "agenda",
-        "alimento",
-        "animal",
-        "aposta",
-        "artigo",
-        "banco",
-        "bico",
-        "carro",
-        "cesta",
-        "corte",
-        "doces",
-        "estilo",
-        "fachada",
-        "fantasia",
-        "jogo",
-        "leitura",
-        "moeda",
-        "moto",
-        "nova",
-        "passo",
-        "pedra",
-        "peça",
-        "pelo",
-        "piano",
-        "placa",
-        "resto",
-        "sabia",
-        "sabores",
-        "sonho",
-        "taxa",
-        "tela",
-        "tempo",
-        "universidade",
-        "viajar",
-        "viver",
-        "zona",
-        "advento",
-        "banco",
-        "bolha",
-        "cesta",
-        "cidade",
-        "depois",
-        "edifício",
-        "jovem",
-        "meia",
-        "monte",
-        "piano",
-        "questão",
-        "quinto",
-        "reverso",
-        "rima",
-        "rua",
-        "soma",
-        "tela",
-        "troca",
-        "vaso",
-        "vista",
-        "viver",
-        "volta",
-        "zebra"
-    ];
-
     public static List<ItemTemplate> ItemsTemplates { get; set; } = [];
 
     public static List<FishingItemChance> FishingItemsChances { get; set; } = [];
@@ -337,4 +168,6 @@ public sealed class Global
     public static ulong FirefighterEmergencyCallDiscordChannel { get; set; }
 
     public static ulong PoliceEmergencyCallDiscordChannel { get; set; }
+
+    public static string DatabaseConnection { get; set; } = string.Empty;
 }

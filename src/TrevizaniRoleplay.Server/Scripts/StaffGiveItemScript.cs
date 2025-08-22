@@ -75,7 +75,7 @@ public class StaffGiveItemScript : Script
             }
 
             await player.WriteLog(LogType.GiveItem, $"{characterItem.Quantity}x {characterItem.GetName()} | Motivo: {reason} | {Functions.Serialize(characterItem)}", target);
-            await Functions.SendServerMessage($"{player.User.Name} deu {characterItem.Quantity}x {characterItem.GetName()} para {target.Character.Name}. Motivo: {reason}", UserStaff.JuniorServerAdmin, false);
+            await Functions.SendServerMessage($"{player.User.Name} deu {characterItem.Quantity}x {characterItem.GetName()} para {target.Character.Name}. Motivo: {reason}", UserStaff.GameAdmin, false);
             player.SendNotification(NotificationType.Success, $"Você deu {characterItem.Quantity}x {characterItem.GetName()} para {target.Character.Name}.");
             target.SendMessage(MessageType.Success, $"{player.User.Name} deu {characterItem.Quantity}x {characterItem.GetName()} para você.");
         }

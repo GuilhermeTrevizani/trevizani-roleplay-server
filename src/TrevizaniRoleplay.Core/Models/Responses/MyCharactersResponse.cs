@@ -12,8 +12,6 @@ public class MyCharactersResponse
         public Guid Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public DateTime LastAccessDate { get; set; }
-        public bool CanResendApplication { get; set; }
-        public bool CanApplyNamechange { get; set; }
         public CharacterStatus Status { get; set; }
         public string DeathReason { get; set; } = string.Empty;
     }

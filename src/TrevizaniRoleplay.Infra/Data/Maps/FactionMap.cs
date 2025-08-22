@@ -13,6 +13,6 @@ public class FactionMap : IEntityTypeConfiguration<Faction>
         builder.Property(x => x.Name).HasMaxLength(50);
         builder.Property(x => x.Color).HasMaxLength(6);
         builder.Property(x => x.ChatColor).HasMaxLength(6);
-        builder.HasOne(x => x.Character).WithOne().HasForeignKey<Faction>(x => x.CharacterId);
+        builder.HasOne(x => x.Character).WithOne().HasForeignKey<Faction>(x => x.CharacterId).OnDelete(DeleteBehavior.Restrict);
     }
 }

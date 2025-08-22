@@ -4,13 +4,13 @@ public enum StaffFlag : byte
 {
     Events = 1,
     Doors = 2,
-    Jobs = 3,
+    // 3 is free
     Factions = 4,
     FactionsStorages = 5,
     Properties = 6,
     Spots = 7,
     Blips = 8,
-    Vehicles = 9,
+    // 9 is free
     CK = 10,
     GiveItem = 11,
     CrackDens = 12,

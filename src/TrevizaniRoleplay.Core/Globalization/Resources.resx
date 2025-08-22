@@ -192,9 +192,6 @@
   <data name="Items" xml:space="preserve">
     <value>Items</value>
   </data>
-  <data name="Jobs" xml:space="preserve">
-    <value>Jobs</value>
-  </data>
   <data name="Man" xml:space="preserve">
     <value>Man</value>
   </data>
@@ -258,9 +255,6 @@
   <data name="VehiclePriceNotConfigured" xml:space="preserve">
     <value>Vehicle price not configured. Please report the bug.</value>
   </data>
-  <data name="Vehicles" xml:space="preserve">
-    <value>Vehicles</value>
-  </data>
   <data name="VehicleSell" xml:space="preserve">
     <value>Vehicle Sell</value>
   </data>
@@ -283,10 +277,10 @@
     <value>You're not on administrative duty.</value>
   </data>
   <data name="YouAreNotTheDriverOfTheVehicle" xml:space="preserve">
-    <value>You are not the driver of the vehicle.</value>
+    <value>You're not the driver of the vehicle.</value>
   </data>
   <data name="YouAreNotTheOwnerOfTheVehicle" xml:space="preserve">
-    <value>You are not the owner of the vehicle.</value>
+    <value>You're not the owner of the vehicle.</value>
   </data>
   <data name="YouCanNotDoThisBecauseYouAreHandcuffedInjuredOrBeingCarried" xml:space="preserve">
     <value>You can't do this because you're handcuffed, injured or being carried.</value>
@@ -368,12 +362,6 @@
   </data>
   <data name="VehiclePart" xml:space="preserve">
     <value>Vehicle Part</value>
-  </data>
-  <data name="VehicleKey" xml:space="preserve">
-    <value>Vehicle Key</value>
-  </data>
-  <data name="PropertyKey" xml:space="preserve">
-    <value>Property Key</value>
   </data>
   <data name="BloodSample" xml:space="preserve">
     <value>Blood Sample</value>
@@ -570,27 +558,6 @@
   <data name="Ajail" xml:space="preserve">
     <value>Ajail</value>
   </data>
-  <data name="JuniorServerAdmin" xml:space="preserve">
-    <value>Junior Server Admin</value>
-  </data>
-  <data name="ServerAdminI" xml:space="preserve">
-    <value>Server Admin I</value>
-  </data>
-  <data name="ServerAdminII" xml:space="preserve">
-    <value>Server Admin II</value>
-  </data>
-  <data name="SeniorServerAdmin" xml:space="preserve">
-    <value>Senior Server Admin</value>
-  </data>
-  <data name="LeadServerAdmin" xml:space="preserve">
-    <value>Lead Server Admin</value>
-  </data>
-  <data name="ServerManager" xml:space="preserve">
-    <value>Server Manager</value>
-  </data>
-  <data name="HeadServerDeveloper" xml:space="preserve">
-    <value>Head Server Developer</value>
-  </data>
   <data name="InviteMember" xml:space="preserve">
     <value>Invite Member</value>
   </data>
@@ -737,9 +704,6 @@
   </data>
   <data name="PrivateMessages" xml:space="preserve">
     <value>Private Messages</value>
-  </data>
-  <data name="VehicleDestruction" xml:space="preserve">
-    <value>Vehicle Destruction</value>
   </data>
   <data name="Mask" xml:space="preserve">
     <value>Mask</value>
@@ -995,5 +959,47 @@
   </data>
   <data name="DiscordClientSecretIsNotConfigured" xml:space="preserve">
     <value>Discord Client Secret is not configured in conf.json</value>
+  </data>
+  <data name="GameAdmin" xml:space="preserve">
+    <value>Game Admin</value>
+  </data>
+  <data name="Tester" xml:space="preserve">
+    <value>Tester</value>
+  </data>
+  <data name="HeadAdmin" xml:space="preserve">
+    <value>Head Admin</value>
+  </data>
+  <data name="LeadAdmin" xml:space="preserve">
+    <value>Lead Admin</value>
+  </data>
+  <data name="Management" xml:space="preserve">
+    <value>Management</value>
+  </data>
+  <data name="Founder" xml:space="preserve">
+    <value>Founder</value>
+  </data>
+  <data name="Withdraw" xml:space="preserve">
+    <value>Withdraw</value>
+  </data>
+  <data name="Deposit" xml:space="preserve">
+    <value>Deposit</value>
+  </data>
+  <data name="CharacterNotFound" xml:space="preserve">
+    <value>Character {0} not found.</value>
+  </data>
+  <data name="YouAreNotTheOwnerOfTheProperty" xml:space="preserve">
+    <value>You're not the owner of the property.</value>
+  </data>
+  <data name="DescriptionMustNotExceed100Characters" xml:space="preserve">
+    <value>Description must not exceed 100 characters.</value>
+  </data>
+  <data name="Bleeding" xml:space="preserve">
+    <value>Bleeding</value>
+  </data>
+  <data name="Warm" xml:space="preserve">
+    <value>Warm</value>
+  </data>
+  <data name="Cold" xml:space="preserve">
+    <value>Cold</value>
   </data>
 </root>

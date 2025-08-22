@@ -39,42 +39,38 @@ public class Server : Script
     private async Task InsertItemsTemplates()
     {
         await InsertItemTemplate(new Guid(Constants.MONEY_ITEM_TEMPLATE_ID), ItemCategory.Money, Resources.Money,
-            0.000001f, "https://i.imgur.com/z5afrcD.png", "bkr_prop_money_sorted_01");
+            0, "https://i.imgur.com/z5afrcD.png", "bkr_prop_money_sorted_01");
         await InsertItemTemplate(new Guid(Constants.VEHICLE_PART_ITEM_TEMPLATE_ID), ItemCategory.VehiclePart, Resources.VehiclePart,
-            0.1f, "https://i.imgur.com/w3D4MtH.png", "imp_prop_impexp_exhaust_06");
-        await InsertItemTemplate(new Guid(Constants.VEHICLE_KEY_ITEM_TEMPLATE_ID), ItemCategory.VehicleKey, Resources.VehicleKey,
-            0.1f, "https://i.imgur.com/bkYGL8a.png", "p_car_keys_01");
-        await InsertItemTemplate(new Guid(Constants.PROPERTY_KEY_ITEM_TEMPLATE_ID), ItemCategory.PropertyKey, Resources.PropertyKey,
-            0.1f, "https://i.imgur.com/IEDSv1j.png", "prop_cs_keys_01");
+            100, "https://i.imgur.com/w3D4MtH.png", "imp_prop_impexp_exhaust_06");
         await InsertItemTemplate(new Guid(Constants.BLOOD_SAMPLE_ITEM_TEMPLATE_ID), ItemCategory.BloodSample, Resources.BloodSample,
-            0.0001f, "https://i.imgur.com/5pguCOS.png", "p_bloodsplat_s");
+            1, "https://i.imgur.com/5pguCOS.png", "p_bloodsplat_s");
         await InsertItemTemplate(new Guid(Constants.PISTOL_AMMO_ITEM_TEMPLATE_ID), ItemCategory.PistolAmmo, Resources.PistolAmmo,
-           0.0001f, "https://i.imgur.com/QoQqfEq.png", string.Empty);
+           1, "https://i.imgur.com/QoQqfEq.png", string.Empty);
         await InsertItemTemplate(new Guid(Constants.SHOTGUN_AMMO_ITEM_TEMPLATE_ID), ItemCategory.ShotgunAmmo, Resources.ShotgunAmmo,
-           0.0001f, "https://i.imgur.com/QoQqfEq.png", string.Empty);
+           1, "https://i.imgur.com/QoQqfEq.png", string.Empty);
         await InsertItemTemplate(new Guid(Constants.ASSAULT_RIFLE_AMMO_ITEM_TEMPLATE_ID), ItemCategory.AssaultRifleAmmo, Resources.AssaultRifleAmmo,
-           0.0001f, "https://i.imgur.com/QoQqfEq.png", string.Empty);
+           1, "https://i.imgur.com/QoQqfEq.png", string.Empty);
         await InsertItemTemplate(new Guid(Constants.LIGHT_MACHINE_GUN_AMMO_ITEM_TEMPLATE_ID), ItemCategory.LightMachineGunAmmo, Resources.LightMachineGunAmmo,
-           0.0001f, "https://i.imgur.com/QoQqfEq.png", string.Empty);
+           1, "https://i.imgur.com/QoQqfEq.png", string.Empty);
         await InsertItemTemplate(new Guid(Constants.SNIPER_RIFLE_AMMO_ITEM_TEMPLATE_ID), ItemCategory.SniperRifleAmmo, Resources.SniperRifleAmmo,
-           0.0001f, "https://i.imgur.com/QoQqfEq.png", string.Empty);
+           1, "https://i.imgur.com/QoQqfEq.png", string.Empty);
         await InsertItemTemplate(new Guid(Constants.SUB_MACHINE_GUN_AMMO_ITEM_TEMPLATE_ID), ItemCategory.SubMachineGunAmmo, Resources.SubMachineGunAmmo,
-           0.0001f, "https://i.imgur.com/QoQqfEq.png", string.Empty);
+           1, "https://i.imgur.com/QoQqfEq.png", string.Empty);
         await InsertItemTemplate(new Guid(Constants.PISTOL_BULLET_SHELL_ITEM_TEMPLATE_ID), ItemCategory.PistolBulletShell, Resources.PistolBulletShell,
-           0.0001f, "https://i.imgur.com/zUZ41G6.png", "w_pi_singleshoth4_shell");
+           1, "https://i.imgur.com/zUZ41G6.png", "w_pi_singleshoth4_shell");
         await InsertItemTemplate(new Guid(Constants.SHOTGUN_BULLET_SHELL_ITEM_TEMPLATE_ID), ItemCategory.ShotgunBulletShell, Resources.ShotgunBulletShell,
-           0.0001f, "https://i.imgur.com/zUZ41G6.png", "prop_sgun_casing");
+           1, "https://i.imgur.com/zUZ41G6.png", "prop_sgun_casing");
         await InsertItemTemplate(new Guid(Constants.ASSAULT_RIFLE_BULLET_SHELL_ITEM_TEMPLATE_ID), ItemCategory.AssaultRifleBulletShell, Resources.AssaultRifleBulletShell,
-           0.0001f, "https://i.imgur.com/zUZ41G6.png", "w_pi_singleshot_shell");
+           1, "https://i.imgur.com/zUZ41G6.png", "w_pi_singleshot_shell");
         await InsertItemTemplate(new Guid(Constants.LIGHT_MACHINE_GUN_BULLET_SHELL_ITEM_TEMPLATE_ID), ItemCategory.LightMachineGunBulletShell, Resources.LightMachineGunBulletShell,
-           0.0001f, "https://i.imgur.com/zUZ41G6.png", "w_pi_singleshot_shell");
+           1, "https://i.imgur.com/zUZ41G6.png", "w_pi_singleshot_shell");
         await InsertItemTemplate(new Guid(Constants.SNIPER_RIFLE_BULLET_SHELL_ITEM_TEMPLATE_ID), ItemCategory.SniperRifleBulletShell, Resources.SniperRifleBulletShell,
-           0.0001f, "https://i.imgur.com/zUZ41G6.png", "w_pi_singleshot_shell");
+           1, "https://i.imgur.com/zUZ41G6.png", "w_pi_singleshot_shell");
         await InsertItemTemplate(new Guid(Constants.SUB_MACHINE_GUN_BULLET_SHELL_ITEM_TEMPLATE_ID), ItemCategory.SubMachineGunBulletShell, Resources.SubMachineGunBulletShell,
-           0.0001f, "https://i.imgur.com/zUZ41G6.png", "w_pi_singleshoth4_shell");
+           1, "https://i.imgur.com/zUZ41G6.png", "w_pi_singleshoth4_shell");
     }
 
-    private async Task InsertItemTemplate(Guid id, ItemCategory itemCategory, string name, float weight, string image, string objectModel)
+    private async Task InsertItemTemplate(Guid id, ItemCategory itemCategory, string name, uint weight, string image, string objectModel)
     {
         var context = Functions.GetDatabaseContext();
         var itemTemplate = await context.ItemsTemplates.FirstOrDefaultAsync(x => x.Id == id);
@@ -135,6 +131,7 @@ public class Server : Script
         var discordBotToken = GetSetting("discordBotToken");
         Global.DiscordClientId = GetSetting("discordClientId");
         Global.DiscordClientSecret = GetSetting("discordClientSecret");
+        Global.DatabaseConnection = GetSetting("databaseConnection");
 
         if (string.IsNullOrWhiteSpace(Global.DiscordClientId))
             throw new Exception(Resources.DiscordClientIdIsNotConfigured);
@@ -150,6 +147,7 @@ public class Server : Script
 
         await context.Sessions.Where(x => !x.FinalDate.HasValue).ExecuteUpdateAsync(x => x.SetProperty(y => y.FinalDate, y => y.RegisterDate));
         await context.Characters.Where(x => x.Connected).ExecuteUpdateAsync(x => x.SetProperty(y => y.Connected, false));
+        await context.Vehicles.Where(x => x.Spawned).ExecuteUpdateAsync(x => x.SetProperty(y => y.Spawned, false));
         Functions.ConsoleLog("Cleaned Invalid Sessions");
 
         await InsertJobs();
@@ -297,9 +295,9 @@ public class Server : Script
         Global.Companies.ForEach(x => x.CreateIdentifier());
         Functions.ConsoleLog($"Companies: {Global.Companies.Count}");
 
-        Global.Commands = Assembly.GetExecutingAssembly().GetTypes()
+        Global.Commands = [.. Assembly.GetExecutingAssembly().GetTypes()
                 .SelectMany(x => x.GetMethods())
-                .Where(x => x.GetCustomAttributes(typeof(CommandAttribute), false).Length > 0).ToList();
+                .Where(x => x.GetCustomAttributes(typeof(CommandAttribute), false).Length > 0)];
         Functions.ConsoleLog($"Commands: {Global.Commands.Count}");
 
         Global.Dealerships = await context.Dealerships.ToListAsync();
@@ -380,7 +378,6 @@ public class Server : Script
             Functions.ConsoleLog("MainTimer_Elapsed Start");
             await RemoveExpiredInfos();
             await RemoveExpiredGraffitis();
-            await RemovePropertyInativeOwners();
             await DebitCompaniesWeekRent();
             await SyncWeather();
             Functions.ConsoleLog("MainTimer_Elapsed End");
@@ -389,68 +386,6 @@ public class Server : Script
         {
             Functions.GetException(ex);
         }
-    }
-
-    private async Task RemovePropertyInativeOwners()
-    {
-        if ((Global.Parameter.InactivePropertiesDate ?? DateTime.MinValue) > DateTime.Now)
-            return;
-
-        Functions.ConsoleLog("RemovePropertyInativeOwners Start");
-        var context = Functions.GetDatabaseContext();
-        var properties = (await context.Properties
-            .Where(x => x.CharacterId.HasValue && x.Value > 0)
-            .Include(x => x.Character)
-                .ThenInclude(x => x!.User)
-            .Include(x => x.Character)
-                .ThenInclude(x => x!.Sessions)
-            .ToListAsync())
-            .Where(x => x.PurchaseDate.HasValue && x.PurchaseDate <= DateTime.Now.AddDays(-10));
-        foreach (var property in properties)
-        {
-            var serverProperty = Global.Properties.FirstOrDefault(x => x.Id == property.Id);
-            if (serverProperty is null)
-                continue;
-
-            var userPremium = property.Character!.User!.GetCurrentPremium();
-            if (userPremium != UserPremium.Gold)
-                userPremium = property.Character.GetCurrentPremium();
-
-            var days = userPremium switch
-            {
-                UserPremium.Gold => 30,
-                UserPremium.Silver => 20,
-                _ => 10,
-            };
-
-            var update = false;
-
-            var hoursPlayedLastDays = property.Character.Sessions!.Where(x => x.Type == SessionType.Login
-                && x.FinalDate.HasValue && x.RegisterDate >= DateTime.Now.AddDays(-days))
-                .Sum(x => (x.FinalDate!.Value - x.RegisterDate).TotalHours);
-            if (hoursPlayedLastDays < 3)
-            {
-                await Functions.WriteLog(LogType.Staff, $"Remover dono inativo propriedade {serverProperty.FormatedAddress} ({serverProperty.Id}) {property.Character.Name} {hoursPlayedLastDays}");
-                await serverProperty.ChangeOwner(null);
-                update = true;
-            }
-
-            if (userPremium == UserPremium.None
-                && (serverProperty.Time.HasValue || serverProperty.Weather.HasValue))
-            {
-                serverProperty.SetTime(null);
-                serverProperty.SetWeather(null);
-                update = true;
-            }
-
-            if (update)
-                context.Properties.Update(serverProperty);
-        }
-
-        Global.Parameter.SetInactivePropertiesDate();
-        context.Parameters.Update(Global.Parameter);
-        await context.SaveChangesAsync();
-        Functions.ConsoleLog("RemovePropertyInativeOwners End");
     }
 
     private async Task DebitCompaniesWeekRent()
@@ -580,10 +515,12 @@ public class Server : Script
         try
         {
             Functions.ConsoleLog("MinuteTimer_Elapsed Start");
+            var context = Functions.GetDatabaseContext();
+
             var itemsToDelete = new List<Item>();
 
             foreach (var item in Global.Items.Where(x => x.GetCategory() == ItemCategory.BloodSample
-                || Functions.CheckIfIsBulletShell(x.GetCategory())))
+                || GlobalFunctions.CheckIfIsBulletShell(x.GetCategory())))
             {
                 var minutesSinceCreation = (DateTime.Now - item.RegisterDate).TotalMinutes;
                 if (minutesSinceCreation < 60)
@@ -599,18 +536,24 @@ public class Server : Script
             if (itemsToDelete.Count > 0)
             {
                 itemsToDelete.ForEach(item => item.DeleteObject());
-                var context = Functions.GetDatabaseContext();
                 context.Items.RemoveRange(itemsToDelete);
                 await context.SaveChangesAsync();
             }
 
             var sos = Global.HelpRequests.Count(x => x.Type == HelpRequestType.SOS);
             if (sos >= 5)
-                await Functions.SendServerMessage($"Existem {sos} SOS pendentes na fila. Utilize /listasos para visualizar.", UserStaff.ServerSupport, false);
+                await Functions.SendServerMessage($"Existem {sos} SOS pendentes na fila. Utilize /listasos para visualizar.", UserStaff.Tester, false);
 
             var reports = Global.HelpRequests.Count(x => x.Type == HelpRequestType.Report);
             if (reports >= 5)
-                await Functions.SendServerMessage($"Existem {reports} Reports pendentes na fila. Utilize /listareport para visualizar.", UserStaff.JuniorServerAdmin, false);
+                await Functions.SendServerMessage($"Existem {reports} Reports pendentes na fila. Utilize /listareport para visualizar.", UserStaff.GameAdmin, false);
+
+            var characterIds = Global.SpawnedPlayers.Select(x => x.Character.Id).ToList();
+            await context.Characters.Where(x => x.Connected && !characterIds.Contains(x.Id)).ExecuteUpdateAsync(x => x.SetProperty(y => y.Connected, false));
+
+            var serverStatic = new ServerStatistic(Global.AllPlayers.Count(), Global.SpawnedPlayers.Count());
+            await context.ServerStatistics.AddAsync(serverStatic);
+            await context.SaveChangesAsync();
 
             Functions.ConsoleLog("MinuteTimer_Elapsed End");
         }
@@ -683,7 +626,7 @@ public class Server : Script
                 }
                 else if (ucpAction.Type == UCPActionType.ReloadParameters)
                 {
-                    Global.Parameter = await context.Parameters.FirstOrDefaultAsync();
+                    Global.Parameter = (await context.Parameters.FirstOrDefaultAsync())!;
 
                     LoadParameters();
                 }
@@ -713,13 +656,13 @@ public class Server : Script
                             var spawnedVehicle = Global.Vehicles.FirstOrDefault(x => x.VehicleDB.Id == vehicle.Id);
                             if (spawnedVehicle is not null)
                             {
-                                spawnedVehicle.VehicleDB.SetOwner(data.NewCharacterId!.Value);
+                                await spawnedVehicle.VehicleDB.ChangeOwner(data.NewCharacterId!.Value);
                                 context.Vehicles.Update(spawnedVehicle.VehicleDB);
                                 await context.SaveChangesAsync();
                             }
                             else
                             {
-                                vehicle.SetOwner(data.NewCharacterId!.Value);
+                                await vehicle.ChangeOwner(data.NewCharacterId!.Value);
                                 context.Vehicles.Update(vehicle);
                                 await context.SaveChangesAsync();
                             }
@@ -750,7 +693,7 @@ public class Server : Script
                     }
 
                     if (data.SendStaffNotification)
-                        await Functions.SendServerMessage("Uma nova aplicação de personagem foi recebida.", UserStaff.ServerSupport, true);
+                        await Functions.SendServerMessage("Uma nova aplicação de personagem foi recebida.", UserStaff.Tester, true);
                 }
                 else if (ucpAction.Type == UCPActionType.GMX)
                 {
@@ -763,7 +706,210 @@ public class Server : Script
                         target.KickEx("Servidor offline para atualização.");
                     }
 
-                    await Functions.SendServerMessage("Servidor offline para atualização.", UserStaff.ServerSupport, true);
+                    await Functions.SendServerMessage("Servidor offline para atualização.", UserStaff.Tester, true);
+                }
+                else if (ucpAction.Type == UCPActionType.ReloadCharactersAcess)
+                {
+                    foreach (var player in Global.SpawnedPlayers)
+                    {
+                        player.PropertiesAccess = await context.CharactersProperties.Where(x => x.CharacterId == player.Character.Id).Select(x => x.PropertyId).ToListAsync();
+                        player.VehiclesAccess = await context.CharactersVehicles.Where(x => x.CharacterId == player.Character.Id).Select(x => x.VehicleId).ToListAsync();
+                    }
+                }
+                else if (ucpAction.Type == UCPActionType.ReloadFactions)
+                {
+                    Global.Factions = await context.Factions.ToListAsync();
+                }
+                else if (ucpAction.Type == UCPActionType.ReloadFactionVehicle)
+                {
+                    var data = Functions.Deserialize<UCPActionReloadFactionVehicleRequest>(ucpAction.Json);
+
+                    var vehicle = await context.Vehicles.FirstOrDefaultAsync(x => x.Id == data.Id);
+
+                    var spawnedVehicle = Global.Vehicles.FirstOrDefault(x => x.VehicleDB.Id == vehicle!.Id);
+                    if (spawnedVehicle is null)
+                    {
+                        vehicle!.SetDescription(data.Description);
+                        context.Vehicles.Update(vehicle);
+                        await context.SaveChangesAsync();
+                    }
+                    else
+                    {
+                        spawnedVehicle.VehicleDB.SetDescription(data.Description);
+                    }
+
+                    await Functions.WriteLog(LogType.Faction, $"Editar Veículo | {vehicle!.Plate} {data.Description}", ucpAction.UserId);
+                }
+                else if (ucpAction.Type == UCPActionType.ReloadFactionsRanks)
+                {
+                    Global.FactionsRanks = await context.FactionsRanks.ToListAsync();
+                }
+                else if (ucpAction.Type == UCPActionType.SaveFactionMember)
+                {
+                    var data = Functions.Deserialize<UCPActionSaveFactionMemberRequest>(ucpAction.Json);
+
+                    var character = context.Characters.Local.FirstOrDefault(x => x.Id == data.Id);
+                    character ??= await context.Characters.FirstOrDefaultAsync(x => x.Id == data.Id);
+
+                    var faction = Global.Factions.FirstOrDefault(x => x.Id == character!.FactionId)!;
+
+                    var factionRank = Global.FactionsRanks.FirstOrDefault(x => x.Id == data.FactionRankId)!;
+
+                    var target = Global.SpawnedPlayers.FirstOrDefault(x => x.Character.Id == character!.Id);
+                    if (target is not null)
+                    {
+                        var user = await context.Users.FirstOrDefaultAsync(x => x.Id == ucpAction.UserId);
+                        target.Character.UpdateFaction(data.FactionRankId, Functions.Serialize(data.Flags), data.Badge);
+                        target.FactionFlags = [.. data.Flags];
+                        target.SendMessage(MessageType.Success, $"{user!.Name} alterou suas informações na facção.");
+                        await target.Save();
+                    }
+                    else
+                    {
+                        character!.UpdateFaction(data.FactionRankId, Functions.Serialize(data.Flags), data.Badge);
+                        context.Characters.Update(character);
+                        await context.SaveChangesAsync();
+                    }
+
+                    await Functions.WriteLog(LogType.Faction, $"Salvar Membro Facção {faction.Name} {character!.Name} {factionRank.Name} {data.Badge} {string.Join(", ", data.Flags.Select(x => x.GetDescription()))}", ucpAction.UserId);
+                }
+                else if (ucpAction.Type == UCPActionType.RemoveFactionMember)
+                {
+                    var characterId = Functions.Deserialize<Guid>(ucpAction.Json);
+
+                    var character = context.Characters.Local.FirstOrDefault(x => x.Id == characterId);
+                    character ??= await context.Characters.FirstOrDefaultAsync(x => x.Id == characterId);
+
+                    var faction = Global.Factions.FirstOrDefault(x => x.Id == character!.FactionId)!;
+
+                    var target = Global.SpawnedPlayers.FirstOrDefault(x => x.Character.Id == character!.Id);
+                    if (target is not null)
+                    {
+                        var user = await context.Users.FirstOrDefaultAsync(x => x.Id == ucpAction.UserId);
+                        await target.RemoveFromFaction();
+                        await target.Save();
+                        target.SendMessage(MessageType.Success, $"{user!.Name} expulsou você da facção.");
+                    }
+                    else
+                    {
+                        if (faction.HasDuty)
+                        {
+                            var items = await context.CharactersItems.Where(x => x.CharacterId == character!.Id).ToListAsync();
+                            items = [.. items.Where(x => !Functions.CanDropItem(faction, x))];
+                            if (items.Count > 0)
+                                context.CharactersItems.RemoveRange(items);
+                        }
+
+                        character!.ResetFaction();
+
+                        context.Characters.Update(character);
+                        await context.SaveChangesAsync();
+                    }
+
+                    await Functions.WriteLog(LogType.Faction, $"Expulsar Facção {faction.Name} {character!.Name}", ucpAction.UserId);
+                }
+                else if (ucpAction.Type == UCPActionType.StaffSaveFaction)
+                {
+                    var data = Functions.Deserialize<FactionRequest>(ucpAction.Json);
+
+                    Character? leader = null;
+                    if (!string.IsNullOrWhiteSpace(data.Leader))
+                        leader = await context.Characters.FirstOrDefaultAsync(x => x.Name == data.Leader);
+
+                    var isNew = !data.Id.HasValue;
+                    var faction = new Faction();
+                    if (isNew)
+                    {
+                        faction.Create(data.Name, data.Type, data.Slots, leader?.Id, data.ShortName);
+                    }
+                    else
+                    {
+                        faction = Global.Factions.FirstOrDefault(x => x.Id == data.Id)!;
+
+                        if (faction.CharacterId.HasValue && faction.CharacterId != leader?.Id)
+                        {
+                            var oldLeader = await context.Characters.FirstOrDefaultAsync(x => x.Id == faction.CharacterId)!;
+                            var target = Global.SpawnedPlayers.FirstOrDefault(x => x.Character.Id == oldLeader!.Id);
+                            if (target is not null)
+                            {
+                                await target.RemoveFromFaction();
+                            }
+                            else
+                            {
+                                oldLeader!.ResetFaction();
+                                context.Characters.Update(oldLeader);
+
+                                if (faction.HasDuty)
+                                {
+                                    var items = await context.CharactersItems.Where(x => x.CharacterId == oldLeader.Id).ToListAsync();
+                                    items = items.Where(x => !Functions.CanDropItem(faction, x)).ToList();
+                                    if (items.Count > 0)
+                                        context.CharactersItems.RemoveRange(items);
+                                }
+
+                                await context.SaveChangesAsync();
+                            }
+                        }
+
+                        faction.Update(data.Name, data.Type, data.Slots, leader?.Id, data.ShortName);
+                    }
+
+                    if (isNew)
+                        await context.Factions.AddAsync(faction);
+                    else
+                        context.Factions.Update(faction);
+
+                    await context.SaveChangesAsync();
+
+                    if (isNew)
+                        Global.Factions.Add(faction);
+
+                    if (leader is not null && leader.FactionId != faction.Id)
+                    {
+                        var lastRank = Global.FactionsRanks
+                            .Where(x => x.FactionId == faction.Id)
+                            .OrderByDescending(x => x.Position)
+                            .FirstOrDefault();
+                        if (lastRank is null)
+                        {
+                            lastRank = new();
+                            lastRank.Create(faction.Id, 1, "Rank 1", 0);
+                            await context.FactionsRanks.AddAsync(lastRank);
+                            await context.SaveChangesAsync();
+                            Global.FactionsRanks.Add(lastRank);
+                        }
+
+                        var target = Global.SpawnedPlayers.FirstOrDefault(x => x.Character.Id == leader.Id);
+                        if (target is not null)
+                        {
+                            target.Character.SetFaction(faction.Id, lastRank.Id, faction.Type == FactionType.Criminal);
+                            await target.Save();
+                        }
+                        else
+                        {
+                            leader.SetFaction(faction.Id, lastRank.Id, faction.Type == FactionType.Criminal);
+                            context.Characters.Update(leader);
+                            await context.SaveChangesAsync();
+                        }
+                    }
+
+                    await Functions.WriteLog(LogType.Staff, $"Gravar Facção | {Functions.Serialize(faction)}", ucpAction.UserId);
+                }
+                else if (ucpAction.Type == UCPActionType.ReloadFactionsFrequencies)
+                {
+                    Global.FactionsFrequencies = await context.FactionsFrequencies.ToListAsync();
+                }
+                else if (ucpAction.Type == UCPActionType.ReloadFactionsEquipments)
+                {
+                    Global.FactionsEquipments = await context.FactionsEquipments.Include(x => x.Items).ToListAsync();
+                }
+                else if (ucpAction.Type == UCPActionType.ReloadItemsTemplates)
+                {
+                    Global.ItemsTemplates = await context.ItemsTemplates.ToListAsync();
+                }
+                else if (ucpAction.Type == UCPActionType.ReloadDrugs)
+                {
+                    Global.Drugs = await context.Drugs.ToListAsync();
                 }
 
                 var ucpActionExecuted = new UCPActionExecuted();
@@ -835,9 +981,9 @@ public class Server : Script
 
                     player.Wounds.Add(new Wound
                     {
-                        Weapon = "Sangramento",
+                        Weapon = Resources.Bleeding,
                         Damage = BleedingDamage,
-                        BodyPart = "Sangramento",
+                        BodyPart = Resources.Bleeding,
                     });
 
                     player.Emit("CreateBlood");

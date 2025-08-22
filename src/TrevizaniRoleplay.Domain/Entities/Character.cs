@@ -60,8 +60,6 @@ public class Character : BaseEntity
     public CharacterWeaponLicenseType WeaponLicenseType { get; private set; } = CharacterWeaponLicenseType.PF;
     public DateTime? WeaponLicenseValidDate { get; private set; }
     public Guid? PoliceOfficerWeaponLicenseCharacterId { get; private set; }
-    public UserPremium Premium { get; private set; } = UserPremium.None;
-    public DateTime? PremiumValidDate { get; private set; }
     public CharacterWalkStyle WalkStyle { get; private set; } = CharacterWalkStyle.Default;
     public int InitialHelpHours { get; private set; }
     public int Age { get; private set; }
@@ -107,6 +105,12 @@ public class Character : BaseEntity
 
     [JsonIgnore]
     public ICollection<Company>? Companies { get; private set; }
+
+    [JsonIgnore]
+    public ICollection<CharacterProperty>? PropertiesAccess { get; private set; }
+
+    [JsonIgnore]
+    public ICollection<CharacterVehicle>? VehiclesAccess { get; private set; }
 
     public void Create(string name, int age, string history, CharacterSex sex,
         Guid userId, string ip, uint model, int health, Guid? evaluatorStaffUserId, int bankAccount,
@@ -395,26 +399,6 @@ public class Character : BaseEntity
         WeaponLicenseType = CharacterWeaponLicenseType.PF;
         WeaponLicenseValidDate = null;
         PoliceOfficerWeaponLicenseCharacterId = policeOfficerCharacterId;
-    }
-
-    public UserPremium GetCurrentPremium()
-    {
-        if ((PremiumValidDate ?? DateTime.MinValue) < DateTime.Now)
-            return UserPremium.None;
-
-        return Premium;
-    }
-
-    public void SetPremium(UserPremium premium)
-    {
-        Premium = premium;
-        PremiumValidDate = (PremiumValidDate > DateTime.Now && Premium == premium ? PremiumValidDate.Value : DateTime.Now).AddDays(30);
-    }
-
-    public void SetPremiumDate(UserPremium premium, DateTime? premiumValidDate)
-    {
-        Premium = premium;
-        PremiumValidDate = premiumValidDate;
     }
 
     public void SetWalkStyle(CharacterWalkStyle walkStyle)

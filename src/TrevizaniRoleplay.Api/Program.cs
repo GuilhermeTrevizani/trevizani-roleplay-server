@@ -60,14 +60,16 @@ builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("Default",
         policy => policy.Requirements.Add(new AuthorizationRequirement(UserStaff.None, null)));
-    options.AddPolicy(PolicySettings.POLICY_SERVER_SUPPORT,
-        policy => policy.Requirements.Add(new AuthorizationRequirement(UserStaff.ServerSupport, null)));
-    options.AddPolicy(PolicySettings.POLICY_JUNIOR_SERVER_ADMIN,
-        policy => policy.Requirements.Add(new AuthorizationRequirement(UserStaff.JuniorServerAdmin, null)));
-    options.AddPolicy(PolicySettings.POLICY_LEAD_SERVER_ADMIN,
-        policy => policy.Requirements.Add(new AuthorizationRequirement(UserStaff.LeadServerAdmin, null)));
-    options.AddPolicy(PolicySettings.POLICY_SERVER_MANAGER,
-        policy => policy.Requirements.Add(new AuthorizationRequirement(UserStaff.ServerManager, null)));
+    options.AddPolicy(PolicySettings.POLICY_TESTER,
+        policy => policy.Requirements.Add(new AuthorizationRequirement(UserStaff.Tester, null)));
+    options.AddPolicy(PolicySettings.POLICY_GAME_ADMIN,
+        policy => policy.Requirements.Add(new AuthorizationRequirement(UserStaff.GameAdmin, null)));
+    options.AddPolicy(PolicySettings.POLICY_LEAD_ADMIN,
+        policy => policy.Requirements.Add(new AuthorizationRequirement(UserStaff.LeadAdmin, null)));
+    options.AddPolicy(PolicySettings.POLICY_HEAD_ADMIN,
+        policy => policy.Requirements.Add(new AuthorizationRequirement(UserStaff.HeadAdmin, null)));
+    options.AddPolicy(PolicySettings.POLICY_MANAGEMENT,
+        policy => policy.Requirements.Add(new AuthorizationRequirement(UserStaff.Management, null)));
     options.AddPolicy(PolicySettings.POLICY_STAFF_FLAG_FURNITURES,
         policy => policy.Requirements.Add(new AuthorizationRequirement(null, StaffFlag.Furnitures)));
     options.AddPolicy(PolicySettings.POLICY_STAFF_FLAG_PROPERTIES,
@@ -76,6 +78,10 @@ builder.Services.AddAuthorization(options =>
         policy => policy.Requirements.Add(new AuthorizationRequirement(null, StaffFlag.Animations)));
     options.AddPolicy(PolicySettings.POLICY_STAFF_FLAG_FACTIONS,
         policy => policy.Requirements.Add(new AuthorizationRequirement(null, StaffFlag.Factions)));
+    options.AddPolicy(PolicySettings.POLICY_STAFF_FLAG_ITEMS,
+        policy => policy.Requirements.Add(new AuthorizationRequirement(null, StaffFlag.Items)));
+    options.AddPolicy(PolicySettings.POLICY_STAFF_FLAG_DRUGS,
+        policy => policy.Requirements.Add(new AuthorizationRequirement(null, StaffFlag.Drugs)));
     options.DefaultPolicy = options.GetPolicy("Default")!;
 });
 

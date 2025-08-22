@@ -10,7 +10,7 @@ public class FactionEquipmentItemMap : IEntityTypeConfiguration<FactionEquipment
     {
         builder.ToTable("FactionsEquipmentsItems");
         builder.HasKey(x => x.Id);
+        builder.Property(x => x.Weapon).HasMaxLength(50);
         builder.HasOne(x => x.FactionEquipment).WithMany(x => x.Items).HasForeignKey(x => x.FactionEquipmentId).OnDelete(DeleteBehavior.Restrict);
-        builder.HasOne(x => x.ItemTemplate).WithMany().HasForeignKey(x => x.ItemTemplateId).OnDelete(DeleteBehavior.Restrict);
     }
 }

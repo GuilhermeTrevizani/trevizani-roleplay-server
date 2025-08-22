@@ -15,7 +15,7 @@ public static class ItemExtension
 
             myObject.ItemId = item.Id;
 
-            if (Functions.CheckIfIsBulletShell(item.GetCategory()))
+            if (GlobalFunctions.CheckIfIsBulletShell(item.GetCategory()))
             {
                 var marker = Functions.CreateMarker(Constants.MARKER_TYPE_QUESTION,
                     new(item.PosX, item.PosY, item.PosZ + 0.1f),

@@ -1,5 +1,4 @@
 ﻿using GTANetworkAPI;
-using TrevizaniRoleplay.Core.Extensions;
 using TrevizaniRoleplay.Server.Extensions;
 using TrevizaniRoleplay.Server.Factories;
 using TrevizaniRoleplay.Server.Models;
@@ -86,7 +85,7 @@ public class InventoryScript : Script
                 }
                 else
                 {
-                    if (player.IsInVehicle)
+                    if (player.IsInVehicle && player.InventoryShowType != InventoryShowType.Vehicle)
                     {
                         player.SendNotification(NotificationType.Error, "Você não pode pegar um item dentro de um veículo.");
                         UpdateCurrentInventory(player);
@@ -255,7 +254,7 @@ public class InventoryScript : Script
         if (!Functions.CanDropItem(player.Faction, item)
             || string.IsNullOrWhiteSpace(item.GetObjectName())
             || item.GetCategory() == ItemCategory.BloodSample
-            || Functions.CheckIfIsBulletShell(item.GetCategory()))
+            || GlobalFunctions.CheckIfIsBulletShell(item.GetCategory()))
         {
             player.SendNotification(NotificationType.Error, "Você não pode largar este item.");
             UpdateCurrentInventory(player);
@@ -660,7 +659,7 @@ public class InventoryScript : Script
             return;
         }
 
-        if (Functions.CheckIfIsBulletShell(item.GetCategory()))
+        if (GlobalFunctions.CheckIfIsBulletShell(item.GetCategory()))
         {
             var temperature = Functions.GetBulletShellTemperature(item.Extra!);
             if (temperature == Resources.Hot)
@@ -1059,8 +1058,14 @@ public class InventoryScript : Script
                 player.SendMessage(MessageType.Success, $"Você usou a bandagem e estancou o sangramento de {target.ICName}.");
                 target.SendMessage(MessageType.Success, $"{player.ICName} usou a bandagem e estancou seu sangramento.");
             }
-            else if (Functions.CheckIfIsAmmo(category))
+            else if (GlobalFunctions.CheckIfIsAmmo(category))
             {
+                if (!item.InUse && player.FactionEquippedWeapons.Count > 0)
+                {
+                    player.SendNotification(NotificationType.Error, "Você não pode equipar este item pois está com armas de serviço.");
+                    return;
+                }
+
                 var weapon = player.Items.FirstOrDefault(x => x.InUse && x.GetCategory() == ItemCategory.Weapon
                     && Functions.GetAmmoItemTemplateIdByWeapon(x.GetItemType()) == item.ItemTemplateId);
                 if (weapon is null)
@@ -1074,6 +1079,12 @@ public class InventoryScript : Script
             }
             else if (category == ItemCategory.WeaponComponent)
             {
+                if (!item.InUse && player.FactionEquippedWeapons.Count > 0)
+                {
+                    player.SendNotification(NotificationType.Error, "Você não pode equipar este item pois está com armas de serviço.");
+                    return;
+                }
+
                 var weapons = player.Items.Where(x => x.InUse && x.GetCategory() == ItemCategory.Weapon
                     && Functions.GetComponentsItemsTemplatesByWeapon(x.GetItemType()).Contains(item.ItemTemplateId))
                     .ToList();
@@ -1192,11 +1203,17 @@ public class InventoryScript : Script
     {
         if (!item.InUse)
         {
+            if (player.FactionEquippedWeapons.Count > 0)
+            {
+                player.SendNotification(NotificationType.Error, "Você não pode equipar este item pois está com armas de serviço.");
+                return;
+            }
+
             var ammoItemTemplateId = Functions.GetAmmoItemTemplateIdByWeapon(item.GetItemType());
             if (ammoItemTemplateId is not null)
             {
                 var weapons = Global.WeaponsInfos.Where(x => x.AmmoItemTemplateId == ammoItemTemplateId);
-                if (weapons.Any(x => player.HasWeapon(Functions.GetWeaponType(x.Name))))
+                if (weapons.Any(x => player.HasWeapon(GlobalFunctions.GetWeaponType(x.Name))))
                 {
                     player.SendNotification(NotificationType.Error, "Você já possui uma arma com o mesmo tipo de munição equipada.");
                     return;
@@ -1205,9 +1222,9 @@ public class InventoryScript : Script
 
             if (!item.InUse)
             {
-                var weaponInfo = Global.WeaponsInfos.FirstOrDefault(x => x.Name == Functions.GetWeaponName(item.GetItemType()));
+                var weaponInfo = Global.WeaponsInfos.FirstOrDefault(x => x.Name == GlobalFunctions.GetWeaponName(item.GetItemType()));
                 if (weaponInfo?.AttachToBody == true
-                    && Global.WeaponsInfos.Where(x => x.AttachToBody).Any(x => player.HasWeapon(Functions.GetWeaponType(x.Name))))
+                    && Global.WeaponsInfos.Where(x => x.AttachToBody).Any(x => player.HasWeapon(GlobalFunctions.GetWeaponType(x.Name))))
                 {
                     player.SendNotification(NotificationType.Error, "Você já possui uma arma grande equipada.");
                     return;
@@ -1278,16 +1295,19 @@ public class InventoryScript : Script
             var weaponItem = player.Items.FirstOrDefault(x => x.InUse && x.GetCategory() == ItemCategory.Weapon && x.GetItemType() == weapon);
             if (weaponItem is null)
             {
-                await Functions.SendServerMessage($"{player.Character.Name} tem a arma {weap} com munição {ammo} sem um item no inventário.", UserStaff.JuniorServerAdmin, true);
-                await player.WriteLog(LogType.Hack, $"Arma sem item no inventário | {weap} | {ammo}", null);
-                await player.ListCharacters("Anti-cheat", "Arma sem item no inventário.");
-                return;
+                if (!player.FactionEquippedWeapons.Contains(weapon))
+                {
+                    await Functions.SendServerMessage($"{player.Character.Name} tem a arma {weap} com munição {ammo} sem um item no inventário.", UserStaff.GameAdmin, true);
+                    await player.WriteLog(LogType.Hack, $"Arma sem item no inventário | {weap} | {ammo}", null);
+                    await player.ListCharacters("Anti-cheat", "Arma sem item no inventário.");
+                    return;
+                }
             }
 
             if (weap == WeaponModel.FireExtinguisher)
             {
-                if (ammo < 1000)
-                    player.SetWeaponAmmo(weapon, 10000);
+                if (ammo < 10_000)
+                    player.SetWeaponAmmo(weapon, 10_000);
 
                 foreach (var activeFire in Global.ActiveFires)
                 {
@@ -1310,6 +1330,9 @@ public class InventoryScript : Script
                 return;
             }
 
+            if (weaponItem is null)
+                return;
+
             var ammoItemTemplateId = Functions.GetAmmoItemTemplateIdByWeapon(weapon);
             if (ammoItemTemplateId is not null)
             {
@@ -1322,7 +1345,7 @@ public class InventoryScript : Script
                         return;
                     }
 
-                    await Functions.SendServerMessage($"{player.Character.Name} tem munição {ammo} da arma {weap} sem um item no inventário.", UserStaff.JuniorServerAdmin, true);
+                    await Functions.SendServerMessage($"{player.Character.Name} tem munição {ammo} da arma {weap} sem um item no inventário.", UserStaff.GameAdmin, true);
                     await player.WriteLog(LogType.Hack, $"Munição sem item no inventário | {weap} | {ammo}", null);
                     await player.ListCharacters("Anti-cheat", "Munição sem item no inventário.");
                     return;
@@ -1341,9 +1364,6 @@ public class InventoryScript : Script
 
     private async Task CreateBulletShell(MyPlayer player, Vector3 position, CharacterItem ammoItem, CharacterItem weaponItem)
     {
-        if (weaponItem.OnlyOnDuty || player.OnAdminDuty)
-            return;
-
         var bulletShellItemTemplateId = ammoItem.ItemTemplateId.ToString() switch
         {
             Constants.PISTOL_AMMO_ITEM_TEMPLATE_ID => Constants.PISTOL_BULLET_SHELL_ITEM_TEMPLATE_ID,
@@ -1366,12 +1386,6 @@ public class InventoryScript : Script
             return;
 
         var weaponItemInfo = Functions.Deserialize<WeaponItem>(weaponItem.Extra!);
-
-        if (Global.Items.Any(x => x.Dimension == player.GetDimension()
-            && position.DistanceTo(new(x.PosX, x.PosY, x.PosZ)) <= 2
-            && Functions.CheckIfIsBulletShell(x.GetCategory())
-            && Functions.Deserialize<BulletShellItem>(x.Extra!).WeaponItemId == weaponItemInfo.Id))
-            return;
 
         var item = new Item();
         item.Create(new Guid(bulletShellItemTemplateId), 0, 1, Functions.Serialize(new BulletShellItem
@@ -1437,7 +1451,7 @@ public class InventoryScript : Script
             var randomNumber = new Random().Next(5, 16);
             await Task.Delay(TimeSpan.FromSeconds(randomNumber));
 
-            player.Emit("Circle:StartMinigame", 3, 0.01f, 0.5f, "fa-solid fa-fish", "EndFishing");
+            player.Emit("Circle:StartMinigame", 3, 0.01f, 0.5f, "fa-solid fa-fish", nameof(EndFishing));
         }
         catch (Exception ex)
         {
@@ -1526,14 +1540,14 @@ public class InventoryScript : Script
         }
 
         var weaponOnBody = player.Items.FirstOrDefault(x => x.InUse && x.GetCategory() == ItemCategory.Weapon
-            && Global.WeaponsInfos.FirstOrDefault(y => y.Name == Functions.GetWeaponName(x.GetItemType()))?.AttachToBody == true);
+            && Global.WeaponsInfos.FirstOrDefault(y => y.Name == GlobalFunctions.GetWeaponName(x.GetItemType()))?.AttachToBody == true);
         if (string.IsNullOrWhiteSpace(player.AttachedWeapon) || weaponOnBody is null)
         {
             player.SendNotification(NotificationType.Error, "Você não está com uma arma no corpo.");
             return;
         }
 
-        var weaponName = Functions.GetWeaponName(weaponOnBody.GetItemType());
+        var weaponName = GlobalFunctions.GetWeaponName(weaponOnBody.GetItemType());
         var weaponBody = Functions.Deserialize<List<WeaponBody>>(player.Character.WeaponsBodyJSON)
             .FirstOrDefault(x => x.Name == weaponName);
         weaponBody = Functions.CheckDefaultWeaponBody(weaponBody);
@@ -1612,14 +1626,8 @@ public class InventoryScript : Script
                 .OrderBy(x => x.Name)
                 .ToList())
             {
-                player.SendMessage(MessageType.None, $"{equipment.Name} ({string.Join(", ", equipment.Items!.Select(x => $"{x.Quantity}x {x.GetName()}"))})");
+                player.SendMessage(MessageType.None, $"{equipment.Name} ({string.Join(", ", equipment.Items!.Select(x => x.Weapon))})");
             }
-            return;
-        }
-
-        if (player.Items.Any(x => !x.OnlyOnDuty && Functions.CheckIfIsAmmo(x.GetCategory())))
-        {
-            player.SendMessage(MessageType.Error, "Você não pode equipar pois possui munições pessoais.");
             return;
         }
 
@@ -1661,46 +1669,37 @@ public class InventoryScript : Script
                 .MinBy(x => player.GetPosition().DistanceTo(x.GetPosition()));
                 if (vehicle is null)
                 {
-                    player.SendMessage(MessageType.Error, "Você não está perto de um veículo ou no interior de sua facção.");
-                    return;
-                }
-
-                if (vehicle.FactionsEquipmentsIds.Contains(factionEquipment.Id))
-                {
-                    player.SendMessage(MessageType.Error, "Você já pegou esse equipamento nesse veículo.");
+                    player.SendMessage(MessageType.Error, "Você não está perto de um veículo ou em um interior de sua facção.");
                     return;
                 }
             }
         }
 
-        var characterItems = new List<CharacterItem>();
-        foreach (var item in factionEquipment.Items.OrderBy(x => x.GetCategory() == ItemCategory.Weapon ? 0 : 1))
+        foreach (var characterItem in player.Items.Where(x => x.InUse && x.GetCategory() == ItemCategory.Weapon).ToList())
         {
-            if (player.Items.Any(x => x.ItemTemplateId == item.ItemTemplateId))
-            {
-                player.SendMessage(MessageType.Error, $"Você já possui {item.GetName()}. Não é possível prosseguir.");
-                return;
-            }
-
-            var characterItem = new CharacterItem();
-            characterItem.Create(item.ItemTemplateId, item.Subtype, item.Quantity, item.Extra);
-            characterItem.SetOnlyOnDuty(true);
-            characterItems.Add(characterItem);
-        }
-
-        var res = await player.GiveItem(characterItems);
-        if (!string.IsNullOrWhiteSpace(res))
-        {
-            player.SendMessage(MessageType.Error, res);
-            return;
-        }
-
-        foreach (var characterItem in characterItems)
             await UseItem(player, characterItem.Id.ToString(), characterItem.Quantity);
+        }
 
-        vehicle?.FactionsEquipmentsIds.Add(factionEquipment.Id);
+        Functions.RunOnMainThread(() =>
+        {
+            player.RemoveFactionEquippedWeapons();
+
+            foreach (var item in factionEquipment.Items)
+            {
+                var weapon = GlobalFunctions.GetWeaponType(item.Weapon);
+
+                player.GiveWeapon((WeaponHash)weapon, (int)item.Ammo);
+
+                var components = Functions.Deserialize<List<uint>>(item.ComponentsJson);
+                foreach (var component in components)
+                    player.AddWeaponComponent(weapon, component);
+
+                player.FactionEquippedWeapons.Add(weapon);
+            }
+        });
+
         await player.WriteLog(LogType.Faction, $"/equipar {name}", null);
-        player.SendMessage(MessageType.Success, $"Você pegou os equipamentos {factionEquipment.Name}.");
+        player.SendMessage(MessageType.Success, $"Você equipou {factionEquipment.Name}.");
     }
 
     [Command("celulares")]

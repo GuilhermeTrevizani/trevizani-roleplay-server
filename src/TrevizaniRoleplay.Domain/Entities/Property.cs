@@ -18,7 +18,6 @@ public class Property : BaseEntity
     public float ExitPosZ { get; private set; }
     public string Address { get; private set; } = string.Empty;
     public uint Number { get; private set; }
-    public uint LockNumber { get; private set; }
     public bool Locked { get; private set; }
     public byte ProtectionLevel { get; private set; }
     public int RobberyValue { get; private set; }
@@ -35,7 +34,6 @@ public class Property : BaseEntity
     public Guid? CompanyId { get; private set; }
     public byte? Time { get; private set; }
     public byte? Weather { get; private set; }
-    public DateTime? PurchaseDate { get; private set; }
 
     [NotMapped]
     public string FormatedAddress => string.IsNullOrWhiteSpace(Name) ? $"{Number} {Address}" : Name;
@@ -61,12 +59,14 @@ public class Property : BaseEntity
     [JsonIgnore]
     public Company? Company { get; private set; }
 
-    public void Create(uint lockNumber, PropertyInterior interior, float entrancePosX, float entrancePosY, float entrancePosZ, uint entranceDimension,
+    [JsonIgnore]
+    public ICollection<CharacterProperty>? CharactersAccess { get; set; }
+
+    public void Create(PropertyInterior interior, float entrancePosX, float entrancePosY, float entrancePosZ, uint entranceDimension,
         int value, float exitPosX, float exitPosY, float exitPosZ, string address, uint number, Guid? factionId, string? name, Guid? parentPropertyId,
         float entranceRotR, float entranceRotP, float entranceRotY,
         float exitRotR, float exitRotP, float exitRotY, Guid? companyId)
     {
-        LockNumber = lockNumber;
         Interior = interior;
         EntrancePosX = entrancePosX;
         EntrancePosY = entrancePosY;
@@ -127,14 +127,11 @@ public class Property : BaseEntity
         ProtectionLevel = 0;
         RobberyValue = 0;
         RobberyCooldown = null;
-        LockNumber = 0;
-        PurchaseDate = null;
     }
 
     public void SetOwner(Guid characterId)
     {
         CharacterId = characterId;
-        PurchaseDate = DateTime.Now;
     }
 
     public void SetLocked(bool locked)
@@ -145,11 +142,6 @@ public class Property : BaseEntity
     public void SetProtectionLevel(byte value)
     {
         ProtectionLevel = value;
-    }
-
-    public void SetLockNumber(uint value)
-    {
-        LockNumber = value;
     }
 
     public void SetRobberyValue(int value)

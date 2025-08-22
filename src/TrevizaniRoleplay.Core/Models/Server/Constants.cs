@@ -36,9 +36,9 @@ public abstract class Constants
     public const int TAXI_NUMBER = 5555555;
     public const int MECHANIC_NUMBER = 7777777;
     public const string CHAT_PAGE_TOGGLE_SCREEN = "ChatPage:ToggleScreen";
-    public const string DATABASE_CONNECTION = "Server=localhost;Database=trevizaniroleplay;Uid=root;Pwd=G159357@;";
+    public const string DEFAULT_DATABASE_CONNECTION = "Server=localhost;Database=trevizaniroleplay;Uid=root;Pwd=G159357@;";
     public const string ROLEPLAY_COLOR = "#C2A2DA";
-    public const float MAX_INVENTORY_WEIGHT = 30;
+    public const float MAX_INVENTORY_WEIGHT = 30_000;
     public const int MAX_INVENTORY_SLOTS = 30;
     public const float RP_DISTANCE = 3.5f;
     public const string EMERGENCY_CALL_COLOR = "#fff5c4";
@@ -55,8 +55,6 @@ public abstract class Constants
     public const string PROPERTY_BUILDING_PAGE_CLOSE = "PropertyBuildingPage:CloseServer";
     public const string MONEY_ITEM_TEMPLATE_ID = "0fe604aa-5bd1-4fad-8799-b48f6f14c50f";
     public const string VEHICLE_PART_ITEM_TEMPLATE_ID = "5705c611-8e67-4255-893d-f6f33a4e97ab";
-    public const string VEHICLE_KEY_ITEM_TEMPLATE_ID = "4bcf980b-a4bf-4bed-8519-c14793431338";
-    public const string PROPERTY_KEY_ITEM_TEMPLATE_ID = "ce2ede2b-08e3-455f-ba46-053dd9476fcd";
     public const string FISHING_ROD_OBJECT_MODEL = "prop_fishing_rod_01";
     public const int INSURANCE_NUMBER = 205;
     public const string BLOOD_SAMPLE_ITEM_TEMPLATE_ID = "0d7a3e3e-3be1-4d5f-8c4d-af094e92249b";
@@ -83,7 +81,7 @@ public abstract class Constants
     public const string SERVER_NAME = "Trevizani Roleplay";
     public const string SERVER_INITIALS = "T:RP";
     public const string SUCCESS_COLOR = "#6EB469";
-    public const string MAIN_COLOR = "#f279b2";
+    public const string MAIN_COLOR = "#1097e6";
     public const string ERROR_COLOR = "#FF6A4D";
     public const string STAFF_COLOR = "#ff6a4c";
     public const string CELLPHONE_MAIN_COLOR = "#ffdc18";
@@ -109,4 +107,6 @@ public abstract class Constants
     public const int STRING_CHUNK_MAX_SIZE = 40_000;
     public const float MARKER_SCALE = 1.0f;
     public const int MAX_PROPERTY_INVENTORY_SLOTS = 100;
+    public const int VEHICLE_DOOR_HOOD = 4;
+    public const int VEHICLE_DOOR_TRUNK = 5;
 }

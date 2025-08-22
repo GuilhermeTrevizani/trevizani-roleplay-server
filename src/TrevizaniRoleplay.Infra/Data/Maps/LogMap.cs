@@ -16,5 +16,6 @@ public class LogMap : IEntityTypeConfiguration<Log>
         builder.Property(x => x.TargetSocialClubName).HasMaxLength(50);
         builder.HasOne(x => x.OriginCharacter).WithMany().HasForeignKey(x => x.OriginCharacterId).OnDelete(DeleteBehavior.Restrict);
         builder.HasOne(x => x.TargetCharacter).WithMany().HasForeignKey(x => x.TargetCharacterId).OnDelete(DeleteBehavior.Restrict);
+        builder.HasOne(x => x.OriginUser).WithMany().HasForeignKey(x => x.OriginUserId).OnDelete(DeleteBehavior.Restrict);
     }
 }

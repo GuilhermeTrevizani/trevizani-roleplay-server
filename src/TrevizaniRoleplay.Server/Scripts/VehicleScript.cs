@@ -1,8 +1,6 @@
 ﻿using GTANetworkAPI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using TrevizaniRoleplay.Core.Extensions;
-using TrevizaniRoleplay.Core.Models.Server;
 using TrevizaniRoleplay.Server.Extensions;
 using TrevizaniRoleplay.Server.Factories;
 using TrevizaniRoleplay.Server.Models;
@@ -20,12 +18,11 @@ public class VehicleScript : Script
             return;
         }
 
-        if (vehicle.VehicleDB.CharacterId == player.Character.Id
-            || player.Items.Any(x => x.GetCategory() == ItemCategory.VehicleKey && x.Subtype == vehicle.VehicleDB.LockNumber))
+        if (vehicle.VehicleDB.CharacterId == player.Character.Id || player.VehiclesAccess.Contains(vehicle.VehicleDB.Id))
         {
             if (vehicle.VehicleDB.Items!.Any(x => (x.GetCategory() == ItemCategory.Weapon && Functions.IsWeaponWithAmmo(x.GetItemType()))
                 || x.GetCategory() == ItemCategory.WeaponComponent
-                || Functions.CheckIfIsAmmo(x.GetCategory())
+                || GlobalFunctions.CheckIfIsAmmo(x.GetCategory())
                 || x.GetCategory() == ItemCategory.Drug))
             {
                 player.SendMessage(MessageType.Error, "Você não pode estacionar o veículo com armas, componentes de armas, munições ou drogas.");
@@ -114,7 +111,7 @@ public class VehicleScript : Script
 
         if (!player.CheckIfTargetIsCloseIC(target, Constants.RP_DISTANCE))
         {
-            player.SendNotification(NotificationType.Error, Resources.YouAreNotCloseToThePlayer);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotCloseToThePlayer);
             return;
         }
 
@@ -125,7 +122,7 @@ public class VehicleScript : Script
         }
 
         var restriction = Functions.CheckPremiumVehicle(vehicle.VehicleDB.Model);
-        if (restriction != UserPremium.None && restriction > target.GetCurrentPremium())
+        if (restriction != UserPremium.None && restriction > target.User.GetCurrentPremium())
         {
             player.SendMessage(MessageType.Error, $"O veículo é restrito para VIP {restriction}.");
             return;
@@ -164,12 +161,12 @@ public class VehicleScript : Script
 
         if (!player.CheckIfTargetIsCloseIC(target, Constants.RP_DISTANCE))
         {
-            player.SendNotification(NotificationType.Error, Resources.YouAreNotCloseToThePlayer);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotCloseToThePlayer);
             return;
         }
 
         var restriction = Functions.CheckPremiumVehicle(vehicle.VehicleDB.Model);
-        if (restriction != UserPremium.None && restriction > target.GetCurrentPremium())
+        if (restriction != UserPremium.None && restriction > target.User.GetCurrentPremium())
         {
             player.SendMessage(MessageType.Error, $"O veículo é restrito para VIP {restriction}.");
             return;
@@ -252,9 +249,9 @@ public class VehicleScript : Script
     }
 
     [Command("vporta", "/vporta (porta [1-4])", Aliases = ["vp"])]
-    public static void CMD_vporta(MyPlayer player, int porta)
+    public static void CMD_vporta(MyPlayer player, int door)
     {
-        if (porta < 1 || porta > 4)
+        if (door < 1 || door > 4)
         {
             player.SendMessage(MessageType.Error, "Porta deve ser entre 1 e 4.");
             return;
@@ -266,13 +263,13 @@ public class VehicleScript : Script
             .MinBy(x => player.GetPosition().DistanceTo(x.GetPosition()));
         if (vehicle is null)
         {
-            player.SendMessage(MessageType.Error, "Você não está próximo de nenhum veículo destrancado.");
+            player.SendMessage(MessageType.Error, "Você não está próximo de um veículo destrancado.");
             return;
         }
 
-        porta--;
-        vehicle.DoorsStates[porta] = !vehicle.DoorsStates[porta];
-        (vehicle.Controller ?? player).TriggerEvent("SetVehicleDoorState", vehicle, porta, vehicle.DoorsStates[porta]);
+        door--;
+        vehicle.DoorsStates[door] = !vehicle.DoorsStates[door];
+        (vehicle.Controller ?? player).TriggerEvent("SetVehicleDoorState", vehicle, door, vehicle.DoorsStates[door]);
     }
 
     [Command("capo")]
@@ -284,21 +281,21 @@ public class VehicleScript : Script
             .MinBy(x => player.GetPosition().DistanceTo(x.GetPosition()));
         if (vehicle == null)
         {
-            player.SendMessage(MessageType.Error, "Você não está próximo de nenhum veículo destrancado.");
+            player.SendMessage(MessageType.Error, "Você não está próximo de um veículo destrancado.");
             return;
         }
 
-        vehicle.DoorsStates[4] = !vehicle.DoorsStates[4];
-        player.SendMessageToNearbyPlayers($"{(vehicle.DoorsStates[4] ? "fecha" : "abre")} o capô do veículo.", MessageCategory.Ame);
-        (vehicle.Controller ?? player).TriggerEvent("SetVehicleDoorState", vehicle, 4, vehicle.DoorsStates[4]);
+        vehicle.DoorsStates[Constants.VEHICLE_DOOR_HOOD] = !vehicle.DoorsStates[Constants.VEHICLE_DOOR_HOOD];
+        player.SendMessageToNearbyPlayers($"{(vehicle.DoorsStates[Constants.VEHICLE_DOOR_HOOD] ? "fecha" : "abre")} o capô do veículo.", MessageCategory.Ame);
+        (vehicle.Controller ?? player).TriggerEvent("SetVehicleDoorState", vehicle, Constants.VEHICLE_DOOR_HOOD, vehicle.DoorsStates[Constants.VEHICLE_DOOR_HOOD]);
     }
 
-    [Command("portamalas", "/portamalas (opção [abrir, fechar, ver])")]
-    public static async Task CMD_portamalas(MyPlayer player, string option)
+    [Command("portamalas")]
+    public static async Task CMD_portamalas(MyPlayer player)
     {
         if (player.IsInVehicle)
         {
-            player.SendMessage(MessageType.Error, "Você não pode fazer isso estando dentro do veículo.");
+            player.SendMessage(MessageType.Error, "Você deve estar fora do veículo.");
             return;
         }
 
@@ -311,66 +308,16 @@ public class VehicleScript : Script
             return;
         }
 
-        if (vehicle.SpawnType != MyVehicleSpawnType.Normal)
+        if (vehicle.DoorsStates[Constants.VEHICLE_DOOR_TRUNK] && vehicle.GetLocked() && !(player.Faction?.Type == FactionType.Police && player.OnDuty))
         {
-            player.SendMessage(MessageType.Error, "Você não pode fazer isso nesse veículo.");
+            player.SendMessage(MessageType.Error, "O veículo está trancado.");
             return;
         }
 
-        option = option.ToLower();
-        if (option == "abrir")
-        {
-            if (vehicle.GetLocked() && !(player.Faction?.Type == FactionType.Police && player.OnDuty))
-            {
-                player.SendMessage(MessageType.Error, "O veículo está trancado.");
-                return;
-            }
-
-            if (!vehicle.DoorsStates[5])
-            {
-                player.SendMessage(MessageType.Error, "O porta-malas está aberto.");
-                return;
-            }
-
-            vehicle.DoorsStates[5] = false;
-            player.SendMessageToNearbyPlayers($"abre o porta-malas do veículo.", MessageCategory.Ame);
-            (vehicle.Controller ?? player).TriggerEvent("SetVehicleDoorState", vehicle, 5, vehicle.DoorsStates[5]);
-            await player.WriteLog(LogType.General, $"/portamalas abrir {vehicle.Identifier}", null);
-        }
-        else if (option == "fechar")
-        {
-            if (vehicle.DoorsStates[5])
-            {
-                player.SendMessage(MessageType.Error, "O porta-malas está fechado.");
-                return;
-            }
-
-            vehicle.DoorsStates[5] = true;
-            player.SendMessageToNearbyPlayers("fecha o porta-malas do veículo.", MessageCategory.Ame);
-            (vehicle.Controller ?? player).TriggerEvent("SetVehicleDoorState", vehicle, 5, vehicle.DoorsStates[5]);
-            await player.WriteLog(LogType.General, $"/portamalas fechar {vehicle.Identifier}", null);
-        }
-        else if (option == "ver")
-        {
-            if (vehicle.DoorsStates[5])
-            {
-                player.SendMessage(MessageType.Error, "O porta-malas está fechado.");
-                return;
-            }
-
-            if (vehicle.VehicleDB.FactionId.HasValue && vehicle.VehicleDB.FactionId != player.Character.FactionId)
-            {
-                player.SendMessage(MessageType.Error, Resources.YouDoNotHaveAccessToTheVehicle);
-                return;
-            }
-
-            vehicle.ShowInventory(player, false);
-            await player.WriteLog(LogType.General, $"/portamalas ver {vehicle.Identifier}", null);
-        }
-        else
-        {
-            player.SendMessage(MessageType.Error, "Opção inválida. Opções disponíveis: abrir, fechar, ver");
-        }
+        vehicle.DoorsStates[Constants.VEHICLE_DOOR_TRUNK] = !vehicle.DoorsStates[Constants.VEHICLE_DOOR_TRUNK];
+        player.SendMessageToNearbyPlayers($"{(vehicle.DoorsStates[Constants.VEHICLE_DOOR_TRUNK] ? "fecha" : "abre")} o porta-malas do veículo.", MessageCategory.Ame);
+        (vehicle.Controller ?? player).TriggerEvent("SetVehicleDoorState", vehicle, Constants.VEHICLE_DOOR_TRUNK, vehicle.DoorsStates[Constants.VEHICLE_DOOR_TRUNK]);
+        await player.WriteLog(LogType.General, $"/portamalas {vehicle.Identifier} ({(vehicle.DoorsStates[Constants.VEHICLE_DOOR_TRUNK] ? "fechar" : "abrir")})", null);
     }
 
     [Command("abastecer", "/abastecer (porcentagem)")]
@@ -444,7 +391,7 @@ public class VehicleScript : Script
             context.Vehicles.Update(vehicle);
             await context.SaveChangesAsync();
 
-            await Functions.SendServerMessage($"{player.User.Name} solicitou alterar a placa do veículo {vehicle.Model.ToUpper()} para {plate.ToUpper()}. Use /aprovarplaca {plate.ToUpper()} ou /reprovarplaca {plate.ToUpper()}.", UserStaff.SeniorServerAdmin, false);
+            await Functions.SendServerMessage($"{player.User.Name} solicitou alterar a placa do veículo {vehicle.Model.ToUpper()} para {plate.ToUpper()}. Use /aprovarplaca {plate.ToUpper()} ou /reprovarplaca {plate.ToUpper()}.", UserStaff.LeadAdmin, false);
             player.SendNotification(NotificationType.Success, $"Você solicitou alterar a placa do veículo {vehicle.Model.ToUpper()} para {plate.ToUpper()}.");
             await CMD_vlista(player);
         }
@@ -683,72 +630,6 @@ public class VehicleScript : Script
         player.SendMessageToNearbyPlayers($"{(status ? "abaixa" : "levanta")} {text} do veículo.", MessageCategory.Ame);
     }
 
-    [Command("vfechadura")]
-    public async Task CMD_vfechadura(MyPlayer player)
-    {
-        if (player.Vehicle is not MyVehicle veh || veh.Driver != player)
-        {
-            player.SendMessage(MessageType.Error, Resources.YouAreNotTheDriverOfTheVehicle);
-            return;
-        }
-
-        if (veh.VehicleDB.CharacterId != player.Character.Id)
-        {
-            player.SendMessage(MessageType.Error, Resources.YouAreNotTheOwnerOfTheVehicle);
-            return;
-        }
-
-        if (player.Money < Global.Parameter.LockValue)
-        {
-            player.SendMessage(MessageType.Error, string.Format(Resources.YouDontHaveEnoughMoney, Global.Parameter.LockValue));
-            return;
-        }
-
-        var context = Functions.GetDatabaseContext();
-        veh.VehicleDB.SetLockNumber(await context.Vehicles.MaxAsync(x => x.LockNumber) + 1);
-        context.Vehicles.Update(veh.VehicleDB);
-        await context.SaveChangesAsync();
-
-        await player.RemoveMoney(Global.Parameter.LockValue);
-
-        player.SendMessage(MessageType.Success, $"Você trocou a fechadura do veículo {veh.Identifier} por ${Global.Parameter.LockValue:N0}.");
-    }
-
-    [Command("vchave")]
-    public async Task CMD_vchave(MyPlayer player)
-    {
-        if (player.Vehicle is not MyVehicle veh || veh.Driver != player)
-        {
-            player.SendMessage(MessageType.Error, Resources.YouAreNotTheDriverOfTheVehicle);
-            return;
-        }
-
-        if (veh.VehicleDB.CharacterId != player.Character.Id)
-        {
-            player.SendMessage(MessageType.Error, Resources.YouAreNotTheOwnerOfTheVehicle);
-            return;
-        }
-
-        if (player.Money < Global.Parameter.KeyValue)
-        {
-            player.SendMessage(MessageType.Error, string.Format(Resources.YouDontHaveEnoughMoney, Global.Parameter.KeyValue));
-            return;
-        }
-
-        var characterItem = new CharacterItem();
-        characterItem.Create(new Guid(Constants.VEHICLE_KEY_ITEM_TEMPLATE_ID), veh.VehicleDB.LockNumber, 1, null);
-        var res = await player.GiveItem(characterItem);
-        if (!string.IsNullOrWhiteSpace(res))
-        {
-            player.SendMessage(MessageType.Error, res);
-            return;
-        }
-
-        await player.RemoveMoney(Global.Parameter.KeyValue);
-
-        player.SendMessage(MessageType.Success, $"Você criou uma cópia da chave para o veículo {veh.Identifier} por ${Global.Parameter.KeyValue:N0}.");
-    }
-
     [RemoteEvent(nameof(ActiveVehicleDriftMode))]
     public static void ActiveVehicleDriftMode(Player playerParam)
     {
@@ -853,7 +734,7 @@ public class VehicleScript : Script
         }
 
         player.Emit("XMR", vehicle.AudioSpot?.Source ?? string.Empty, vehicle.AudioSpot?.Volume ?? 1,
-            player.GetCurrentPremium() != UserPremium.None, Functions.Serialize(Global.AudioRadioStations.OrderBy(x => x.Name)));
+            player.User.GetCurrentPremium() != UserPremium.None, Functions.Serialize(Global.AudioRadioStations.OrderBy(x => x.Name)));
     }
 
     [Command("quebrartrava", Aliases = ["picklock"])]
@@ -874,7 +755,7 @@ public class VehicleScript : Script
         var vehicle = Global.Vehicles.Where(x =>
             player.GetPosition().DistanceTo(x.GetPosition()) <= Constants.RP_DISTANCE
             && x.GetDimension() == player.GetDimension()
-            && !x.GetLocked()
+            && x.GetLocked()
             && x.VehicleDB.CharacterId.HasValue)
             .MinBy(x => player.GetPosition().DistanceTo(x.GetPosition()));
         if (vehicle is null)
@@ -895,7 +776,7 @@ public class VehicleScript : Script
         var attempts = 1;
 
         player.Emit("PickLock:Start", difficulty, pins, attempts, "Vehicle");
-        await Functions.SendServerMessage($"{player.Character.Name} ({player.SessionId}) começou a quebrar a trava do veículo {vehicle.Identifier}.", UserStaff.JuniorServerAdmin, false);
+        await Functions.SendServerMessage($"{player.Character.Name} ({player.SessionId}) começou a quebrar a trava do veículo {vehicle.Identifier}.", UserStaff.GameAdmin, false);
     }
 
     [RemoteEvent(nameof(FinishPickLock))]
@@ -922,7 +803,7 @@ public class VehicleScript : Script
                 var vehicle = Global.Vehicles
                     .Where(x => player.GetPosition().DistanceTo(x.GetPosition()) <= Constants.RP_DISTANCE
                         && x.GetDimension() == player.GetDimension()
-                        && !x.GetLocked()
+                        && x.GetLocked()
                         && x.VehicleDB.CharacterId.HasValue)
                     .MinBy(x => player.GetPosition().DistanceTo(x.GetPosition()));
                 if (vehicle is null)
@@ -1082,106 +963,83 @@ public class VehicleScript : Script
 
         if (vehicle.HasFuelTank && vehicle.VehicleDB.Fuel == 0)
         {
-            player.SendNotification(NotificationType.Error, "Veículo não possui combustível.");
+            player.SendMessage(MessageType.Error, "Veículo não possui combustível.");
             return;
         }
 
         if (vehicle.GetClass() == VehicleClass.Cycles)
         {
-            player.SendNotification(NotificationType.Error, "Veículo não possui motor.");
+            player.SendMessage(MessageType.Error, "Veículo não possui motor.");
             return;
         }
 
-        if (player.HotwireWords.HasValue)
+        if (player.HotwireVehicle is not null)
         {
             player.SendMessage(MessageType.Error, "Você já está fazendo ligação direta em um veículo.");
             return;
         }
 
-        player.HotwireWords = vehicle.VehicleDB.ProtectionLevel switch
+        var quantity = vehicle.VehicleDB.ProtectionLevel switch
         {
-            1 => 4,
-            2 => 6,
-            3 => 8,
-            _ => 2,
+            1 => 5,
+            2 => 7,
+            3 => 9,
+            _ => 3,
         };
+
+        var speed = vehicle.VehicleDB.ProtectionLevel switch
+        {
+            1 => 0.02f,
+            2 => 0.03f,
+            3 => 0.04f,
+            _ => 0.01f,
+        };
+
+        var size = vehicle.VehicleDB.ProtectionLevel switch
+        {
+            1 => 0.6f,
+            2 => 0.7f,
+            3 => 0.8f,
+            _ => 0.5f,
+        };
+
         player.HotwireVehicle = vehicle;
 
-        await Functions.SendServerMessage($"{player.Character.Name} ({player.SessionId}) começou a fazer ligação direta no veículo {vehicle.Identifier}.", UserStaff.JuniorServerAdmin, false);
-        await GenerateHotwireWord(player);
+        await Functions.SendServerMessage($"{player.Character.Name} ({player.SessionId}) começou a fazer ligação direta no veículo {vehicle.Identifier}.", UserStaff.GameAdmin, false);
+
+        player.Emit("Circle:StartMinigame", quantity, speed, size, "fa-solid fa-car", nameof(EndVehicleHotwire));
     }
 
-    private static async Task GenerateHotwireWord(MyPlayer player)
+    [RemoteEvent(nameof(EndVehicleHotwire))]
+    public async Task EndVehicleHotwire(Player playerParam, bool success)
     {
-        var random = new Random().Next(0, Global.WordsToShuffle.Count);
-        player.HotwireWord = Global.WordsToShuffle[random];
-
-        player.SendMessage(MessageType.Error, $"Use /desem para desembaralhar a seguinte palavra: {ShuffleWord(player.HotwireWord)}. Você tem 15 segundos antes de ser eletrocutado.");
-
-        player.HotwireCancellationTokenSource?.Cancel();
-        player.HotwireCancellationTokenSource = new CancellationTokenSource();
-        await Task.Delay(TimeSpan.FromSeconds(15), player.HotwireCancellationTokenSource.Token).ContinueWith(t =>
+        try
         {
-            if (t.IsCanceled)
+            var player = Functions.CastPlayer(playerParam);
+            if (player.Vehicle is not MyVehicle vehicle || vehicle.Driver != player)
+            {
+                player.SendMessage(MessageType.Error, Resources.YouAreNotTheDriverOfTheVehicle);
                 return;
+            }
 
-            FailHotwire(player);
-        });
-    }
+            if (!success)
+            {
+                player.EndHotwire();
+                player.Health -= 10;
+                player.SendMessageToNearbyPlayers("falhou na ligação direta e foi eletrocutado.", MessageCategory.Ame);
+                return;
+            }
 
-    private static string ShuffleWord(string word)
-    {
-        var random = new Random();
-        var caracteres = word.ToCharArray();
-
-        for (int i = caracteres.Length - 1; i > 0; i--)
-        {
-            var j = random.Next(0, i + 1);
-            (caracteres[j], caracteres[i]) = (caracteres[i], caracteres[j]);
+            vehicle.SetEngineStatus(true);
+            player.EndHotwire();
+            player.SendMessageToNearbyPlayers("faz uma ligação direta no veículo.", MessageCategory.Ame);
+            await player.WriteLog(LogType.HotWire, vehicle.Identifier, null);
+            await Functions.SendServerMessage($"{player.Character.Name} ({player.SessionId}) fez ligação direta no veículo {vehicle.Identifier}.", UserStaff.GameAdmin, false);
         }
-
-        return new string(caracteres);
-    }
-
-    private static void FailHotwire(MyPlayer player)
-    {
-        player.EndHotwire();
-        player.Health -= 10;
-        player.SendMessageToNearbyPlayers("falhou na ligação direta e foi eletrocutado.", MessageCategory.Ame);
-    }
-
-    [Command("desembaralhar", "/desembaralhar (palavra)", Aliases = ["desem"])]
-    public async Task CMD_desembaralhar(MyPlayer player, string word)
-    {
-        if (player.Vehicle is not MyVehicle vehicle || vehicle.Driver != player)
+        catch (Exception ex)
         {
-            player.SendMessage(MessageType.Error, Resources.YouAreNotTheDriverOfTheVehicle);
-            return;
+            Functions.GetException(ex);
         }
-
-        if (!player.HotwireWords.HasValue || vehicle != player.HotwireVehicle)
-        {
-            player.SendMessage(MessageType.Error, "Você não está fazendo ligação direta em um veículo.");
-            return;
-        }
-
-        if (word.ToLower() != player.HotwireWord!.ToLower())
-        {
-            FailHotwire(player);
-            return;
-        }
-
-        player.HotwireWords--;
-        if (player.HotwireWords > 0)
-        {
-            await GenerateHotwireWord(player);
-            return;
-        }
-
-        vehicle.SetEngineStatus(true);
-        player.EndHotwire();
-        player.SendMessageToNearbyPlayers("faz uma ligação direta no veículo.", MessageCategory.Ame);
-        await player.WriteLog(LogType.HotWire, vehicle.Identifier, null);
     }
 
     [Command("desmanchar")]
@@ -1191,7 +1049,7 @@ public class VehicleScript : Script
             && x.Dimension == player.GetDimension()
             && player.GetPosition().DistanceTo(new(x.PosX, x.PosY, x.PosZ)) <= Constants.RP_DISTANCE))
         {
-            player.SendNotification(NotificationType.Error, "Você não está próximo de nenhum ponto de desmanche de veículos.");
+            player.SendMessage(MessageType.Error, "Você não está próximo de nenhum ponto de desmanche de veículos.");
             return;
         }
 
@@ -1451,7 +1309,7 @@ public class VehicleScript : Script
             {
                 BodyHealthDamage = damage,
                 EngineHealthDamage = damage,
-                Weapon = Functions.GetWeaponName(Convert.ToUInt32(weaponString)),
+                Weapon = GlobalFunctions.GetWeaponName(Convert.ToUInt32(weaponString)),
                 Attacker = $"{attacker.Character.Name} ({attacker.Character.Id})",
                 Distance = vehicle.GetPosition().DistanceTo(attacker.GetPosition()),
             };
@@ -1555,7 +1413,7 @@ public class VehicleScript : Script
             }
 
             var premium = Functions.CheckPremiumVehicle(model);
-            if (premium != UserPremium.None && premium > player.GetCurrentPremium())
+            if (premium != UserPremium.None && premium > player.User.GetCurrentPremium())
             {
                 player.SendNotification(NotificationType.Error, $"O veículo é restrito para Premium {premium.GetDescription()}.");
                 return;
@@ -1570,12 +1428,11 @@ public class VehicleScript : Script
 
             var vehicle = new Domain.Entities.Vehicle();
             var context = Functions.GetDatabaseContext();
-            vehicle.Create(model, await Functions.GenerateVehiclePlate(false), r1, g1, b1, r2, g2, b2);
+            vehicle.Create(model, await Functions.GenerateVehiclePlate(), r1, g1, b1, r2, g2, b2);
             vehicle.ChangePosition(dealership.VehiclePosX, dealership.VehiclePosY, dealership.VehiclePosZ,
                 dealership.VehicleRotR, dealership.VehicleRotP, dealership.VehicleRotY, 0);
             vehicle.SetOwner(player.Character.Id);
             vehicle.SetFuel(vehicle.GetMaxFuel());
-            vehicle.SetLockNumber((await context.Vehicles.Select(x => x.LockNumber).DefaultIfEmpty().MaxAsync()) + 1);
 
             await context.Vehicles.AddAsync(vehicle);
             await context.SaveChangesAsync();
@@ -1742,7 +1599,7 @@ public class VehicleScript : Script
     }
 
     [Command("vtrancar")]
-    public static void CMDvtrancar(MyPlayer player)
+    public static void CMD_vtrancar(MyPlayer player)
     {
         var veh = Global.Vehicles
             .Where(x => x.GetDimension() == player.GetDimension()
@@ -1810,8 +1667,8 @@ public class VehicleScript : Script
                 var companies = player.Companies.Select(x => x.Id);
                 var door = Global.Doors
                     .Where(x => (
-                        x.FactionId.HasValue && x.FactionId == player.Character.FactionId
-                        || x.CompanyId.HasValue && companies.Contains(x.CompanyId.Value)
+                        (x.FactionId.HasValue && x.FactionId == player.Character.FactionId)
+                        || (x.CompanyId.HasValue && companies.Contains(x.CompanyId.Value))
                         || player.OnAdminDuty
                         )
                         && player.GetPosition().DistanceTo(new(x.PosX, x.PosY, x.PosZ)) <= 10)
@@ -1888,20 +1745,6 @@ public class VehicleScript : Script
             }
 
             player.SendNotification(NotificationType.Error, "Você não tem acesso a nenhuma propriedade, veículo ou porta próximos.");
-        }
-        catch (Exception ex)
-        {
-            Functions.GetException(ex);
-        }
-    }
-
-    [ServerEvent(Event.VehicleDeath)]
-    public async void OnVehicleDestroy(GTANetworkAPI.Vehicle vehicleParam)
-    {
-        try
-        {
-            var vehicle = Functions.CastVehicle(vehicleParam);
-            await Functions.WriteLog(LogType.VehicleDestruction, $"{vehicle.VehicleDB.Id} | {Functions.Serialize(vehicle.Damages)}");
         }
         catch (Exception ex)
         {
@@ -2131,15 +1974,13 @@ public class VehicleScript : Script
                         await player.RemoveMoney(totalValue);
 
                         var safeValue = totalValue - totalCostValue;
+
                         if (safeValue > 0)
-                        {
-                            company.DepositSafe(safeValue);
-                            context.Companies.Update(company);
-                            await context.SaveChangesAsync();
-                        }
+                            await company.MovementSafe(player, player.Character.Id, FinancialTransactionType.Deposit, Convert.ToUInt32(safeValue),
+                                $"Modificações veiculares de {vehicle.VehicleDB.Model.ToUpper()}. Preço de Custo: ${totalCostValue:N0}, Preço de Venda: ${totalValue:N0}");
 
                         player.SendMessage(MessageType.Success, $"Você aplicou as modificações no veículo {vehicle.VehicleDB.Model.ToUpper()} {vehicle.VehicleDB.Plate.ToUpper()} por ${totalValue:N0}.");
-                        await player.WriteLog(LogType.MechanicTunning, $"{vehicle.Identifier} ({vehicle.VehicleDB.Id}) | {company.Name} ({company.Id}) | {totalValue} {totalCostValue} {safeValue} | {vehicleTuningJSON}", null);
+                        await player.WriteLog(LogType.MechanicTunning, $"{vehicle.Identifier} ({vehicle.VehicleDB.Id}) | {company.Name} ({company.Id}) | {vehicleTuningJSON}", null);
                     }
                 }
             }
@@ -2360,5 +2201,46 @@ public class VehicleScript : Script
 
         player.SeatBelt = !player.SeatBelt;
         player.SendMessageToNearbyPlayers($"{(player.SeatBelt ? "coloca" : "retira")} o cinto de segurança.", MessageCategory.Ame);
+    }
+
+    [Command("idveh", "/idveh (placa)")]
+    public static void CMD_idveh(MyPlayer player, string plate)
+    {
+        var vehicle = Global.Vehicles.FirstOrDefault(x => x.VehicleDB.Plate.ToLower() == plate.ToLower());
+        if (vehicle is null)
+        {
+            player.SendMessage(MessageType.Error, $"Veículo com a placa {plate} não está spawnado.");
+            return;
+        }
+
+        player.SendMessage(MessageType.None, $"ID do veículo {vehicle.VehicleDB.Model.ToUpper()} ({vehicle.VehicleDB.Plate.ToUpper()}) é {vehicle.Id}.");
+    }
+
+    [Command("vinv")]
+    public static async Task CMD_vinv(MyPlayer player)
+    {
+        var vehicle = Global.Vehicles.Where(x => x.GetDimension() == player.GetDimension()
+            && player.GetPosition().DistanceTo(x.GetPosition()) <= Constants.RP_DISTANCE)
+            .MinBy(x => player.GetPosition().DistanceTo(x.GetPosition()));
+        if (vehicle is null)
+        {
+            player.SendMessage(MessageType.Error, "Você não está próximo de nenhum veículo.");
+            return;
+        }
+
+        if (player.GetVehicle() != vehicle && vehicle.DoorsStates[Constants.VEHICLE_DOOR_TRUNK])
+        {
+            player.SendMessage(MessageType.Error, "O porta-malas está fechado.");
+            return;
+        }
+
+        if (vehicle.VehicleDB.FactionId.HasValue && vehicle.VehicleDB.FactionId != player.Character.FactionId)
+        {
+            player.SendMessage(MessageType.Error, Resources.YouDoNotHaveAccessToTheVehicle);
+            return;
+        }
+
+        vehicle.ShowInventory(player, false);
+        await player.WriteLog(LogType.General, $"/vinv {vehicle.Identifier}", null);
     }
 }

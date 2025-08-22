@@ -13,13 +13,13 @@ namespace TrevizaniRoleplay.Api.Controllers;
 [Route("logs")]
 public class LogsController(DatabaseContext context) : BaseController(context)
 {
-    [HttpGet("types"), Authorize(Policy = PolicySettings.POLICY_LEAD_SERVER_ADMIN)]
+    [HttpGet("types"), Authorize(Policy = PolicySettings.POLICY_LEAD_ADMIN)]
     public async Task<IEnumerable<SelectOptionResponse>> GetTypes()
     {
         var user = await context.Users.FirstOrDefaultAsync(x => x.Id == UserId);
 
         var types = Enum.GetValues<LogType>().ToList();
-        if (user!.Staff < UserStaff.ServerManager)
+        if (user!.Staff < UserStaff.Management)
             types.RemoveAll(x => x == LogType.ICChat || x == LogType.ViewLogs);
 
         return types
@@ -31,7 +31,7 @@ public class LogsController(DatabaseContext context) : BaseController(context)
            .OrderBy(x => x.Label);
     }
 
-    [HttpPost("search"), Authorize(Policy = PolicySettings.POLICY_LEAD_SERVER_ADMIN)]
+    [HttpPost("search"), Authorize(Policy = PolicySettings.POLICY_LEAD_ADMIN)]
     public async Task<IEnumerable<LogResponse>> Search([FromBody] LogRequest request)
     {
         var query = context.Logs.AsQueryable();
@@ -52,7 +52,7 @@ public class LogsController(DatabaseContext context) : BaseController(context)
             query = query.Where(x => x.OriginIp == request.OriginIp);
 
         if (!string.IsNullOrWhiteSpace(request.OriginUser))
-            query = query.Where(x => x.OriginCharacterId.HasValue && x.OriginCharacter!.User!.DiscordUsername.ToLower() == request.OriginUser.ToLower());
+            query = query.Where(x => x.OriginUserId.HasValue && x.OriginUser!.DiscordUsername.ToLower() == request.OriginUser.ToLower());
 
         if (!string.IsNullOrWhiteSpace(request.OriginSocialClubName))
             query = query.Where(x => x.OriginSocialClubName == request.OriginSocialClubName);
@@ -73,7 +73,7 @@ public class LogsController(DatabaseContext context) : BaseController(context)
             query = query.Where(x => x.Description.ToLower().Contains(request.Description.ToLower()));
 
         var user = await context.Users.FirstOrDefaultAsync(x => x.Id == UserId);
-        if (user!.Staff < UserStaff.ServerManager)
+        if (user!.Staff < UserStaff.Management)
         {
             var blockedTypes = new List<LogType> { LogType.ICChat, LogType.ViewLogs };
             query = query.Where(x => !blockedTypes.Contains(x.Type));
@@ -81,14 +81,14 @@ public class LogsController(DatabaseContext context) : BaseController(context)
 
         var logs = await query
             .Include(x => x.OriginCharacter)
-                .ThenInclude(x => x!.User)
+            .Include(x => x.OriginUser)
             .Include(x => x.TargetCharacter)
                 .ThenInclude(x => x!.User)
             .OrderByDescending(x => x.RegisterDate)
             .Take(100)
             .ToListAsync();
 
-        await WriteLog(LogType.ViewLogs, $"{user.Name} ({user.DiscordUsername}) | Tipo: {request.Type?.GetDescription()} | {Serialize(request)}");
+        await WriteLog(LogType.ViewLogs, $"Tipo: {request.Type?.GetDescription()} | {Serialize(request)}");
 
         return logs.Select(x => new LogResponse
         {
@@ -96,10 +96,12 @@ public class LogsController(DatabaseContext context) : BaseController(context)
             Type = x.Type.GetDescription(),
             Date = x.RegisterDate,
             Description = x.Description,
-            OriginCharacterName = x.OriginCharacterId.HasValue ? $"{x.OriginCharacter!.Name} ({x.OriginCharacter.User!.Name} ({x.OriginCharacter.User.DiscordUsername}))" : string.Empty,
+            OriginCharacter = x.OriginCharacterId.HasValue ? x.OriginCharacter!.Name : string.Empty,
+            OriginUser = x.OriginUserId.HasValue ? $"{x.OriginUser!.Name} ({x.OriginUser.DiscordUsername})" : string.Empty,
             OriginIp = x.OriginIp,
             OriginSocialClubName = x.OriginSocialClubName,
-            TargetCharacterName = x.TargetCharacterId.HasValue ? $"{x.TargetCharacter!.Name} ({x.TargetCharacter.User!.Name} ({x.TargetCharacter.User.DiscordUsername}))" : string.Empty,
+            TargetCharacter = x.TargetCharacterId.HasValue ? $"{x.TargetCharacter!.Name} ()" : string.Empty,
+            TargetUser = x.TargetCharacterId.HasValue ? $"{x.TargetCharacter!.User!.Name} ({x.TargetCharacter.User.DiscordUsername})" : string.Empty,
             TargetIp = x.TargetIp,
             TargetSocialClubName = x.TargetSocialClubName,
         });

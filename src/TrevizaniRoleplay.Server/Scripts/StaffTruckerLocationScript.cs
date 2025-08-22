@@ -129,7 +129,7 @@ public class StaffTruckerLocationScript : Script
 
             foreach (var allowedVehicle in allowedVehicles)
             {
-                if (!Functions.CheckIfVehicleExists(allowedVehicle))
+                if (!GlobalFunctions.CheckIfVehicleExists(allowedVehicle))
                 {
                     player.SendNotification(NotificationType.Error, $"Veículo {allowedVehicle} não existe.");
                     return;

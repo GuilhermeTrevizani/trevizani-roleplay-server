@@ -10,7 +10,7 @@ public class StaffDealershipScript : Script
     [Command("concessionarias")]
     public static void CMD_concessionarias(MyPlayer player)
     {
-        if (player.User.Staff < UserStaff.ServerManager)
+        if (player.User.Staff < UserStaff.Management)
         {
             player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -25,7 +25,7 @@ public class StaffDealershipScript : Script
         try
         {
             var player = Functions.CastPlayer(playerParam);
-            if (player.User.Staff < UserStaff.ServerManager)
+            if (player.User.Staff < UserStaff.Management)
             {
                 player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
@@ -53,7 +53,7 @@ public class StaffDealershipScript : Script
         try
         {
             var player = Functions.CastPlayer(playerParam);
-            if (player.User.Staff < UserStaff.ServerManager)
+            if (player.User.Staff < UserStaff.Management)
             {
                 player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
@@ -125,7 +125,7 @@ public class StaffDealershipScript : Script
         try
         {
             var player = Functions.CastPlayer(playerParam);
-            if (player.User.Staff < UserStaff.ServerManager)
+            if (player.User.Staff < UserStaff.Management)
             {
                 player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
@@ -159,7 +159,7 @@ public class StaffDealershipScript : Script
     private static void UpdateDealerships()
     {
         var json = GetDealershipsJson();
-        foreach (var target in Global.SpawnedPlayers.Where(x => x.User.Staff >= UserStaff.ServerManager))
+        foreach (var target in Global.SpawnedPlayers.Where(x => x.User.Staff >= UserStaff.Management))
             target.Emit("StaffDealership:Update", json);
     }
 
@@ -189,7 +189,7 @@ public class StaffDealershipScript : Script
         try
         {
             var player = Functions.CastPlayer(playerParam);
-            if (player.User.Staff < UserStaff.ServerManager)
+            if (player.User.Staff < UserStaff.Management)
             {
                 player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
@@ -210,7 +210,7 @@ public class StaffDealershipScript : Script
         try
         {
             var player = Functions.CastPlayer(playerParam);
-            if (player.User.Staff < UserStaff.ServerManager)
+            if (player.User.Staff < UserStaff.Management)
             {
                 player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
@@ -222,7 +222,7 @@ public class StaffDealershipScript : Script
                 return;
             }
 
-            if (!Functions.CheckIfVehicleExists(model))
+            if (!GlobalFunctions.CheckIfVehicleExists(model))
             {
                 player.SendNotification(NotificationType.Error, "Modelo não existe.");
                 return;
@@ -287,7 +287,7 @@ public class StaffDealershipScript : Script
         try
         {
             var player = Functions.CastPlayer(playerParam);
-            if (player.User.Staff < UserStaff.ServerManager)
+            if (player.User.Staff < UserStaff.Management)
             {
                 player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
@@ -317,7 +317,7 @@ public class StaffDealershipScript : Script
     private static void UpdateDealershipsVehicles(Guid dealershipId)
     {
         var json = GetDealershipsVehiclesJson(dealershipId);
-        foreach (var target in Global.SpawnedPlayers.Where(x => x.User.Staff >= UserStaff.ServerManager))
+        foreach (var target in Global.SpawnedPlayers.Where(x => x.User.Staff >= UserStaff.Management))
             target.Emit("StaffDealershipVehicle:Update", json);
     }
 

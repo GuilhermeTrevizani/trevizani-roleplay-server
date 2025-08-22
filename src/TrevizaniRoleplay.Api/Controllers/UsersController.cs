@@ -56,7 +56,7 @@ public class UsersController(
             var hasUsers = await context.Users.AnyAsync();
             user = new();
             user.Create(res.Id, res.Username, res.Global_Name, Ip,
-                hasUsers ? UserStaff.None : UserStaff.HeadServerDeveloper,
+                hasUsers ? UserStaff.None : UserStaff.Founder,
                 hasUsers ? "[]" : Serialize(Enum.GetValues<StaffFlag>()));
             await context.Users.AddAsync(user);
             await context.SaveChangesAsync();
@@ -119,7 +119,7 @@ public class UsersController(
         return generatedToken;
     }
 
-    [HttpGet("staffers"), Authorize(Policy = PolicySettings.POLICY_SERVER_SUPPORT)]
+    [HttpGet("staffers"), Authorize(Policy = PolicySettings.POLICY_TESTER)]
     public async Task<IEnumerable<StafferResponse>> GetStaffers()
     {
         return (await context.Users
@@ -162,23 +162,14 @@ public class UsersController(
             PremiumPoints = user!.PremiumPoints,
             Staff = user.Staff,
             StaffFlags = Deserialize<StaffFlag[]>(user.StaffFlagsJSON)!,
+            NotificationsUnread = await context.Notifications.CountAsync(x => x.UserId == user.Id && !x.ReadDate.HasValue),
         };
     }
 
-    [HttpGet("potential-fakes"), Authorize(Policy = PolicySettings.POLICY_JUNIOR_SERVER_ADMIN)]
+    [HttpGet("potential-fakes"), Authorize(Policy = PolicySettings.POLICY_GAME_ADMIN)]
     public async Task<IEnumerable<PotentialFakeResponse>> GetPotentialFakes()
     {
-        var users = await context.Database.SqlQueryRaw<PotentialFakeResponse>(@"SELECT DISTINCT GROUP_CONCAT(DiscordUserName ORDER BY DiscordUsername SEPARATOR ', ') AS Users
-        FROM (
-            SELECT DISTINCT s.Ip, u.DiscordUserName FROM Sessions s
-            inner join characters c on c.Id = s.CharacterId
-            inner join users u on u.Id = c.UserId
-            WHERE s.Ip != ''
-        ) as AllUsers
-        GROUP BY Ip
-        HAVING COUNT(*) > 1;").ToListAsync();
-
-        var usersLogs = await context.Database.SqlQueryRaw<PotentialFakeResponse>(@"SELECT DISTINCT GROUP_CONCAT(DiscordUserName ORDER BY DiscordUsername SEPARATOR ', ') AS Users
+        var users = await context.Database.SqlQueryRaw<PotentialFakeResponse>(@"SELECT DISTINCT GROUP_CONCAT(DiscordUserName ORDER BY DiscordUsername SEPARATOR ', ') AS Users, 'SocialClub' Identifier
         FROM (
             SELECT DISTINCT s.SocialCLubName, u.DiscordUserName FROM Sessions s
             inner join characters c on c.Id = s.CharacterId
@@ -186,6 +177,16 @@ public class UsersController(
             WHERE s.SocialCLubName != ''
         ) as AllUsers
         GROUP BY SocialCLubName
+        HAVING COUNT(*) > 1;").ToListAsync();
+
+        var usersLogs = await context.Database.SqlQueryRaw<PotentialFakeResponse>(@"SELECT DISTINCT GROUP_CONCAT(DiscordUserName ORDER BY DiscordUsername SEPARATOR ', ') AS Users, 'IP' Identifier
+        FROM (
+            SELECT DISTINCT s.Ip, u.DiscordUserName FROM Sessions s
+            inner join characters c on c.Id = s.CharacterId
+            inner join users u on u.Id = c.UserId
+            WHERE s.Ip != ''
+        ) as AllUsers
+        GROUP BY Ip
         HAVING COUNT(*) > 1;").ToListAsync();
 
         users.AddRange(usersLogs);

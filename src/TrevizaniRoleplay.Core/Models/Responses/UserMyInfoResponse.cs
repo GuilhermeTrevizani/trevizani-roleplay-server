@@ -7,4 +7,5 @@ public class UserMyInfoResponse
     public int PremiumPoints { get; set; }
     public UserStaff Staff { get; set; }
     public StaffFlag[] StaffFlags { get; set; } = [];
+    public int NotificationsUnread { get; set; }
 }

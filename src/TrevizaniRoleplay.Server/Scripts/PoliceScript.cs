@@ -327,9 +327,9 @@ public class PoliceScript : Script
                 var items = confiscation.Items!.ToList();
 
                 if (first)
-                    items = items.Where(x => Functions.CheckIfIsBulletShell(x.GetCategory())).ToList();
+                    items = [.. items.Where(x => GlobalFunctions.CheckIfIsBulletShell(x.GetCategory()))];
                 else
-                    items = items.Where(x => x.GetCategory() == ItemCategory.Weapon || Functions.CheckIfIsBulletShell(x.GetCategory())).ToList();
+                    items = [.. items.Where(x => x.GetCategory() == ItemCategory.Weapon || GlobalFunctions.CheckIfIsBulletShell(x.GetCategory()))];
 
                 json = Functions.Serialize(items!
                     .Select(x => new
@@ -415,7 +415,7 @@ public class PoliceScript : Script
                 }
                 else if (item.Type == ForensicTestItemType.BulletShell)
                 {
-                    if (!Functions.CheckIfIsBulletShell(originConfiscationItem.GetCategory()))
+                    if (!GlobalFunctions.CheckIfIsBulletShell(originConfiscationItem.GetCategory()))
                     {
                         player.SendNotification(NotificationType.Error, $"Primeiro Item de {item.Identifier} não é uma cápsula.");
                         return;
@@ -428,7 +428,7 @@ public class PoliceScript : Script
                     }
 
                     if (targetConfiscationItem.GetCategory() != ItemCategory.Weapon
-                        && !Functions.CheckIfIsBulletShell(targetConfiscationItem.GetCategory()))
+                        && !GlobalFunctions.CheckIfIsBulletShell(targetConfiscationItem.GetCategory()))
                     {
                         player.SendNotification(NotificationType.Error, $"Segundo Item de {item.Identifier} não é uma arma ou uma cápsula.");
                         return;

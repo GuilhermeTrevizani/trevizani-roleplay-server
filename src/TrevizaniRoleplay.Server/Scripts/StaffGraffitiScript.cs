@@ -11,7 +11,7 @@ public class StaffGraffitiScript : Script
     [Command("grafites")]
     public async Task CMD_grafites(MyPlayer player)
     {
-        if (player.User.Staff < UserStaff.JuniorServerAdmin)
+        if (player.User.Staff < UserStaff.GameAdmin)
         {
             player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
@@ -30,7 +30,7 @@ public class StaffGraffitiScript : Script
             if (graffiti is null)
                 return;
 
-            if (player.User.Staff < UserStaff.JuniorServerAdmin)
+            if (player.User.Staff < UserStaff.GameAdmin)
             {
                 player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;
@@ -54,7 +54,7 @@ public class StaffGraffitiScript : Script
             if (graffiti is null)
                 return;
 
-            if (player.User.Staff < UserStaff.JuniorServerAdmin)
+            if (player.User.Staff < UserStaff.GameAdmin)
             {
                 player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
                 return;

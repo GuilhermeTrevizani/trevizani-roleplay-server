@@ -1,5 +1,4 @@
 ﻿using GTANetworkAPI;
-using TrevizaniRoleplay.Core.Models.Server;
 using TrevizaniRoleplay.Server.Extensions;
 using TrevizaniRoleplay.Server.Factories;
 using TrevizaniRoleplay.Server.Models;
@@ -8,8 +7,8 @@ namespace TrevizaniRoleplay.Server.Scripts;
 
 public class TruckerScript : Script
 {
-    [Command("rotas")]
-    public static void CMD_rotas(MyPlayer player)
+    [Command("tpda")]
+    public static void CMD_tpda(MyPlayer player)
     {
         if (player.Character.Job != CharacterJob.Trucker || !player.OnDuty)
         {

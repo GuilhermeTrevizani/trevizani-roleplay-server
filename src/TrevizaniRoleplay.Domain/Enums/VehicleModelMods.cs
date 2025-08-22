@@ -1,4 +1,4 @@
-﻿namespace TrevizaniRoleplay.Server.Models;
+﻿namespace TrevizaniRoleplay.Domain.Enums;
 
 public enum VehicleModelMods : uint
 {

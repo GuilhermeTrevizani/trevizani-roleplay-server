@@ -109,7 +109,7 @@ public static class CompanyExtension
         message = Functions.CheckFinalDot(message);
         foreach (var target in Global.SpawnedPlayers.Where(x => !x.User.AnnouncementToggle))
             target.SendMessage(Models.MessageType.None, $"[{company.Name}] {message}", Constants.ANNOUNCEMENT_COLOR);
-        await Functions.SendServerMessage($"{player.Character.Name} ({player.SessionId}) ({player.User.Name}) enviou o anúncio da empresa.", UserStaff.JuniorServerAdmin, false);
+        await Functions.SendServerMessage($"{player.Character.Name} ({player.SessionId}) ({player.User.Name}) enviou o anúncio da empresa.", UserStaff.GameAdmin, false);
 
         Global.Announcements.Add(new()
         {
@@ -164,5 +164,30 @@ public static class CompanyExtension
             })
             .OrderBy(x => x.Name))
             );
+    }
+
+    public static async Task MovementSafe(this Company company, MyPlayer player, Guid characterId, FinancialTransactionType type, uint value, string description)
+    {
+        var context = Functions.GetDatabaseContext();
+
+        var companySafeMovement = new CompanySafeMovement();
+        companySafeMovement.Create(company.Id, characterId, type, value, description);
+
+        await context.CompaniesSafesMovements.AddAsync(companySafeMovement);
+
+        if (type == FinancialTransactionType.Deposit)
+            company.DepositSafe(Convert.ToInt32(value));
+        else
+            company.WithdrawSafe(Convert.ToInt32(value));
+
+        context.Companies.Update(company);
+
+        await context.SaveChangesAsync();
+
+        await player.WriteLog(LogType.Company,
+            $"{(type == FinancialTransactionType.Deposit ? "Depósito" : "Saque")} Cofre {company.Name} ({company.Id}) ${value:N0}. {description}".Trim(),
+            null);
+
+        await context.SaveChangesAsync();
     }
 }

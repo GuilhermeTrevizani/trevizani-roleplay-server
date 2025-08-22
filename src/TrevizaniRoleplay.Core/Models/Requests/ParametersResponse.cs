@@ -14,8 +14,6 @@ public class ParametersRequest
     public int AnnouncementValue { get; set; }
     public int ExtraPaymentGarbagemanValue { get; set; }
     public bool Blackout { get; set; }
-    public int KeyValue { get; set; }
-    public int LockValue { get; set; }
     public string IPLsJSON { get; set; } = string.Empty;
     public int TattooValue { get; set; }
     public int CooldownDismantleHours { get; set; }
@@ -55,4 +53,7 @@ public class ParametersRequest
     public int UnemploymentAssistance { get; set; }
     public string PremiumPointPackagesJSON { get; set; } = string.Empty;
     public string MOTD { get; set; } = string.Empty;
+    public uint EntranceBenefitValue { get; set; }
+    public uint EntranceBenefitCooldownUsers { get; set; }
+    public uint EntranceBenefitCooldownHours { get; set; }
 }

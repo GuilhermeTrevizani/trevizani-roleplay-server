@@ -54,7 +54,7 @@ public class GraffitiScript : Script
                 return;
             }
 
-            var graffitiCount = player.GetCurrentPremium() switch
+            var graffitiCount = player.User.GetCurrentPremium() switch
             {
                 UserPremium.Gold => 5,
                 UserPremium.Silver => 4,
@@ -68,7 +68,7 @@ public class GraffitiScript : Script
                 return;
             }
 
-            var days = player.GetCurrentPremium() switch
+            var days = player.User.GetCurrentPremium() switch
             {
                 UserPremium.Gold => 21,
                 UserPremium.Silver => 14,
@@ -89,7 +89,7 @@ public class GraffitiScript : Script
             Global.Graffitis.Add(graffiti);
             graffiti.CreateIdentifier();
 
-            await Functions.SendServerMessage($"{player.Character.Name} ({player.SessionId}) grafitou {graffiti.Text.Replace("<br />", " ")}.", UserStaff.JuniorServerAdmin, false);
+            await Functions.SendServerMessage($"{player.Character.Name} ({player.SessionId}) grafitou {graffiti.Text.Replace("<br />", " ")}.", UserStaff.GameAdmin, false);
             player.SendNotification(NotificationType.Success, "Grafite criado.");
         }
         catch (Exception ex)

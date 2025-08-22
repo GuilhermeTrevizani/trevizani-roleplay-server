@@ -1,6 +1,5 @@
 ﻿using GTANetworkAPI;
 using Microsoft.EntityFrameworkCore;
-using TrevizaniRoleplay.Core.Extensions;
 using TrevizaniRoleplay.Server.Extensions;
 using TrevizaniRoleplay.Server.Factories;
 using TrevizaniRoleplay.Server.Models;
@@ -114,7 +113,7 @@ public class CommandScript : Script
             case InviteType.Frisk:
                 if (!player.CheckIfTargetIsCloseIC(target, Constants.RP_DISTANCE))
                 {
-                    player.SendNotification(NotificationType.Error, Resources.YouAreNotCloseToThePlayer);
+                    player.SendMessage(MessageType.Error, Resources.YouAreNotCloseToThePlayer);
                     return;
                 }
 
@@ -125,7 +124,7 @@ public class CommandScript : Script
             case InviteType.VehicleSell:
                 if (!player.CheckIfTargetIsCloseIC(target, Constants.RP_DISTANCE))
                 {
-                    player.SendNotification(NotificationType.Error, Resources.YouAreNotCloseToThePlayer);
+                    player.SendMessage(MessageType.Error, Resources.YouAreNotCloseToThePlayer);
                     return;
                 }
 
@@ -139,7 +138,7 @@ public class CommandScript : Script
                 }
 
                 var veh = Global.Vehicles.FirstOrDefault(x => x.VehicleDB.Id == veiculo);
-                if (veh == null)
+                if (veh is null)
                 {
                     player.SendMessage(MessageType.Error, "Veículo inválido.");
                     break;
@@ -160,7 +159,7 @@ public class CommandScript : Script
 
                 await player.RemoveMoney(vehicleValue);
 
-                veh.VehicleDB.SetOwner(player.Character.Id);
+                await veh.VehicleDB.ChangeOwner(player.Character.Id);
 
                 context.Vehicles.Update(veh.VehicleDB);
                 await context.SaveChangesAsync();
@@ -174,7 +173,7 @@ public class CommandScript : Script
                     return;
 
                 var company = Global.Companies.FirstOrDefault(x => x.Id == companyId);
-                if (company == null)
+                if (company is null)
                     return;
 
                 var companyCharacter = new CompanyCharacter();
@@ -196,7 +195,7 @@ public class CommandScript : Script
             case InviteType.VehicleTransfer:
                 if (!player.CheckIfTargetIsCloseIC(target, Constants.RP_DISTANCE))
                 {
-                    player.SendNotification(NotificationType.Error, Resources.YouAreNotCloseToThePlayer);
+                    player.SendMessage(MessageType.Error, Resources.YouAreNotCloseToThePlayer);
                     return;
                 }
 
@@ -216,7 +215,7 @@ public class CommandScript : Script
                     return;
                 }
 
-                transferVehicle.VehicleDB.SetOwner(player.Character.Id);
+                await transferVehicle.VehicleDB.ChangeOwner(player.Character.Id);
 
                 context.Vehicles.Update(transferVehicle.VehicleDB);
                 await context.SaveChangesAsync();
@@ -228,7 +227,7 @@ public class CommandScript : Script
             case InviteType.Carry:
                 if (!player.CheckIfTargetIsCloseIC(target, Constants.RP_DISTANCE))
                 {
-                    player.SendNotification(NotificationType.Error, Resources.YouAreNotCloseToThePlayer);
+                    player.SendMessage(MessageType.Error, Resources.YouAreNotCloseToThePlayer);
                     return;
                 }
 
@@ -305,7 +304,7 @@ public class CommandScript : Script
 
         if (!player.CheckIfTargetIsCloseIC(target, Constants.RP_DISTANCE))
         {
-            player.SendNotification(NotificationType.Error, Resources.YouAreNotCloseToThePlayer);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotCloseToThePlayer);
             return;
         }
 
@@ -378,7 +377,7 @@ public class CommandScript : Script
 
         Global.HelpRequests.Add(helpRequest);
 
-        foreach (var target in Global.SpawnedPlayers.Where(x => x.User.Staff >= UserStaff.ServerSupport && !x.StaffToggle))
+        foreach (var target in Global.SpawnedPlayers.Where(x => x.User.Staff >= UserStaff.Tester && !x.StaffToggle))
         {
             target.SendMessage(MessageType.Error, $"SOS de {player.Character.Name} ({player.SessionId}) ({player.User.Name})");
             target.SendMessage(MessageType.Error, $"Pergunta: {{#B0B0B0}}{message} {{{Constants.ERROR_COLOR}}}(/at {player.SessionId} /csos {player.SessionId})");
@@ -448,7 +447,7 @@ public class CommandScript : Script
 
         Global.HelpRequests.Add(helpRequest);
 
-        foreach (var target in Global.SpawnedPlayers.Where(x => x.User.Staff >= UserStaff.JuniorServerAdmin && !x.StaffToggle))
+        foreach (var target in Global.SpawnedPlayers.Where(x => x.User.Staff >= UserStaff.GameAdmin && !x.StaffToggle))
         {
             target.SendMessage(MessageType.Error, $"Report de {player.Character.Name} ({player.SessionId}) ({player.User.Name})");
             target.SendMessage(MessageType.Error, $"Pergunta: {{#B0B0B0}}{message} {{{Constants.ERROR_COLOR}}}(/ar {player.SessionId} /creport {player.SessionId})");
@@ -537,25 +536,27 @@ public class CommandScript : Script
                     address = property.FormatedAddress;
             }
 
-            var droppableCategories = new List<ItemCategory> {
-                ItemCategory.Weapon,
-                ItemCategory.Drug,
-                ItemCategory.WeaponComponent,
-            };
-            var itemsToRemove = player.Items.Where(x => droppableCategories.Contains(x.GetCategory())
-                || Functions.CheckIfIsAmmo(x.GetCategory())
-                || x.OnlyOnDuty)
-                .ToList();
             var bodyItems = new List<BodyItem>();
-            foreach (var characterItem in itemsToRemove)
-            {
-                if (characterItem.OnlyOnDuty)
-                    continue;
+            var itemsToRemove = new List<CharacterItem>();
 
-                var bodyItem = new BodyItem();
-                bodyItem.Create(characterItem.ItemTemplateId, characterItem.Subtype, characterItem.Quantity, characterItem.Extra);
-                bodyItem.SetSlot(characterItem.Slot);
-                bodyItems.Add(bodyItem);
+            if (player.DropItemsOnDeath)
+            {
+                var droppableCategories = new List<ItemCategory>
+                {
+                    ItemCategory.Weapon,
+                    ItemCategory.Drug,
+                    ItemCategory.WeaponComponent,
+                };
+
+                itemsToRemove = [.. player.Items.Where(x => droppableCategories.Contains(x.GetCategory())
+                    || GlobalFunctions.CheckIfIsAmmo(x.GetCategory()))];
+                foreach (var characterItem in itemsToRemove)
+                {
+                    var bodyItem = new BodyItem();
+                    bodyItem.Create(characterItem.ItemTemplateId, characterItem.Subtype, characterItem.Quantity, characterItem.Extra);
+                    bodyItem.SetSlot(characterItem.Slot);
+                    bodyItems.Add(bodyItem);
+                }
             }
 
             var body = new Body();
@@ -571,17 +572,20 @@ public class CommandScript : Script
             body.CreateIdentifier();
             Global.Bodies.Add(body);
 
-            await player.RemoveItem(itemsToRemove);
-            var stackedItems = itemsToRemove
-                .Where(x => x.GetIsStack())
-                .Select(x => new
-                {
-                    x.ItemTemplateId,
-                    x.Quantity
-                })
-                .ToList();
-            foreach (var stackedItem in stackedItems)
-                await player.RemoveStackedItem(stackedItem.ItemTemplateId, stackedItem.Quantity);
+            if (itemsToRemove.Count > 0)
+            {
+                await player.RemoveItem(itemsToRemove);
+                var stackedItems = itemsToRemove
+                    .Where(x => x.GetIsStack())
+                    .Select(x => new
+                    {
+                        x.ItemTemplateId,
+                        x.Quantity
+                    })
+                    .ToList();
+                foreach (var stackedItem in stackedItems)
+                    await player.RemoveStackedItem(stackedItem.ItemTemplateId, stackedItem.Quantity);
+            }
 
             if (ck)
             {
@@ -745,7 +749,7 @@ public class CommandScript : Script
             return;
         }
 
-        if (target.Character.Wound != CharacterWound.SeriouslyInjured || target.Wounds.Any(x => x.Weapon != Functions.GetWeaponName((uint)WeaponModel.Fist)))
+        if (target.Character.Wound != CharacterWound.SeriouslyInjured || target.Wounds.Any(x => x.Weapon != GlobalFunctions.GetWeaponName((uint)WeaponModel.Fist)))
         {
             player.SendMessage(MessageType.Error, "Jogador não está gravemente ferido ou ferido somente com socos.");
             return;
@@ -763,13 +767,13 @@ public class CommandScript : Script
     {
         player.SendMessage(MessageType.Title, $"STAFF: {Constants.SERVER_NAME}");
 
-        var admins = Global.SpawnedPlayers.Where(x => x.User.Staff >= UserStaff.JuniorServerAdmin);
+        var admins = Global.SpawnedPlayers.Where(x => x.User.Staff >= UserStaff.GameAdmin);
         foreach (var admin in admins
-            .Where(x => x.OnAdminDuty || player.User.Staff >= UserStaff.JuniorServerAdmin)
+            .Where(x => x.OnAdminDuty || player.User.Staff >= UserStaff.GameAdmin)
             .OrderByDescending(x => x.OnAdminDuty)
             .ThenByDescending(x => x.User.Staff)
             .ThenBy(x => x.User.Name))
-            player.SendMessage(MessageType.None, $"{admin.User.Staff.GetDescription()} {admin.User.Name}{(player.User.Staff >= UserStaff.JuniorServerAdmin ? $" ({admin.SessionId})" : string.Empty)}", admin.OnAdminDuty ? admin.StaffColor : "#B0B0B0");
+            player.SendMessage(MessageType.None, $"{admin.User.Staff.GetDescription()} {admin.User.Name}{(player.User.Staff >= UserStaff.GameAdmin ? $" ({admin.SessionId})" : string.Empty)}", admin.OnAdminDuty ? admin.StaffColor : "#B0B0B0");
 
         var adminsOffDuty = admins.Count(x => !x.OnAdminDuty);
         player.SendMessage(MessageType.None, $"{adminsOffDuty} administrador{(adminsOffDuty == 1 ? " está" : "es estão")} online em roleplay. Se precisar de ajuda de um administrador, utilize o /reportar.");
@@ -782,7 +786,7 @@ public class CommandScript : Script
         var faction = Global.Factions.FirstOrDefault(x => x.Id == property?.FactionId);
         if (faction?.Type != FactionType.Police)
         {
-            player.SendNotification(NotificationType.Error, "Você não está em uma propriedade policial.");
+            player.SendMessage(MessageType.Error, "Você não está em uma propriedade policial.");
             return;
         }
 
@@ -862,7 +866,7 @@ public class CommandScript : Script
 
         var audioSpot = item.GetAudioSpot();
         player.Emit("Boombox", item.Id.ToString(), audioSpot?.Source ?? string.Empty, audioSpot?.Volume ?? 1,
-            player.GetCurrentPremium() != UserPremium.None, Functions.Serialize(Global.AudioRadioStations.OrderBy(x => x.Name)));
+            player.User.GetCurrentPremium() != UserPremium.None, Functions.Serialize(Global.AudioRadioStations.OrderBy(x => x.Name)));
     }
 
     [Command("stopanim", Aliases = ["sa"])]
@@ -1067,7 +1071,7 @@ public class CommandScript : Script
     [Command("caminhada", "/caminhada (tipo)")]
     public static void CMD_caminhada(MyPlayer player, byte style)
     {
-        if (player.GetCurrentPremium() == UserPremium.None)
+        if (player.User.GetCurrentPremium() == UserPremium.None)
         {
             player.SendMessage(MessageType.Error, "Você não é premium.");
             return;
@@ -1106,13 +1110,13 @@ public class CommandScript : Script
         var paycheck = await player.Paycheck(true);
 
         var vehicles = await context.Vehicles.Where(x => x.CharacterId == player.Character.Id && !x.Sold).ToListAsync();
-        var currentPremium = player.GetCurrentPremium();
+        var currentPremium = player.User.GetCurrentPremium();
 
         var response = new CharacterInfoResponse
         {
             FactionId = player.Character.FactionId,
             Staff = player.User.Staff,
-            Premium = $"{currentPremium.GetDescription()}{(currentPremium != UserPremium.None ? $" (até {player.Character.PremiumValidDate ?? player.User.PremiumValidDate})" : string.Empty)}",
+            Premium = $"{currentPremium.GetDescription()}{(currentPremium != UserPremium.None ? $" (até {player.User.PremiumValidDate})" : string.Empty)}",
             Armor = player.GetArmor(),
             Health = player.GetHealth(),
             Bank = player.Character.Bank,
@@ -1201,7 +1205,7 @@ public class CommandScript : Script
             new("Teclas", "F8", "Tira uma screenshot"),
             new("Geral", "/stats", "Exibe as informações do seu personagem"),
             new("Geral", "/ajuda", "Exibe os comandos do servidor"),
-            new("Geral", "/configuracoes /config", "Exibe as suas configurações"),
+            new("Geral", "/config", "Exibe as suas configurações"),
             new("Geral", "/tela", "Exibe um fundo com a cor de fundo configurada na tela"),
             new("Geral", "/id", "Procura o ID de um personagem"),
             new("Geral", "/aceitar /ac", "Aceita um convite"),
@@ -1273,6 +1277,8 @@ public class CommandScript : Script
             new("Celular", "/an", "Envia um anúncio"),
             new("Celular", "/gps", "Busca a localização de uma propriedade"),
             new("Celular", "/temperatura", "Visualiza a temperatura e o clima atual"),
+            new("Celular", "/eloc", "Envia sua localização"),
+            new("Celular", "/vivavoz", "Ativa/desativa o viva-voz do celular"),
             new("Rádio Comunicador", "/canal", "Troca os canais de rádio"),
             new("Rádio Comunicador", "/r", "Fala no canal de rádio 1"),
             new("Rádio Comunicador", "/r2", "Fala no canal de rádio 2"),
@@ -1296,9 +1302,6 @@ public class CommandScript : Script
             new("Rádio Comunicador", "/rdo5", "Interpretação do ambiente no canal de rádio 5"),
             new("Propriedades", "/pvender", "Vende uma propriedade para um personagem"),
             new("Propriedades", "/pvendergoverno", "Venda uma propriedade para o governo"),
-            new("Propriedades", "/armazenamento", "Visualiza o armazenamento de uma propriedade"),
-            new("Propriedades", "/pchave", "Cria uma chave cópia de uma propriedade"),
-            new("Propriedades", "/pfechadura", "Altera a fechadura de uma propriedade"),
             new("Propriedades", "/pupgrade", "Realiza atualições na propriedade"),
             new("Propriedades", "/arrombar", "Arromba a porta de uma propriedade"),
             new("Propriedades", "/roubarpropriedade", "Rouba uma propriedade"),
@@ -1310,15 +1313,13 @@ public class CommandScript : Script
             new("Veículos", "/vestacionar", "Estaciona um veículo"),
             new("Veículos", "/vlista", "Mostra seus veículos"),
             new("Veículos", "/vvender", "Vende um veículo para outro personagem"),
-            new("Veículos", "/portamalas", "Gerencia o porta-malas de um veículo"),
+            new("Veículos", "/portamalas", "Abre/fecha o porta-malas de um veículo"),
             new("Veículos", "/capo", "Abre/fecha o capô de um veículo"),
             new("Veículos", "/vporta", "Abre/fecha a porta de um veículo"),
             new("Veículos", "/abastecer", "Abastece um veículo em um posto de combustível"),
             new("Veículos", "/danos", "Visualiza os danos de um veículo"),
             new("Veículos", "/velmax", "Define a velocidade máxima de um veículo"),
             new("Veículos", "/janela /janelas /ja", "Abre/fecha a janela de um veículo"),
-            new("Veículos", "/vchave", "Cria uma chave cópia de um veículo"),
-            new("Veículos", "/vfechadura", "Altera a fechadura de um veículo"),
             new("Veículos", "/xmr", "Altera as configurações do XMR"),
             new("Veículos", "/quebrartrava /picklock", "Quebra a trava de um veículo"),
             new("Veículos", "/colocar", "Coloca um jogador em um veículo"),
@@ -1329,7 +1330,6 @@ public class CommandScript : Script
             new("Veículos", "/rebocar", "Rebocar um veículo"),
             new("Veículos", "/rebocaroff", "Solta um veículo"),
             new("Veículos", "/vtransferir", "Transfere um veículo para outro personagem"),
-            new("Veículos", "/desembaralhar /desem", "Desembaralha uma palavra da ligação direta em um veículo"),
             new("Veículos", "/helif", "Congela/descongela um helicóptero"),
             new("Veículos", "/valugar", "Aluga um veículo de emprego"),
             new("Veículos", "/motor", "Liga/desliga o motor de um veículo"),
@@ -1339,8 +1339,8 @@ public class CommandScript : Script
             new("Geral", "/armacorpo /armac", "Altera posicionamento da arma acoplada ao corpo"),
             new("Geral", "/fontsize", "Altera o tamanho da fonte do chat"),
             new("Geral", "/pagesize", "Altera a quantidade de linhas do chat"),
-            new("Propriedades", "/phora /ptime", "Altera o horário da propriedade"),
-            new("Propriedades", "/ptempo /pweather", "Altera o tempo da propriedade"),
+            new("Propriedades", "/phora", "Altera o horário da propriedade"),
+            new("Propriedades", "/ptempo", "Altera o tempo da propriedade"),
             new("Geral", "/premium", "Abre o painel de gerenciamento Premium"),
             new("Geral", "/alterarnumero", "Altera o número do seu celular equipado"),
             new("Geral", "/caminhada", "Altera o estilo de caminhada"),
@@ -1356,7 +1356,7 @@ public class CommandScript : Script
             new("Geral", "/corrigirvw", "Corrige seu VW"),
             new("Geral", "/atributos", "Define os seus atributos"),
             new("Geral", "/examinar", "Visualiza os atributos de um personagem próximo"),
-            new("Geral", "/supporters", "Exibe os supporters do servidor"),
+            new("Geral", "/testers", "Exibe os testers do servidor"),
             new("Veículos", "/vtrancar", "Tranca/destranca um veículo"),
             new("Geral", "/cabelo", "Ativa/desativa o cabelo"),
             new("Geral", "/cancelarsos", "Cancela o seu SOS"),
@@ -1364,6 +1364,8 @@ public class CommandScript : Script
             new("Geral", "/celulares", "Lista os seus números"),
             new("Geral", "/transferir", "Transfere o valor para uma conta bancária"),
             new("Geral", "/fixinvi", "Corrige a invisibilidade do seu personagem"),
+            new("Veículos", "/idveh", "Procura o ID de um veículo"),
+            new("Veículos", "/vinv", "Visualiza o inventário de um veículo"),
         };
 
         if (player.Character.Job != CharacterJob.Unemployed)
@@ -1390,7 +1392,7 @@ public class CommandScript : Script
             else if (player.Character.Job == CharacterJob.Trucker)
                 commands.AddRange(
                 [
-                    new("Emprego", "/rotas", "Exibe as rotas disponíveis para trabalho"),
+                    new("Emprego", "/tpda", "Abre o painel de gerenciamento de caminhoneiros"),
                     new("Emprego", "/carregarcaixas", "Carrega o seu veículo com as caixas da rota"),
                     new("Emprego", "/cancelarcaixas", "Devolve as caixas da rota"),
                     new("Emprego", "/entregarcaixas", "Entrega as caixas da rota em um ponto de entrega"),
@@ -1402,8 +1404,8 @@ public class CommandScript : Script
             commands.AddRange(
             [
                 new(Resources.Faction, "/f", "Chat OOC da facção"),
-                new(Resources.Faction, "/faccao", "Abre o painel de gerenciamento da facção"),
                 new(Resources.Faction, "/sairfaccao", "Sai da facção"),
+                new(Resources.Faction, "/membros", "Lista os membros online da facção"),
             ]);
 
             if (player.Faction!.Government)
@@ -1464,7 +1466,6 @@ public class CommandScript : Script
                     new(Resources.Faction, "/algemar", "Algema/desalgema um personagem"),
                     new(Resources.Faction, "/radar", "Coloca um radar de velocidade"),
                     new(Resources.Faction, "/radaroff", "Remove um radar de velocidade"),
-                    //new(Resources.Faction, "/spotlight /holofote", "Ativa/desativa o holofote de um veículo"),
                     new(Resources.Faction, "/confisco", "Cria um registro de confisco"),
                     new(Resources.Faction, "/vpegarpregos", "Pega um tapete de pregos do porta-malas de um veículo"),
                     new(Resources.Faction, "/colocarpregos", "Coloca um tapete de pregos no chão"),
@@ -1501,7 +1502,8 @@ public class CommandScript : Script
                 if (player.FactionFlags.Contains(FactionFlag.HQ))
                     commands.AddRange(
                     [
-                        new($"Flag Facção {FactionFlag.HQ.GetDescription()}", "/hq", "Envia uma mensagem no rádio da facção como dispatcher"),
+                        new($"Flag Facção {FactionFlag.HQ.GetDescription()}", "/hq", "Envia uma mensagem IC no HQ da facção"),
+                        new($"Flag Facção {FactionFlag.HQ.GetDescription()}", "/hqooc", "Envia uma mensagem OOC no HQ da facção"),
                     ]);
 
                 if (player.FactionFlags.Contains(FactionFlag.Storage))
@@ -1546,25 +1548,18 @@ public class CommandScript : Script
                     new($"Flag Staff {StaffFlag.Doors.GetDescription()}", "/portas", "Abre o painel de gerenciamento de portas"),
                 ]);
 
-            if (player.StaffFlags.Contains(StaffFlag.Jobs))
-                commands.AddRange(
-                [
-                    new($"Flag Staff {StaffFlag.Jobs.GetDescription()}", "/empregos", "Abre o painel de gerenciamento de empregos"),
-                ]);
-
             if (player.StaffFlags.Contains(StaffFlag.Factions))
                 commands.AddRange(
                 [
-                    new($"Flag Staff {StaffFlag.Factions.GetDescription()}", "/faccoes", "Abre o painel de gerenciamento de facções"),
                     new($"Flag Staff {StaffFlag.Factions.GetDescription()}", "/contrabandistas", "Abre o painel de gerenciamento de contrabandistas"),
                     new($"Flag Staff {StaffFlag.Factions.GetDescription()}", "/setfaccao", "Define a facção de um jogador"),
+                    new($"Flag Staff {StaffFlag.Factions.GetDescription()}", "/atunar", "Realiza modificações em um veículo"),
                 ]);
 
             if (player.StaffFlags.Contains(StaffFlag.FactionsStorages))
                 commands.AddRange(
                 [
                     new($"Flag Staff {StaffFlag.FactionsStorages.GetDescription()}", "/aarmazenamentos", "Abre o painel de gerenciamento de armazenamentos"),
-                    new($"Flag Staff {StaffFlag.FactionsStorages.GetDescription()}", "/aequipamentos", "Abre o painel de gerenciamento de equipamentos"),
                 ]);
 
             if (player.StaffFlags.Contains(StaffFlag.Properties))
@@ -1572,7 +1567,7 @@ public class CommandScript : Script
                 [
                     new($"Flag Staff {StaffFlag.Properties.GetDescription()}", "/eprop", "Edita uma propriedade"),
                     new($"Flag Staff {StaffFlag.Properties.GetDescription()}", "/int", "Visualiza um tipo de interior"),
-                    new($"Flag Staff {StaffFlag.Properties.GetDescription()}", "/aarmazenamento", "Visualiza o armazenamento de uma propriedade"),
+                    new($"Flag Staff {StaffFlag.Properties.GetDescription()}", "/apinv", "Visualiza o inventário de uma propriedade"),
                     new($"Flag Staff {StaffFlag.Properties.GetDescription()}", "/criarpropriedade /cprop", "Cria uma propriedade"),
                     new($"Flag Staff {StaffFlag.Properties.GetDescription()}", "/criarapartamento /cap", "Cria um apartamento"),
                     new($"Flag Staff {StaffFlag.Properties.GetDescription()}", "/irprop", "Vai para uma propriedade"),
@@ -1605,19 +1600,6 @@ public class CommandScript : Script
                     new($"Flag Staff {StaffFlag.Companies.GetDescription()}", "/empresas", "Abre o painel de gerenciamento de empresas"),
                 ]);
 
-            if (player.StaffFlags.Contains(StaffFlag.Vehicles))
-                commands.AddRange(
-                [
-                    new($"Flag Staff {StaffFlag.Vehicles.GetDescription()}", "/veiculos", "Abre o painel de gerenciamento de veículos"),
-                    new($"Flag Staff {StaffFlag.Vehicles.GetDescription()}", "/atunar", "Realiza modificações em um veículo"),
-                ]);
-
-            if (player.StaffFlags.Contains(StaffFlag.Items))
-                commands.AddRange(
-                [
-                    new($"Flag Staff {StaffFlag.Items.GetDescription()}", "/itens", "Abre o painel de gerenciamento de itens"),
-                ]);
-
             if (player.StaffFlags.Contains(StaffFlag.VehicleMaintenance))
                 commands.AddRange(
                 [
@@ -1625,12 +1607,6 @@ public class CommandScript : Script
                     new($"Flag Staff {StaffFlag.VehicleMaintenance.GetDescription()}", "/amotor", "Liga/desliga o motor de um veículo"),
                     new($"Flag Staff {StaffFlag.VehicleMaintenance.GetDescription()}", "/aabastecer", "Abastece um veículo"),
                     new($"Flag Staff {StaffFlag.VehicleMaintenance.GetDescription()}", "/aveiculo", "Cria um veículo temporário"),
-                ]);
-
-            if (player.StaffFlags.Contains(StaffFlag.Drugs))
-                commands.AddRange(
-                [
-                    new($"Flag Staff {StaffFlag.Drugs.GetDescription()}", "/drogas", "Abre o painel de gerenciamento de drogas"),
                 ]);
 
             if (player.StaffFlags.Contains(StaffFlag.Spots))
@@ -1653,9 +1629,9 @@ public class CommandScript : Script
                 ]);
         }
 
-        if (player.User.Staff >= UserStaff.ServerSupport)
+        if (player.User.Staff >= UserStaff.Tester)
         {
-            var display = UserStaff.ServerSupport.GetDescription();
+            var display = UserStaff.Tester.GetDescription();
             commands.AddRange(
             [
                 new(display, "/at", "Atende um SOS"),
@@ -1665,9 +1641,9 @@ public class CommandScript : Script
             ]);
         }
 
-        if (player.User.Staff >= UserStaff.JuniorServerAdmin)
+        if (player.User.Staff >= UserStaff.GameAdmin)
         {
-            var display = UserStaff.JuniorServerAdmin.GetDescription();
+            var display = UserStaff.GameAdmin.GetDescription();
             commands.AddRange(
             [
                 new(display, "/checar", "Visualiza as informações de um personagem"),
@@ -1717,32 +1693,20 @@ public class CommandScript : Script
                 new(display, "/checarafk", "Checa se o jogador está AFK"),
                 new(display, "/afks", "Lista os jogadores que estão AFK"),
                 new(display, "/mascarados", "Lista os jogadores mascarados"),
-            ]);
-        }
-
-        if (player.User.Staff >= UserStaff.ServerAdminI)
-        {
-            var display = UserStaff.ServerAdminI.GetDescription();
-            commands.AddRange(
-            [
                 new(display, "/aremovercorpo", "Remove um corpo"),
                 new(display, "/vida", "Altera a vida de um jogador"),
-            ]);
-        }
-
-        if (player.User.Staff >= UserStaff.ServerAdminII)
-        {
-            var display = UserStaff.ServerAdminII.GetDescription();
-            commands.AddRange(
-            [
                 new(display, "/idade", "Altera a idade de um personagem"),
                 new(display, "/colete", "Altera o colete de um jogador"),
+                new(display, "/testarefeito", "Testa efeitos do GTA V"),
+                new(display, "/pararefeito", "Para os efeitos do GTA V"),
+                new(display, "/notificacoes", "Visualiza suas notificações não lidas"),
+                new(display, "/lernotificacoes", "Marca todas suas notificações como lidas"),
             ]);
         }
 
-        if (player.User.Staff >= UserStaff.SeniorServerAdmin)
+        if (player.User.Staff >= UserStaff.LeadAdmin)
         {
-            var display = UserStaff.SeniorServerAdmin.GetDescription();
+            var display = UserStaff.LeadAdmin.GetDescription();
             commands.AddRange(
             [
                 new(display, "/alteracoesplaca", "Lista as solicitações de alterações de placa"),
@@ -1752,9 +1716,9 @@ public class CommandScript : Script
             ]);
         }
 
-        if (player.User.Staff >= UserStaff.LeadServerAdmin)
+        if (player.User.Staff >= UserStaff.HeadAdmin)
         {
-            var display = UserStaff.LeadServerAdmin.GetDescription();
+            var display = UserStaff.HeadAdmin.GetDescription();
             commands.AddRange(
             [
                 new(display, "/limparchatgeral", "Limpa o chat de todos os personagens"),
@@ -1765,14 +1729,15 @@ public class CommandScript : Script
             ]);
         }
 
-        if (player.User.Staff >= UserStaff.ServerManager)
+        if (player.User.Staff >= UserStaff.Management)
         {
-            var display = UserStaff.ServerManager.GetDescription();
+            var display = UserStaff.Management.GetDescription();
             commands.AddRange(
             [
-                new(display, "/lsp", "Adiciona LS Points para um usuário"),
+                new(display, "/pp", "Adiciona Premium Points para um usuário"),
                 new(display, "/concessionarias", "Abre o painel de gerenciamento de concessionárias"),
                 new(display, "/nome", "Altera o nome permanente de um jogador"),
+                new(display, "/empregos", "Abre o painel de gerenciamento de empregos"),
             ]);
         }
 
@@ -1780,19 +1745,19 @@ public class CommandScript : Script
         player.Emit("Help:Open", Functions.Serialize(commands));
     }
 
-    [Command("configuracoes", Aliases = ["config"])]
-    public static void CMD_configuracoes(MyPlayer player)
+    [Command("config")]
+    public static void CMD_config(MyPlayer player)
     {
         var settings = new UCPSettingsRequest(player.User.TimeStampToggle, player.User.AnnouncementToggle,
             player.User.PMToggle, player.User.FactionChatToggle, player.StaffChatToggle, player.User.ChatFontType,
             player.User.ChatLines, player.User.ChatFontSize, player.User.FactionToggle, player.User.VehicleTagToggle,
             player.User.ChatBackgroundColor, player.User.ShowNametagId, player.User.AmbientSoundToggle,
             player.User.FreezingTimePropertyEntrance, player.User.ShowOwnNametag, player.StaffToggle,
-            player.FactionWalkieTalkieToggle, player.User.ReceiveSMSDiscord);
+            player.FactionWalkieTalkieToggle, player.User.ReceiveSMSDiscord, player.User.ReceiveNotificationsOnDiscord);
         player.Emit("Settings:Open", Functions.Serialize(settings), Functions.Serialize(new
         {
-            IsPremium = player.GetCurrentPremium() != UserPremium.None,
-            IsStaff = player.User.Staff >= UserStaff.JuniorServerAdmin,
+            IsPremium = player.User.GetCurrentPremium() != UserPremium.None,
+            IsStaff = player.User.Staff >= UserStaff.GameAdmin,
             HasFaction = player.Character.FactionId.HasValue,
         }), Functions.Serialize(
                 Enum.GetValues<UserReceiveSMSDiscord>()
@@ -1837,10 +1802,10 @@ public class CommandScript : Script
         }
 
         player.User.UpdateSettings(settings.TimeStampToggle, settings.AnnouncementToggle,
-            player.GetCurrentPremium() != UserPremium.None && settings.PMToggle,
+            player.User.GetCurrentPremium() != UserPremium.None && settings.PMToggle,
             settings.FactionChatToggle, settings.ChatFontType, settings.ChatLines, settings.ChatFontSize,
             settings.FactionToggle, settings.VehicleTagToggle, settings.ChatBackgroundColor, settings.ShowNametagId, settings.AmbientSoundToggle,
-            settings.FreezingTimePropertyEntrance, settings.ShowOwnNametag, settings.ReceiveSMSDiscord);
+            settings.FreezingTimePropertyEntrance, settings.ShowOwnNametag, settings.ReceiveSMSDiscord, settings.ReceiveNotificationsOnDiscord);
         player.StaffChatToggle = settings.StaffChatToggle;
         player.StaffToggle = settings.StaffToggle;
         player.FactionWalkieTalkieToggle = settings.FactionWalkieTalkieToggle;
@@ -1919,7 +1884,7 @@ public class CommandScript : Script
 
         if (player.PropertyNoClip)
         {
-            await Functions.SendServerMessage($"{player.Character.Name} ({player.User.Name}) tentou usar o comando /corrigirvw enquanto estava com o no-clip ativado.", UserStaff.JuniorServerAdmin, true);
+            await Functions.SendServerMessage($"{player.Character.Name} ({player.User.Name}) tentou usar o comando /corrigirvw enquanto estava com o no-clip ativado.", UserStaff.GameAdmin, true);
             player.SendMessage(MessageType.Error, "Você não pode corrigir seu VW enquanto está com o no-clip ativado.");
             return;
         }
@@ -1999,20 +1964,20 @@ public class CommandScript : Script
             player.SendMessage(MessageType.None, target.Character.Attributes);
     }
 
-    [Command("supporters")]
-    public static void CMD_supporters(MyPlayer player)
+    [Command("testers")]
+    public static void CMD_testers(MyPlayer player)
     {
-        var supports = Global.SpawnedPlayers.Where(x => x.User.Staff == UserStaff.ServerSupport).OrderBy(x => x.User.Name);
+        var supports = Global.SpawnedPlayers.Where(x => x.User.Staff == UserStaff.Tester).OrderBy(x => x.User.Name);
         if (!supports.Any())
         {
-            player.SendMessage(MessageType.Error, "Não há nenhum support online.");
+            player.SendMessage(MessageType.Error, "Não há nenhum tester online.");
             return;
         }
 
-        player.SendMessage(MessageType.Title, $"SUPPORTS: {Constants.SERVER_NAME}");
+        player.SendMessage(MessageType.Title, $"TESTERS: {Constants.SERVER_NAME}");
         foreach (var support in supports)
-            player.SendMessage(MessageType.None, $"{support.User.Name}{(player.User.Staff >= UserStaff.ServerSupport ? $" ({support.SessionId})" : string.Empty)}");
-        player.SendMessage(MessageType.None, "Se precisar de ajuda de um Supporter, utilize o /sos.");
+            player.SendMessage(MessageType.None, $"{support.User.Name}{(player.User.Staff >= UserStaff.Tester ? $" ({support.SessionId})" : string.Empty)}");
+        player.SendMessage(MessageType.None, "Se precisar de ajuda de um Tester, utilize o /sos.");
     }
 
     [Command("pegarneve")]
@@ -2051,5 +2016,47 @@ public class CommandScript : Script
         player.SendMessage(MessageType.Success, "Você corrigiu sua visibilidade.");
         await player.WriteLog(LogType.Fix, "/fixinvi", null);
         player.SendMessage(MessageType.Error, "ATENÇÃO! Abusar desse comando é inadmissível.");
+    }
+
+    [Command("notificacoes")]
+    public async Task CMD_notificacoes(MyPlayer player)
+    {
+        var context = Functions.GetDatabaseContext();
+        var unreadNotifications = await context.Notifications
+            .Where(x => x.UserId == player.User.Id && !x.ReadDate.HasValue)
+            .OrderByDescending(x => x.RegisterDate)
+            .ToListAsync();
+        if (unreadNotifications.Count == 0)
+        {
+            player.SendMessage(MessageType.Error, "Você não possui notificações não lidas.");
+            return;
+        }
+
+        foreach (var unreadNotification in unreadNotifications)
+            player.SendMessage(MessageType.None, $"{unreadNotification.Message} ({unreadNotification.RegisterDate})");
+
+        player.SendMessage(MessageType.Title, "Use /lernotificacoes para marcar todas as notificações como lidas.");
+    }
+
+    [Command("lernotificacoes")]
+    public async Task CMD_lernotificacoes(MyPlayer player)
+    {
+        var context = Functions.GetDatabaseContext();
+        var unreadNotifications = await context.Notifications
+            .Where(x => x.UserId == player.User.Id && !x.ReadDate.HasValue)
+            .ToListAsync();
+        if (unreadNotifications.Count == 0)
+        {
+            player.SendMessage(MessageType.Error, "Você não possui notificações não lidas.");
+            return;
+        }
+
+        foreach (var unreadNotification in unreadNotifications)
+        {
+            unreadNotification.MarkAsRead();
+            context.Notifications.Update(unreadNotification);
+        }
+        await context.SaveChangesAsync();
+        player.SendMessage(MessageType.Success, "Todas as notificações foram marcadas como lidas.");
     }
 }

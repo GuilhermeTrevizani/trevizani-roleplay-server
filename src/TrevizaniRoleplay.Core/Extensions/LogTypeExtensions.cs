@@ -40,7 +40,6 @@ public static class LogTypeExtensions
             LogType.HealMe => Resources.HealMe,
             LogType.PrivateMessages => Resources.PrivateMessages,
             LogType.Mask => Resources.Mask,
-            LogType.VehicleDestruction => Resources.VehicleDestruction,
             LogType.Hack => Resources.Hack,
             LogType.Drug => Resources.Drug,
             LogType.LockBreak => Resources.LockBreak,

@@ -12,6 +12,6 @@ public class CompanyMap : IEntityTypeConfiguration<Company>
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Name).HasMaxLength(100);
         builder.Property(x => x.Color).HasMaxLength(6);
-        builder.HasOne(x => x.Character).WithMany(x => x.Companies).HasForeignKey(x => x.CharacterId);
+        builder.HasOne(x => x.Character).WithMany(x => x.Companies).HasForeignKey(x => x.CharacterId).OnDelete(DeleteBehavior.Restrict);
     }
 }

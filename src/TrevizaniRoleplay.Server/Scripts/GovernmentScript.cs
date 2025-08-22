@@ -295,18 +295,18 @@ public class GovernmentScript : Script
         }
 
         var barrier = Global.Objects.Where(x =>
-            x.CharacterId == player.Character.Id
+            x.FactionId == player.Character.FactionId
             && x.GetDimension() == player.GetDimension()
             && player.GetPosition().DistanceTo(x.GetPosition()) <= Constants.RP_DISTANCE)
         .MinBy(x => player.GetPosition().DistanceTo(x.GetPosition()));
         if (barrier is null)
         {
-            player.SendMessage(Models.MessageType.Error, "Você não está próximo de nenhuma barreira criada por você.");
+            player.SendMessage(Models.MessageType.Error, "Você não está próximo de nenhuma barreira criada pela facção.");
             return;
         }
 
         barrier.DestroyObject();
-        player.SendMessageToNearbyPlayers($"retira a barreira do chão.", MessageCategory.Ame);
+        player.SendMessageToNearbyPlayers("retira a barreira do chão.", MessageCategory.Ame);
         await player.WriteLog(LogType.Faction, $"/rb | X: {barrier.Position.X} Y: {barrier.Position.Y} Z: {barrier.Position.Z}", null);
     }
 
@@ -336,7 +336,7 @@ public class GovernmentScript : Script
             barrier.DestroyObject();
 
         player.SendFactionMessage($"{player.FactionRank!.Name} {player.Character.Name} removeu todas as barreiras da facção.");
-        await player.WriteLog(LogType.Faction, $"/rball", null);
+        await player.WriteLog(LogType.Faction, "/rball", null);
     }
 
     [Command("rballme")]
@@ -359,7 +359,7 @@ public class GovernmentScript : Script
             barrier.DestroyObject();
 
         player.SendFactionMessage($"{player.FactionRank!.Name} {player.Character.Name} removeu todas as suas barreiras.");
-        await player.WriteLog(LogType.Faction, $"/rballme", null);
+        await player.WriteLog(LogType.Faction, "/rballme", null);
     }
 
     [Command("setdep", "/setdep (departamento [lista])")]
@@ -425,7 +425,7 @@ public class GovernmentScript : Script
                 || x.Character.Faction?.ShortName.ToUpper() == player.TargetFactionDepartment.ToUpper()
                 || (x.Faction?.HasWalkieTalkie == true && player.TargetFactionDepartment == "ALL")));
         foreach (var target in targets)
-            target.SendMessage(Models.MessageType.None, targetMessage, "#a35353");
+            target.SendMessage(Models.MessageType.None, targetMessage, "#cecc15");
 
         player.SendMessageToNearbyPlayers(message, MessageCategory.WalkieTalkie);
     }
@@ -479,12 +479,6 @@ public class GovernmentScript : Script
     [Command("ftow")]
     public async Task CMD_ftow(MyPlayer player)
     {
-        if (!(player.Faction?.HasVehicles ?? false))
-        {
-            player.SendMessage(Models.MessageType.Error, "Você não está em uma governamental ou não está em serviço.");
-            return;
-        }
-
         if (!player.FactionFlags.Contains(FactionFlag.RespawnVehicles))
         {
             player.SendMessage(Models.MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
@@ -498,5 +492,29 @@ public class GovernmentScript : Script
 
         player.SendFactionMessage($"{player.User.Name} respawnou todos os veículos da facção sem ocupantes.");
         await player.WriteLog(LogType.Faction, "/ftow", null);
+    }
+
+    [Command("hqooc", "/hqooc (mensagem)", GreedyArg = true)]
+    public async Task CMD_hqooc(MyPlayer player, string message)
+    {
+        if (!player.FactionFlags.Contains(FactionFlag.HQ))
+        {
+            player.SendMessage(Models.MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
+            return;
+        }
+
+        if (player.FactionWalkieTalkieToggle)
+        {
+            player.SendMessage(Models.MessageType.Error, "Você ocultou as mensagens de rádio da facção.");
+            return;
+        }
+
+        message = Functions.CheckFinalDot(message);
+        var targetMessage = $"(( [HQ] {player.User.Name}: {message} ))";
+        var targets = Global.SpawnedPlayers.Where(x => x.Character.FactionId == player.Character.FactionId && !x.FactionWalkieTalkieToggle).ToList();
+        foreach (var target in targets)
+            target.SendMessage(Models.MessageType.None, targetMessage, "#47C3F3");
+
+        await player.WriteLog(LogType.Faction, $"/hqooc {message}", null);
     }
 }

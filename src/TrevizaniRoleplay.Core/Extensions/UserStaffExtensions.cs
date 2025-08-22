@@ -10,13 +10,12 @@ public static class UserStaffExtensions
         return userStaff switch
         {
             UserStaff.None => Resources.None,
-            UserStaff.JuniorServerAdmin => Resources.JuniorServerAdmin,
-            UserStaff.ServerAdminI => Resources.ServerAdminI,
-            UserStaff.ServerAdminII => Resources.ServerAdminII,
-            UserStaff.SeniorServerAdmin => Resources.SeniorServerAdmin,
-            UserStaff.LeadServerAdmin => Resources.LeadServerAdmin,
-            UserStaff.ServerManager => Resources.ServerManager,
-            UserStaff.HeadServerDeveloper => Resources.HeadServerDeveloper,
+            UserStaff.Tester => Resources.Tester,
+            UserStaff.GameAdmin => Resources.GameAdmin,
+            UserStaff.LeadAdmin => Resources.LeadAdmin,
+            UserStaff.HeadAdmin => Resources.HeadAdmin,
+            UserStaff.Management => Resources.Management,
+            UserStaff.Founder => Resources.Founder,
             _ => userStaff.ToString(),
         };
     }

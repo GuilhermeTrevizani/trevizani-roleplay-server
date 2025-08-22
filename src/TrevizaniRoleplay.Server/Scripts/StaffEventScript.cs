@@ -29,7 +29,7 @@ public class StaffEventScript : Script
         Global.WeatherInfo.Manual = true;
         Functions.SetWeatherInfo();
 
-        await Functions.SendServerMessage($"{player.User.Name} alterou o tempo para {Global.WeatherInfo.WeatherType} e a temperatura para {Global.WeatherInfo.Main.Temp:N0}°C.", UserStaff.JuniorServerAdmin, false);
+        await Functions.SendServerMessage($"{player.User.Name} alterou o tempo para {Global.WeatherInfo.WeatherType} e a temperatura para {Global.WeatherInfo.Main.Temp:N0}°C.", UserStaff.GameAdmin, false);
         await player.WriteLog(LogType.Staff, $"/tempo {Global.WeatherInfo.WeatherType} {Global.WeatherInfo.Main.Temp:N0}", null);
     }
 
@@ -45,7 +45,7 @@ public class StaffEventScript : Script
         foreach (var target in Global.SpawnedPlayers)
             target.SendMessage(MessageType.None, $"[Anúncio de Roleplay] {message}", "#ed0202");
 
-        await Functions.SendServerMessage($"{player.User.Name} enviou o anúncio de roleplay.", UserStaff.JuniorServerAdmin, false);
+        await Functions.SendServerMessage($"{player.User.Name} enviou o anúncio de roleplay.", UserStaff.GameAdmin, false);
         await player.WriteLog(LogType.Staff, $"/anrp {message}", null);
 
         if (Global.DiscordClient is null
@@ -74,7 +74,7 @@ public class StaffEventScript : Script
 
         Global.WeatherInfo.Manual = false;
 
-        await Functions.SendServerMessage($"{player.User.Name} removeu o tempo fixo e ativou a sincronização automática.", UserStaff.JuniorServerAdmin, false);
+        await Functions.SendServerMessage($"{player.User.Name} removeu o tempo fixo e ativou a sincronização automática.", UserStaff.GameAdmin, false);
         await player.WriteLog(LogType.Staff, "/rtempo", null);
     }
 
@@ -108,7 +108,7 @@ public class StaffEventScript : Script
         var message = string.IsNullOrWhiteSpace(newName) ? $"{player.User.Name} removeu o nome temporário de {target.Character.Name}."
             :
             $"{player.User.Name} alterou o nome temporário de {target.Character.Name} para {newName}.";
-        await Functions.SendServerMessage(message, UserStaff.JuniorServerAdmin, false);
+        await Functions.SendServerMessage(message, UserStaff.GameAdmin, false);
         var targetMessage = string.IsNullOrWhiteSpace(newName) ? $"{player.User.Name} removeu o seu nome temporário."
             :
             $"{player.User.Name} alterou seu nome temporário para {newName}.";
@@ -144,7 +144,7 @@ public class StaffEventScript : Script
             target.SetOutfit();
         }
 
-        await Functions.SendServerMessage($"{player.User.Name} alterou a skin de {target.Character.Name} para {skin}.", UserStaff.JuniorServerAdmin, false);
+        await Functions.SendServerMessage($"{player.User.Name} alterou a skin de {target.Character.Name} para {skin}.", UserStaff.GameAdmin, false);
         await player.WriteLog(LogType.Staff, $"/skin {skin}", target);
     }
 
