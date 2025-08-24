@@ -20,7 +20,7 @@ public class Character : BaseEntity
     public int ConnectedTime { get; private set; }
     public Guid? FactionId { get; private set; }
     public Guid? FactionRankId { get; private set; }
-    public int Bank { get; private set; } = 5000;
+    public int Bank { get; private set; } = 5_000;
     public DateTime? DeathDate { get; private set; }
     public string DeathReason { get; private set; } = string.Empty;
     public CharacterJob Job { get; private set; } = CharacterJob.Unemployed;
@@ -36,7 +36,7 @@ public class Character : BaseEntity
     public DateTime? DriverLicenseValidDate { get; private set; }
     public DateTime? DriverLicenseBlockedDate { get; private set; }
     public Guid? PoliceOfficerBlockedDriverLicenseCharacterId { get; private set; }
-    public int Badge { get; private set; }
+    public int IdNumber { get; private set; }
     public DateTime? AnnouncementLastUseDate { get; private set; }
     public int ExtraPayment { get; private set; }
     public string WoundsJSON { get; private set; } = "[]";
@@ -114,7 +114,7 @@ public class Character : BaseEntity
 
     public void Create(string name, int age, string history, CharacterSex sex,
         Guid userId, string ip, uint model, int health, Guid? evaluatorStaffUserId, int bankAccount,
-        CharacterBloodType bloodType, int initialHelpHours, float posX, float posY, float posZ)
+        CharacterBloodType bloodType, int initialHelpHours, float posX, float posY, float posZ, int idNumber)
     {
         Name = name;
         Age = age;
@@ -131,6 +131,7 @@ public class Character : BaseEntity
         PosX = posX;
         PosY = posY;
         PosZ = posZ;
+        IdNumber = idNumber;
     }
 
     public void UpdateApplication(string name, int age, string history, CharacterSex sex, uint model)
@@ -222,11 +223,10 @@ public class Character : BaseEntity
             Job = CharacterJob.Unemployed;
     }
 
-    public void UpdateFaction(Guid factionRankId, string factionFlagsJSON, int badge)
+    public void UpdateFaction(Guid factionRankId, string factionFlagsJSON)
     {
         FactionRankId = factionRankId;
         FactionFlagsJSON = factionFlagsJSON;
-        Badge = badge;
     }
 
     public void UseDrug(Guid drugItemTemplateId, int thresoldDeath, int minutesDuration)
@@ -276,7 +276,6 @@ public class Character : BaseEntity
     public void ResetFaction()
     {
         FactionId = FactionRankId = null;
-        Badge = 0;
         FactionFlagsJSON = "[]";
         Armor = 0;
 

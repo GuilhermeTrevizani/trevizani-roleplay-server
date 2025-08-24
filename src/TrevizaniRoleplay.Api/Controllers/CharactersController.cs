@@ -289,7 +289,8 @@ public class CharactersController(DatabaseContext context) : BaseController(cont
                 UserId, Ip, model, Constants.MAX_HEALTH,
                 user.Staff >= UserStaff.GameAdmin ? user.Id : null,
                 bankAccount, bloodType, initialHelpHours,
-                Constants.INITIAL_SPAWN_POSITION_X, Constants.INITIAL_SPAWN_POSITION_Y, Constants.INITIAL_SPAWN_POSITION_Z);
+                Constants.INITIAL_SPAWN_POSITION_X, Constants.INITIAL_SPAWN_POSITION_Y, Constants.INITIAL_SPAWN_POSITION_Z,
+                (await context.Characters.CountAsync()) + 1);
             if (oldCharacter is not null)
             {
                 character.SetBank(oldCharacter!.Bank);

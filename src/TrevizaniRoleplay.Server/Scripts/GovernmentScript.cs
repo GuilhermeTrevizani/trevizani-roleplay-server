@@ -199,7 +199,7 @@ public class GovernmentScript : Script
     [Command("mostrardistintivo", "/mostrardistintivo (ID ou nome)")]
     public static void CMD_mostrardistintivo(MyPlayer player, string idOrName)
     {
-        if (player.Character.Badge == 0)
+        if (player.Faction?.HasDuty != true)
         {
             player.SendMessage(Models.MessageType.Error, "Você não possui um distintivo.");
             return;
@@ -215,7 +215,7 @@ public class GovernmentScript : Script
             return;
         }
 
-        target.SendMessage(Models.MessageType.None, $"Distintivo #{player.Character.Badge} de {player.Character.Name}", $"#{player.Faction!.Color}");
+        target.SendMessage(Models.MessageType.None, $"Distintivo #{player.Character.IdNumber} de {player.Character.Name}", $"#{player.Faction!.Color}");
         target.SendMessage(Models.MessageType.None, $"{player.Faction.Name} - {player.FactionRank!.Name}");
         player.SendMessageToNearbyPlayers(player == target ? "olha seu próprio distintivo." : $"mostra seu distintivo para {target.ICName}.", MessageCategory.Ame);
     }

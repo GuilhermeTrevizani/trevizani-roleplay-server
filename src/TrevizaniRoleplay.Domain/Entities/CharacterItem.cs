@@ -7,7 +7,6 @@ public class CharacterItem : BaseItem
     public Guid CharacterId { get; private set; }
     public byte Slot { get; private set; }
     public bool InUse { get; private set; }
-    public bool OnlyOnDuty { get; private set; }
 
     [JsonIgnore]
     public Character? Character { get; private set; }
@@ -35,10 +34,5 @@ public class CharacterItem : BaseItem
     public void SetSubtype(uint subtype)
     {
         Subtype = subtype;
-    }
-
-    public void SetOnlyOnDuty(bool onlyOnDuty)
-    {
-        OnlyOnDuty = onlyOnDuty;
     }
 }

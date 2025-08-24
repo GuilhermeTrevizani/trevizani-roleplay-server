@@ -25,7 +25,6 @@ public class MyFactionDetailResponse
         public string User { get; set; } = string.Empty;
         public DateTime LastAccessDate { get; set; }
         public int Position { get; set; }
-        public int Badge { get; set; }
         public bool IsOnline { get; set; }
         public double AverageMinutesOnDutyLastTwoWeeks { get; set; }
         public string FlagsJson { get; set; } = string.Empty;

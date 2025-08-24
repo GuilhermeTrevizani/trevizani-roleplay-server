@@ -60,7 +60,6 @@ public class FactionsController(DatabaseContext context) : BaseController(contex
                 User = x.User!.Name,
                 LastAccessDate = x.LastAccessDate,
                 Position = x.FactionRank.Position,
-                Badge = x.Badge,
                 IsOnline = x.Connected,
                 FlagsJson = x.FactionFlagsJSON,
                 AverageMinutesOnDutyLastTwoWeeks = x.Sessions
@@ -341,16 +340,6 @@ public class FactionsController(DatabaseContext context) : BaseController(contex
         var factionRank = factionRanks.FirstOrDefault(x => x.Id == character.FactionRankId)
             ?? throw new ArgumentException(Resources.RecordNotFound);
 
-        if (request.Badge < 0)
-            throw new ArgumentException("Distintivo deve ser maior ou igual a zero.");
-
-        if (request.Badge > 0)
-        {
-            var characterTarget = await context.Characters.WhereActive().FirstOrDefaultAsync(x => x.FactionId == faction.Id && x.Badge == request.Badge);
-            if (characterTarget is not null && characterTarget.Id != character.Id)
-                throw new ArgumentException($"Distintivo {request.Badge} está sendo usado por {characterTarget.Name}.");
-        }
-
         var maxPosition = characters.Where(x => x.FactionId == request.FactionId).Select(x => factionRanks.FirstOrDefault(y => y.Id == x.FactionRankId)?.Position ?? 0).Max();
 
         if (factionRank.Position >= maxPosition && !characters.Any(x => x.Id == character.Id))
@@ -360,7 +349,6 @@ public class FactionsController(DatabaseContext context) : BaseController(contex
         ucpAction.Create(UCPActionType.SaveFactionMember, UserId, Serialize(new UCPActionSaveFactionMemberRequest
         {
             Id = request.Id,
-            Badge = request.Badge,
             FactionRankId = request.FactionRankId,
             Flags = request.Flags,
         }));

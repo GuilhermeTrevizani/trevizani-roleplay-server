@@ -759,19 +759,19 @@ public class Server : Script
                     if (target is not null)
                     {
                         var user = await context.Users.FirstOrDefaultAsync(x => x.Id == ucpAction.UserId);
-                        target.Character.UpdateFaction(data.FactionRankId, Functions.Serialize(data.Flags), data.Badge);
+                        target.Character.UpdateFaction(data.FactionRankId, Functions.Serialize(data.Flags));
                         target.FactionFlags = [.. data.Flags];
                         target.SendMessage(MessageType.Success, $"{user!.Name} alterou suas informações na facção.");
                         await target.Save();
                     }
                     else
                     {
-                        character!.UpdateFaction(data.FactionRankId, Functions.Serialize(data.Flags), data.Badge);
+                        character!.UpdateFaction(data.FactionRankId, Functions.Serialize(data.Flags));
                         context.Characters.Update(character);
                         await context.SaveChangesAsync();
                     }
 
-                    await Functions.WriteLog(LogType.Faction, $"Salvar Membro Facção {faction.Name} {character!.Name} {factionRank.Name} {data.Badge} {string.Join(", ", data.Flags.Select(x => x.GetDescription()))}", ucpAction.UserId);
+                    await Functions.WriteLog(LogType.Faction, $"Salvar Membro Facção {faction.Name} {character!.Name} {factionRank.Name} {string.Join(", ", data.Flags.Select(x => x.GetDescription()))}", ucpAction.UserId);
                 }
                 else if (ucpAction.Type == UCPActionType.RemoveFactionMember)
                 {
