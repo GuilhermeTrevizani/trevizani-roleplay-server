@@ -36,7 +36,7 @@ public class MyVehicle(NetHandle netHandle) : GTANetworkAPI.Vehicle(netHandle)
                 velocity.Y * velocity.Y +
                 velocity.Z * velocity.Z
             );
-            return Convert.ToInt32(Math.Abs(speed * 3.6));
+            return Convert.ToInt32(Math.Abs(speed * Constants.MPH_CONVERSION));
         }
     }
 

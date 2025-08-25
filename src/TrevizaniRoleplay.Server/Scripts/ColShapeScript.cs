@@ -51,7 +51,7 @@ public class ColShapeScript : Script
             if (colShape.PoliceOfficerCharacterId.HasValue && colShape.MaxSpeed.HasValue)
             {
                 var target = Global.SpawnedPlayers.FirstOrDefault(x => x.Character.Id == colShape.PoliceOfficerCharacterId);
-                target?.SendMessage(MessageType.None, $"[RADAR] {{{(vehicle.Speed > colShape.MaxSpeed ? Constants.ERROR_COLOR : Constants.SUCCESS_COLOR)}}}{vehicle.Speed} {{#FFFFFF}}km/h.");
+                target?.SendMessage(MessageType.None, $"[RADAR] {{{(vehicle.Speed > colShape.MaxSpeed ? Constants.ERROR_COLOR : Constants.SUCCESS_COLOR)}}}{vehicle.Speed} {{#FFFFFF}}MPH.");
                 return;
             }
         }

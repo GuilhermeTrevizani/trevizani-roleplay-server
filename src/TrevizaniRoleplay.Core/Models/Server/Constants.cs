@@ -109,4 +109,5 @@ public abstract class Constants
     public const int MAX_PROPERTY_INVENTORY_SLOTS = 100;
     public const int VEHICLE_DOOR_HOOD = 4;
     public const int VEHICLE_DOOR_TRUNK = 5;
+    public const float MPH_CONVERSION = 2.236936f;
 }

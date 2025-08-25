@@ -489,9 +489,9 @@ public class VehicleScript : Script
     }
 
     [Command("velmax", "/velmax (velocidade)")]
-    public static void CMD_velmax(MyPlayer player, int velocidade)
+    public static void CMD_velmax(MyPlayer player, int speed)
     {
-        if (velocidade < 5 && velocidade != 0)
+        if (speed < 5 && speed != 0)
         {
             player.SendMessage(MessageType.Error, "Velocidade precisa ser maior que 5 ou igual a 0.");
             return;
@@ -509,15 +509,15 @@ public class VehicleScript : Script
             return;
         }
 
-        if (veh.Speed > velocidade && velocidade != 0)
+        if (veh.Speed > speed && speed != 0)
         {
             player.SendMessage(MessageType.Error, "A velocidade do veículo está acima da velocidade máxima pretendida.");
             return;
         }
 
-        player.Emit("SetVehicleMaxSpeed", velocidade / 3.6F);
-        player.SendMessage(MessageType.Success, velocidade == 0 ? "Você removeu a limitação de velocidade do veículo." :
-            $"Você alterou a velocidade máxima do veículo para {velocidade} km/h.");
+        player.Emit("SetVehicleMaxSpeed", speed / Constants.MPH_CONVERSION);
+        player.SendMessage(MessageType.Success, speed == 0 ? "Você removeu a limitação de velocidade do veículo." :
+            $"Você alterou a velocidade máxima do veículo para {speed} MPH.");
     }
 
     [Command("janela", "/janela (opção [fe, fd, te, td, todas])", Aliases = ["janelas", "ja"], AllowEmptyStrings = true)]
