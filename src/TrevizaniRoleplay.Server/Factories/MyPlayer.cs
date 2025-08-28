@@ -2098,7 +2098,7 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
 
     private void UpdateMoneyHUD() => Emit("HUDPage:UpdateMoney", Money);
 
-    public async Task RemoveStackedItem(Guid itemTemplateId, int quantity)
+    public async Task RemoveStackedItem(Guid itemTemplateId, int quantity, bool updateInventory = true)
     {
         if (quantity <= 0)
             return;
@@ -2119,7 +2119,9 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
             Items.Remove(item);
         }
         await context.SaveChangesAsync();
-        ShowInventory(update: true);
+
+        if (updateInventory)
+            ShowInventory(update: true);
 
         if (itemTemplateId == new Guid(Constants.MONEY_ITEM_TEMPLATE_ID))
             UpdateMoneyHUD();

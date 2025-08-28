@@ -1351,7 +1351,7 @@ public class InventoryScript : Script
                     return;
                 }
 
-                await player.RemoveStackedItem(ammoItem.ItemTemplateId, 1);
+                await player.RemoveStackedItem(ammoItem.ItemTemplateId, 1, false);
 
                 await CreateBulletShell(player, position, ammoItem, weaponItem);
             }
