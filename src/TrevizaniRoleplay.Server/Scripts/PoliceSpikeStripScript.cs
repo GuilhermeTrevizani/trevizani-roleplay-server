@@ -6,42 +6,51 @@ namespace TrevizaniRoleplay.Server.Scripts;
 
 public class PoliceSpikeStripScript : Script
 {
-    [Command("vpegarpregos")]
-    public static void CMD_vpegarpregos(MyPlayer player)
+    [Command(["vpregos"], "Facção", "Pega/coloca um tapete de pregos do porta-malas de um veículo")]
+    public static void CMD_vpregos(MyPlayer player)
     {
         if (player.Faction?.Type != FactionType.Police || !player.OnDuty)
         {
             player.SendMessage(MessageType.Error, "Você não está em uma facção policial ou não está em serviço.");
             return;
         }
-
-        if (player.HasSpikeStrip)
-        {
-            player.SendMessage(MessageType.Error, "Você já possui um tapete de pregos.");
-            return;
-        }
-
-        var vehicle = Global.Vehicles.Where(x => x.GetDimension() == player.GetDimension()
-            && player.GetPosition().DistanceTo(x.GetPosition()) <= Constants.RP_DISTANCE)
-            .MinBy(x => player.GetPosition().DistanceTo(x.GetPosition()));
+            
+            var vehicle = Global.Vehicles.Where(x => x.GetDimension() == player.GetDimension()
+                && player.GetPosition().DistanceTo(x.GetPosition()) <= Constants.RP_DISTANCE)
+                .MinBy(x => player.GetPosition().DistanceTo(x.GetPosition()));
         if (vehicle is null || vehicle.DoorsStates[Constants.VEHICLE_DOOR_TRUNK])
         {
             player.SendMessage(MessageType.Error, "Você não está próximo de um veículo com o porta-malas aberto.");
             return;
         }
 
-        if (!vehicle.HasSpikeStrip)
+        if (player.HasSpikeStrip)
         {
-            player.SendMessage(MessageType.Error, "O veículo não possui um tapete de pregos.");
-            return;
-        }
+            if (vehicle.HasSpikeStrip)
+            {
+                player.SendMessage(MessageType.Error, "O veículo já possui um tapete de pregos.");
+                return;
+            }
 
-        vehicle.HasSpikeStrip = false;
-        player.HasSpikeStrip = true;
-        player.SendMessageToNearbyPlayers($"pega um tapete de pregos do porta-malas.", MessageCategory.Ame);
+            vehicle.HasSpikeStrip = true;
+            player.HasSpikeStrip = false;
+            player.SendMessageToNearbyPlayers($"coloca um tapete de pregos no porta-malas.", MessageCategory.Ame);
+        }
+        else
+        {
+            if (!vehicle.HasSpikeStrip)
+            {
+                player.SendMessage(MessageType.Error, "O veículo não possui um tapete de pregos.");
+                return;
+            }
+
+            vehicle.HasSpikeStrip = false;
+            player.HasSpikeStrip = true;
+            player.SendMessageToNearbyPlayers($"pega um tapete de pregos do porta-malas.", MessageCategory.Ame);
+        }
     }
 
-    [Command("colocarpregos", "/colocarpregos (tamanho (1-3))")]
+    [Command(["colocarpregos"], "Facção", "Coloca um tapete de pregos no chão", "(tamanho (1-3))")]
     public async Task CMD_colocarpregos(MyPlayer player, byte size)
     {
         if (player.Faction?.Type != FactionType.Police || !player.OnDuty)
@@ -86,7 +95,7 @@ public class PoliceSpikeStripScript : Script
         await player.WriteLog(LogType.Faction, $"/colocarpregos {size} {position}", null);
     }
 
-    [Command("pegarpregos")]
+    [Command(["pegarpregos"], "Facção", "Pega um tapete de pregos do chão")]
     public static void CMD_pegarpregos(MyPlayer player)
     {
         if (player.Faction?.Type != FactionType.Police || !player.OnDuty)
@@ -109,40 +118,5 @@ public class PoliceSpikeStripScript : Script
             spikeStrip.DestroyObject();
         player.HasSpikeStrip = true;
         player.SendMessageToNearbyPlayers($"pega um tapete de pregos do chão.", MessageCategory.Ame);
-    }
-
-    [Command("vcolocarpregos")]
-    public static void CMD_vcolocarpregos(MyPlayer player)
-    {
-        if (player.Faction?.Type != FactionType.Police || !player.OnDuty)
-        {
-            player.SendMessage(MessageType.Error, "Você não está em uma facção policial ou não está em serviço.");
-            return;
-        }
-
-        if (!player.HasSpikeStrip)
-        {
-            player.SendMessage(MessageType.Error, "Você não tem um tapete de pregos.");
-            return;
-        }
-
-        var vehicle = Global.Vehicles.Where(x => x.GetDimension() == player.GetDimension()
-            && player.GetPosition().DistanceTo(x.GetPosition()) <= Constants.RP_DISTANCE)
-            .MinBy(x => player.GetPosition().DistanceTo(x.GetPosition()));
-        if (vehicle is null || vehicle.DoorsStates[Constants.VEHICLE_DOOR_TRUNK])
-        {
-            player.SendMessage(MessageType.Error, "Você não está próximo de um veículo com o porta-malas aberto.");
-            return;
-        }
-
-        if (vehicle.HasSpikeStrip)
-        {
-            player.SendMessage(MessageType.Error, "O veículo já possui um tapete de pregos.");
-            return;
-        }
-
-        vehicle.HasSpikeStrip = true;
-        player.HasSpikeStrip = false;
-        player.SendMessageToNearbyPlayers($"coloca um tapete de pregos no porta-malas.", MessageCategory.Ame);
     }
 }

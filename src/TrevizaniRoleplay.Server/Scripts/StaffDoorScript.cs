@@ -7,7 +7,7 @@ namespace TrevizaniRoleplay.Server.Scripts;
 
 public class StaffDoorScript : Script
 {
-    [Command("portas")]
+    [Command(["portas"], "Staff", "Abre o painel de gerenciamento de portas")]
     public static void CMD_portas(MyPlayer player)
     {
         if (!player.StaffFlags.Contains(StaffFlag.Doors))

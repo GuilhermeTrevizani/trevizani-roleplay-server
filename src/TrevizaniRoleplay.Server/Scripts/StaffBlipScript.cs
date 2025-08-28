@@ -7,7 +7,7 @@ namespace TrevizaniRoleplay.Server.Scripts;
 
 public class StaffBlipScript : Script
 {
-    [Command("blips")]
+    [Command(["blips"], "Staff", "Abre o painel de gerenciamento de blips")]
     public static void CMD_blips(MyPlayer player)
     {
         if (!player.StaffFlags.Contains(StaffFlag.Blips))

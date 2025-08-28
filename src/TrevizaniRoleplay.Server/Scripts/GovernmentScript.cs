@@ -11,7 +11,7 @@ namespace TrevizaniRoleplay.Server.Scripts;
 
 public class GovernmentScript : Script
 {
-    [Command("meg", "/meg (mensagem)", GreedyArg = true)]
+    [Command(["meg"], "Facção", "Fala no megafone", "(mensagem)", GreedyArg = true)]
     public static void CMD_meg(MyPlayer player, string message)
     {
         if (!(player.Faction?.Government ?? false) || !player.OnDuty)
@@ -23,7 +23,7 @@ public class GovernmentScript : Script
         player.SendMessageToNearbyPlayers(message, MessageCategory.Megaphone);
     }
 
-    [Command("gov", "/gov (mensagem)", GreedyArg = true)]
+    [Command(["gov"], "Facção", "Envia um anúncio governamental da facção", "(mensagem)", GreedyArg = true)]
     public async Task CMD_gov(MyPlayer player, string message)
     {
         if (!(player.Faction?.HasGovernmentAdvertisement ?? false) || !player.OnDuty)
@@ -113,7 +113,7 @@ public class GovernmentScript : Script
         }
     }
 
-    [Command("uniforme")]
+    [Command(["uniforme"], "Facção", "Abre o menu de seleção de roupas")]
     public static void CMD_uniforme(MyPlayer player)
     {
         if (!(player.Faction?.HasDuty ?? false))
@@ -125,7 +125,7 @@ public class GovernmentScript : Script
         player.EditOutfits(2);
     }
 
-    [Command("freparar")]
+    [Command(["freparar"], "Facção", "Conserta veículos da facção")]
     public async Task CMD_freparar(MyPlayer player)
     {
         if (!(player.Faction?.HasDuty ?? false))
@@ -170,7 +170,7 @@ public class GovernmentScript : Script
         });
     }
 
-    [Command("rapel")]
+    [Command(["rapel"], "Facção", "Desce de rapel dos assentos traseiros de um helicóptero apropriado")]
     public static void CMD_rapel(MyPlayer player)
     {
         if (!(player.Faction?.Government ?? false) || !player.OnDuty)
@@ -196,7 +196,7 @@ public class GovernmentScript : Script
         player.Emit("TaskRappelFromHeli");
     }
 
-    [Command("mostrardistintivo", "/mostrardistintivo (ID ou nome)")]
+    [Command(["mostrardistintivo"], "Facção", "Mostra seu distintivo para um personagem", "(ID ou nome)")]
     public static void CMD_mostrardistintivo(MyPlayer player, string idOrName)
     {
         if (player.Faction?.HasDuty != true)
@@ -220,7 +220,7 @@ public class GovernmentScript : Script
         player.SendMessageToNearbyPlayers(player == target ? "olha seu próprio distintivo." : $"mostra seu distintivo para {target.ICName}.", MessageCategory.Ame);
     }
 
-    [Command("hq", "/hq (mensagem)", GreedyArg = true)]
+    [Command(["hq"], "Facção", "Envia uma mensagem IC no HQ da facção", "(mensagem)", GreedyArg = true)]
     public async Task CMD_hq(MyPlayer player, string message)
     {
         if (!(player.Faction?.HasWalkieTalkie ?? false))
@@ -250,7 +250,7 @@ public class GovernmentScript : Script
         await player.WriteLog(LogType.Faction, $"/hq {message}", null);
     }
 
-    [Command("br", "/br (tipo). Use /br 0 para visualizar os tipos.")]
+    [Command(["br"], "Facção", "Cria uma barreira", "(tipo). Use /br 0 para visualizar os tipos.")]
     public static void CMD_br(MyPlayer player, int type)
     {
         if (!(player.Faction?.HasBarriers ?? false) || !player.OnDuty)
@@ -285,7 +285,7 @@ public class GovernmentScript : Script
         }
     }
 
-    [Command("rb")]
+    [Command(["rb"], "Facção", "Remove uma barreira")]
     public async Task CMD_rb(MyPlayer player)
     {
         if (!(player.Faction?.HasBarriers ?? false) || !player.OnDuty)
@@ -310,7 +310,7 @@ public class GovernmentScript : Script
         await player.WriteLog(LogType.Faction, $"/rb | X: {barrier.Position.X} Y: {barrier.Position.Y} Z: {barrier.Position.Z}", null);
     }
 
-    [Command("rball")]
+    [Command(["rball"], "Facção", "Remove todas barreiras criadas por sua facção")]
     public async Task CMD_rball(MyPlayer player)
     {
         if (!(player.Faction?.HasBarriers ?? false) || !player.OnDuty)
@@ -339,7 +339,7 @@ public class GovernmentScript : Script
         await player.WriteLog(LogType.Faction, "/rball", null);
     }
 
-    [Command("rballme")]
+    [Command(["rballme"], "Facção", "Remove todas barreiras criadas por você")]
     public async Task CMD_rballme(MyPlayer player)
     {
         if (!(player.Faction?.HasBarriers ?? false) || !player.OnDuty)
@@ -362,7 +362,7 @@ public class GovernmentScript : Script
         await player.WriteLog(LogType.Faction, "/rballme", null);
     }
 
-    [Command("setdep", "/setdep (departamento [lista])")]
+    [Command(["setdep"], "Facção", "Define qual o departamento de destino no canal interdepartamental", "(departamento [lista])")]
     public static void CMD_setdep(MyPlayer player, string shortName)
     {
         if (!(player.Faction?.HasWalkieTalkie ?? false) || !player.OnDuty)
@@ -401,7 +401,7 @@ public class GovernmentScript : Script
         player.SendMessage(Models.MessageType.Success, $"Você alterou o departamento destino para {shortName}.");
     }
 
-    [Command("dep", "/dep (mensagem)", GreedyArg = true)]
+    [Command(["dep"], "Facção", "Fala no canal interdepartamental", "(mensagem)", GreedyArg = true)]
     public static void CMD_dep(MyPlayer player, string message)
     {
         if (!(player.Faction?.HasWalkieTalkie ?? false) || !player.OnDuty)
@@ -430,7 +430,7 @@ public class GovernmentScript : Script
         player.SendMessageToNearbyPlayers(message, MessageCategory.WalkieTalkie);
     }
 
-    [Command("usaruniforme", "/usaruniforme (tipo). Use /usaruniforme 0 para visualizar os tipos.")]
+    [Command(["usaruniforme"], "Facção", "Veste um uniforme pré-definido", "(tipo). Use /usaruniforme 0 para visualizar os tipos.")]
     public static void CMD_usaruniforme(MyPlayer player, int type)
     {
         if (!player.ValidPed)
@@ -476,7 +476,7 @@ public class GovernmentScript : Script
         player.SendMessage(Models.MessageType.Success, $"Você alterou seu uniforme para {factionUniform.Name}.");
     }
 
-    [Command("ftow")]
+    [Command(["ftow"], "Facção", "Respawna todos os veículos da facção sem ocupantes")]
     public async Task CMD_ftow(MyPlayer player)
     {
         if (!player.FactionFlags.Contains(FactionFlag.RespawnVehicles))
@@ -494,7 +494,7 @@ public class GovernmentScript : Script
         await player.WriteLog(LogType.Faction, "/ftow", null);
     }
 
-    [Command("hqooc", "/hqooc (mensagem)", GreedyArg = true)]
+    [Command(["hqooc"], "Facção", "Envia uma mensagem OOC no HQ da facção", "(mensagem)", GreedyArg = true)]
     public async Task CMD_hqooc(MyPlayer player, string message)
     {
         if (!player.FactionFlags.Contains(FactionFlag.HQ))

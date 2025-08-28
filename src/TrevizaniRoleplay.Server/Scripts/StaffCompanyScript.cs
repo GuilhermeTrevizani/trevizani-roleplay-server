@@ -1,6 +1,5 @@
 ﻿using GTANetworkAPI;
 using Microsoft.EntityFrameworkCore;
-using TrevizaniRoleplay.Core.Extensions;
 using TrevizaniRoleplay.Server.Extensions;
 using TrevizaniRoleplay.Server.Factories;
 using TrevizaniRoleplay.Server.Models;
@@ -9,7 +8,7 @@ namespace TrevizaniRoleplay.Server.Scripts;
 
 public class StaffCompanyScript : Script
 {
-    [Command("empresas")]
+    [Command(["empresas"], "Staff", "Abre o painel de gerenciamento de empresas")]
     public async Task CMD_empresas(MyPlayer player)
     {
         if (!player.StaffFlags.Contains(StaffFlag.Companies))

@@ -8,7 +8,7 @@ namespace TrevizaniRoleplay.Server.Scripts;
 
 public class StaffScript : Script
 {
-    [Command("pos", "/pos (x) (y) (z)")]
+    [Command(["pos"], "Staff", "Vai até a posição", "(x) (y) (z)")]
     public async Task CMD_pos(MyPlayer player, float x, float y, float z)
     {
         if (player.User.Staff < UserStaff.GameAdmin)
@@ -21,7 +21,7 @@ public class StaffScript : Script
         await player.WriteLog(LogType.Staff, $"/pos {x} {y} {z}", null);
     }
 
-    [Command("ooc", "/ooc (mensagem)", GreedyArg = true)]
+    [Command(["ooc"], "Staff", "Chat OOC Global", "(mensagem)", GreedyArg = true)]
     public async Task CMD_ooc(MyPlayer player, string message)
     {
         if (player.User.Staff < UserStaff.GameAdmin)
@@ -36,7 +36,7 @@ public class StaffScript : Script
         await player.WriteLog(LogType.GlobalOOCChat, message, null);
     }
 
-    [Command("waypoint")]
+    [Command(["waypoint"], "Staff", "Teleporta até o waypoint marcado no mapa")]
     public static void CMD_waypoint(MyPlayer player)
     {
         if (player.User.Staff < UserStaff.GameAdmin)
@@ -48,7 +48,7 @@ public class StaffScript : Script
         player.Emit("Waypoint");
     }
 
-    [Command("limparchatgeral")]
+    [Command(["limparchatgeral"], "Staff", "Limpa o chat de todos os personagens")]
     public async Task CMD_limparchatgeral(MyPlayer player)
     {
         if (player.User.Staff < UserStaff.HeadAdmin)
@@ -68,7 +68,7 @@ public class StaffScript : Script
         await player.WriteLog(LogType.Staff, "/limparchatgeral", null);
     }
 
-    [Command("areparar", "/areparar (veículo)")]
+    [Command(["areparar"], "Staff", "Conserta um veículo", "(veículo)")]
     public async Task CMD_areparar(MyPlayer player, uint? id)
     {
         if (!player.StaffFlags.Contains(StaffFlag.VehicleMaintenance))
@@ -107,7 +107,7 @@ public class StaffScript : Script
         await Functions.SendServerMessage($"{player.User.Name} reparou o veículo {vehicle.Identifier}.", UserStaff.GameAdmin, false);
     }
 
-    [Command("pp", "/pp (usuário) (quantidade)")]
+    [Command(["pp"], "Staff", "Adiciona Premium Points para um usuário", "(usuário) (quantidade)")]
     public async Task CMD_pp(MyPlayer player, string userName, int quantity)
     {
         if (player.User.Staff < UserStaff.Management)
@@ -148,7 +148,7 @@ public class StaffScript : Script
         await player.WriteLog(LogType.Staff, $"/pp {user.Id} {user.Name} {quantity}", target);
     }
 
-    [Command("ir", "/ir (ID ou nome)")]
+    [Command(["ir"], "Staff", "Vai a um personagem", "(ID ou nome)")]
     public async Task CMD_ir(MyPlayer player, string idOrName)
     {
         if (player.User.Staff < UserStaff.GameAdmin)
@@ -167,7 +167,7 @@ public class StaffScript : Script
         await player.WriteLog(LogType.Staff, "/ir", target);
     }
 
-    [Command("trazer", "/trazer (ID ou nome)")]
+    [Command(["trazer"], "Staff", "Traz um personagem", "(ID ou nome)")]
     public async Task CMD_trazer(MyPlayer player, string idOrName)
     {
         if (player.User.Staff < UserStaff.GameAdmin)
@@ -186,7 +186,7 @@ public class StaffScript : Script
         await player.WriteLog(LogType.Staff, "/trazer", target);
     }
 
-    [Command("tp", "/tp (ID ou nome) (ID ou nome)")]
+    [Command(["tp"], "Staff", "Teleporta um personagem para outro", "(ID ou nome) (ID ou nome)")]
     public async Task CMD_tp(MyPlayer player, string idOrName, string idOrNameDestino)
     {
         if (player.User.Staff < UserStaff.GameAdmin)
@@ -212,7 +212,7 @@ public class StaffScript : Script
         await player.WriteLog(LogType.Staff, $"/tp {target.Character.Name} {targetDest.Character.Name}", null);
     }
 
-    [Command("a", "/a (mensagem)", GreedyArg = true)]
+    [Command(["a"], "Staff", "Envia mensagem no chat administrativo", "(mensagem)", GreedyArg = true)]
     public async Task CMD_a(MyPlayer player, string message)
     {
         if (player.User.Staff < UserStaff.GameAdmin)
@@ -235,7 +235,7 @@ public class StaffScript : Script
         await player.WriteLog(LogType.StaffChat, message, null);
     }
 
-    [Command("hs", "/hs (mensagem)", GreedyArg = true)]
+    [Command(["hs"], "Staff", "Envia mensagem no chat head staff", "(mensagem)", GreedyArg = true)]
     public async Task CMD_hs(MyPlayer player, string message)
     {
         if (player.User.Staff < UserStaff.HeadAdmin)
@@ -258,7 +258,7 @@ public class StaffScript : Script
         await player.WriteLog(LogType.StaffChat, message, null);
     }
 
-    [Command("sc", "/sc (mensagem)", GreedyArg = true)]
+    [Command(["sc"], "Staff", "Envia mensagem no chat support", "(mensagem)", GreedyArg = true)]
     public async Task CMD_sc(MyPlayer player, string message)
     {
         if (player.User.Staff < UserStaff.Tester)
@@ -281,7 +281,7 @@ public class StaffScript : Script
         await player.WriteLog(LogType.StaffChat, message, null);
     }
 
-    [Command("kick", "/kick (ID ou nome) (motivo)", GreedyArg = true)]
+    [Command(["kick"], "Staff", "Expulsa um personagem", "(ID ou nome) (motivo)", GreedyArg = true)]
     public async Task CMD_kick(MyPlayer player, string idOrName, string reason)
     {
         if (player.User.Staff < UserStaff.GameAdmin)
@@ -311,7 +311,7 @@ public class StaffScript : Script
         target.KickEx($"{player.User.Name} kickou você. Motivo: {reason}");
     }
 
-    [Command("irveh", "/irveh (veículo)")]
+    [Command(["irveh"], "Staff", "Vai a um veículo", "(veículo)")]
     public async Task CMD_irveh(MyPlayer player, int id)
     {
         if (player.User.Staff < UserStaff.GameAdmin)
@@ -333,7 +333,7 @@ public class StaffScript : Script
         await player.WriteLog(LogType.Staff, $"/irveh {veh.Identifier}", null);
     }
 
-    [Command("trazerveh", "/trazerveh (veículo)")]
+    [Command(["trazerveh"], "Staff", "Traz um veículo", "(veículo)")]
     public async Task CMD_trazerveh(MyPlayer player, int id)
     {
         if (player.User.Staff < UserStaff.GameAdmin)
@@ -356,7 +356,7 @@ public class StaffScript : Script
         await player.WriteLog(LogType.Staff, $"/trazerveh {vehicle.Identifier}", null);
     }
 
-    [Command("aduty", Aliases = ["atrabalho"])]
+    [Command(["aduty", "atrabalho"], "Staff", "Entra/sai de serviço administrativo")]
     public async Task CMD_aduty(MyPlayer player)
     {
         if (player.User.Staff < UserStaff.GameAdmin)
@@ -387,7 +387,7 @@ public class StaffScript : Script
         await Functions.SendServerMessage($"{player.User.Name} {(player.OnAdminDuty ? "entrou em" : "saiu de")} serviço administrativo.", UserStaff.GameAdmin, false);
     }
 
-    [Command("at", "/at (ID)")]
+    [Command(["at"], "Staff", "Atende um SOS", "(ID)")]
     public async Task CMD_at(MyPlayer player, int id)
     {
         if (player.User.Staff < UserStaff.Tester)
@@ -430,7 +430,7 @@ public class StaffScript : Script
         target.SendMessage(MessageType.Success, $"{player.User.Name} atendeu o seu {helpRequest.Type.GetDescription()}: {helpRequest.Message}");
     }
 
-    [Command("ar", "/ar (ID)")]
+    [Command(["ar"], "Staff", "Atende um report", "(ID)")]
     public async Task CMD_ar(MyPlayer player, int id)
     {
         if (player.User.Staff < UserStaff.GameAdmin)
@@ -473,7 +473,7 @@ public class StaffScript : Script
         target.SendMessage(MessageType.Success, $"{player.User.Name} atendeu o seu {helpRequest.Type.GetDescription()}: {helpRequest.Message}");
     }
 
-    [Command("listasos")]
+    [Command(["listasos"], "Staff", "Lista os SOS pendentes")]
     public static void CMD_listasos(MyPlayer player)
     {
         if (player.User.Staff < UserStaff.Tester)
@@ -492,11 +492,11 @@ public class StaffScript : Script
         foreach (var helpRequest in helpRequests)
         {
             player.SendMessage(MessageType.Error, $"{helpRequest.Type.GetDescription()} de {helpRequest.CharacterName} ({helpRequest.CharacterSessionId}) ({helpRequest.UserName}) em {helpRequest.RegisterDate}");
-            player.SendMessage(MessageType.Error, $"Pergunta: {{#B0B0B0}}{helpRequest.Message} {{{Constants.ERROR_COLOR}}}(/at {helpRequest.CharacterSessionId} /csos {helpRequest.CharacterSessionId})");
+            player.SendMessage(MessageType.None, $"{helpRequest.Message} {{{Constants.ERROR_COLOR}}}(/at {helpRequest.CharacterSessionId} /csos {helpRequest.CharacterSessionId})", "#B0B0B0");
         }
     }
 
-    [Command("listareport")]
+    [Command(["listareport"], "Staff", "Lista os reports pendentes")]
     public static void CMD_listareport(MyPlayer player)
     {
         if (player.User.Staff < UserStaff.GameAdmin)
@@ -515,11 +515,11 @@ public class StaffScript : Script
         foreach (var helpRequest in helpRequests)
         {
             player.SendMessage(MessageType.Error, $"{helpRequest.Type.GetDescription()} de {helpRequest.CharacterName} ({helpRequest.CharacterSessionId}) ({helpRequest.UserName}) em {helpRequest.RegisterDate}");
-            player.SendMessage(MessageType.Error, $"Pergunta: {{#B0B0B0}}{helpRequest.Message} {{{Constants.ERROR_COLOR}}}(/ar {helpRequest.CharacterSessionId} /creport {helpRequest.CharacterSessionId})");
+            player.SendMessage(MessageType.None, $"{helpRequest.Message} {{{Constants.ERROR_COLOR}}}(/ar {helpRequest.CharacterSessionId} /creport {helpRequest.CharacterSessionId})", "#B0B0B0");
         }
     }
 
-    [Command("csos", "/csos (ID)")]
+    [Command(["csos"], "Staff", "Converte um SOS para report", "(ID)")]
     public async Task CMD_csos(MyPlayer player, int id)
     {
         if (player.User.Staff < UserStaff.Tester)
@@ -552,7 +552,7 @@ public class StaffScript : Script
         await Functions.SendServerMessage($"{player.User.Name} converteu o {HelpRequestType.SOS.GetDescription()} de {helpRequest.CharacterName} ({helpRequest.CharacterSessionId}) ({helpRequest.UserName}) para um {helpRequest.Type.GetDescription()}.", UserStaff.Tester, false);
     }
 
-    [Command("creport", "/creport (ID)")]
+    [Command(["creport"], "Staff", "Converte um report para SOS", "(ID)")]
     public async Task CMD_creport(MyPlayer player, int id)
     {
         if (player.User.Staff < UserStaff.GameAdmin)
@@ -585,7 +585,7 @@ public class StaffScript : Script
         await Functions.SendServerMessage($"{player.User.Name} converteu o {HelpRequestType.Report.GetDescription()} de {helpRequest.CharacterName} ({helpRequest.CharacterSessionId}) ({helpRequest.UserName}) para um {helpRequest.Type.GetDescription()}.", UserStaff.Tester, false);
     }
 
-    [Command("spec", "/spec (ID ou nome)")]
+    [Command(["spec"], "Staff", "Observa um personagem", "(ID ou nome)")]
     public async Task CMD_spec(MyPlayer player, string idOrName)
     {
         if (player.User.Staff < UserStaff.GameAdmin)
@@ -654,7 +654,7 @@ public class StaffScript : Script
         return UserStaff.GameAdmin;
     }
 
-    [Command("specoff")]
+    [Command(["specoff"], "Staff", "Para de observar um personagem")]
     public static async Task CMD_specoff(MyPlayer player)
     {
         if (player.User.Staff < UserStaff.GameAdmin)
@@ -673,7 +673,7 @@ public class StaffScript : Script
         player.Emit("SpectatePlayer", player, false);
     }
 
-    [Command("specs")]
+    [Command(["specs"], "Staff", "Lista quem está observando um personagem")]
     public async Task CMD_specs(MyPlayer player)
     {
         if (player.User.Staff < UserStaff.GameAdmin)
@@ -700,7 +700,7 @@ public class StaffScript : Script
         await player.WriteLog(LogType.Staff, "/specs", null);
     }
 
-    [Command("aferimentos", "/aferimentos (ID ou nome)")]
+    [Command(["aferimentos"], "Staff", "Visualiza os ferimentos de um personagem", "(ID ou nome)")]
     public static void CMD_aferimentos(MyPlayer player, string idOrName)
     {
         if (player.User.Staff < UserStaff.GameAdmin)
@@ -732,7 +732,7 @@ public class StaffScript : Script
             })), true);
     }
 
-    [Command("aestacionar", "/aestacionar (veículo)")]
+    [Command(["aestacionar"], "Staff", "Estaciona um veículo", "(veículo)")]
     public async Task CMD_aestacionar(MyPlayer player, int id)
     {
         if (player.User.Staff < UserStaff.GameAdmin)
@@ -762,7 +762,7 @@ public class StaffScript : Script
         await vehicle.Park(player);
     }
 
-    [Command("acurar", "/acurar (ID ou nome)")]
+    [Command(["acurar"], "Staff", "Cura um personagem ferido", "(ID ou nome)")]
     public async Task CMD_acurar(MyPlayer player, string idOrName)
     {
         if (player.User.Staff < UserStaff.GameAdmin)
@@ -794,7 +794,7 @@ public class StaffScript : Script
         await player.WriteLog(LogType.Staff, "/acurar", target);
     }
 
-    [Command("adanos", "/adanos (veículo)")]
+    [Command(["adanos"], "Staff", "Visualiza os danos de um veículo", "(veículo)")]
     public static void CMD_adanos(MyPlayer player, int id)
     {
         var vehicle = Global.Vehicles.FirstOrDefault(x => x.Id == id);
@@ -824,7 +824,7 @@ public class StaffScript : Script
                 })), true);
     }
 
-    [Command("checarveh", "/checarveh (veículo)")]
+    [Command(["checarveh"], "Staff", "Visualiza o proprietário de um veículo", "(veículo)")]
     public async Task CMD_checarveh(MyPlayer player, int id)
     {
         if (player.User.Staff < UserStaff.GameAdmin)
@@ -852,7 +852,7 @@ public class StaffScript : Script
         player.SendMessage(MessageType.None, $"Veículo: {{{Constants.MAIN_COLOR}}}{vehicle.VehicleDB.Id}{{#FFFFFF}} | Modelo: {{{Constants.MAIN_COLOR}}}{vehicle.VehicleDB.Model}{{#FFFFFF}} | Proprietário: {{{Constants.MAIN_COLOR}}}{owner}");
     }
 
-    [Command("proximo", "/proximo (distância)", Aliases = ["prox"])]
+    [Command(["proximo", "prox"], "Staff", "Lista os itens que estão próximos", "(distância)")]
     public static void CMD_proximo(MyPlayer player, float distance)
     {
         if (player.User.Staff < UserStaff.GameAdmin)
@@ -1043,7 +1043,7 @@ public class StaffScript : Script
         }
     }
 
-    [Command("raviso", "/raviso (nome do personagem)", GreedyArg = true)]
+    [Command(["raviso"], "Staff", "Remove o aviso mais recente de um personagem", "(nome do personagem)", GreedyArg = true)]
     public async Task CMD_raviso(MyPlayer player, string characterName)
     {
         if (player.User.Staff < UserStaff.HeadAdmin)
@@ -1079,7 +1079,7 @@ public class StaffScript : Script
         await Functions.SendServerMessage($"{player.User.Name} removeu um aviso ({lastWarn.Reason}) de {character.Name}.", UserStaff.None, false);
     }
 
-    [Command("ajail", "/ajail (ID ou nome) (minutos) (motivo)", GreedyArg = true)]
+    [Command(["ajail"], "Staff", "Prende um personagem online administrativamente", "(ID ou nome) (minutos) (motivo)", GreedyArg = true)]
     public async Task CMD_ajail(MyPlayer player, string idOrName, int minutes, string reason)
     {
         if (player.User.Staff < UserStaff.GameAdmin)
@@ -1193,7 +1193,7 @@ public class StaffScript : Script
         }
     }
 
-    [Command("rajail", "/rajail (nome do personagem)", GreedyArg = true)]
+    [Command(["rajail"], "Staff", "Solta um personagem da prisão administrativa", "(nome do personagem)", GreedyArg = true)]
     public async Task CMD_rajail(MyPlayer player, string characterName)
     {
         if (player.User.Staff < UserStaff.HeadAdmin)
@@ -1245,7 +1245,7 @@ public class StaffScript : Script
         await Functions.SendServerMessage($"{player.User.Name} soltou {character.Name} da prisão administrativa.", UserStaff.None, false);
     }
 
-    [Command("vflip", "/vflip (veículo)")]
+    [Command(["vflip"], "Staff", "Descapota um veículo", "(veículo)")]
     public async Task CMD_vflip(MyPlayer player, int id)
     {
         if (player.User.Staff < UserStaff.GameAdmin)
@@ -1272,7 +1272,7 @@ public class StaffScript : Script
         await Functions.SendServerMessage($"{player.User.Name} descapotou o veículo {vehicle.Identifier}.", UserStaff.GameAdmin, false);
     }
 
-    [Command("amotor")]
+    [Command(["amotor"], "Staff", "Liga/desliga o motor de um veículo")]
     public async Task CMD_amotor(MyPlayer player)
     {
         if (!player.StaffFlags.Contains(StaffFlag.VehicleMaintenance))
@@ -1298,7 +1298,7 @@ public class StaffScript : Script
         await player.WriteLog(LogType.Staff, $"/amotor {vehicle.Identifier}", null);
     }
 
-    [Command("aabastecer")]
+    [Command(["aabastecer"], "Staff", "Abastece um veículo")]
     public async Task CMD_aabastecer(MyPlayer player)
     {
         if (!player.StaffFlags.Contains(StaffFlag.VehicleMaintenance))
@@ -1325,7 +1325,7 @@ public class StaffScript : Script
         await Functions.SendServerMessage($"{player.User.Name} abasteceu o veículo {vehicle.Identifier}.", UserStaff.GameAdmin, false);
     }
 
-    [Command("aveiculo", "/aveiculo (modelo)")]
+    [Command(["aveiculo"], "Staff", "Cria um veículo temporário", "(modelo)")]
     public async Task CMD_aveiculo(MyPlayer player, string model)
     {
         if (!player.StaffFlags.Contains(StaffFlag.VehicleMaintenance))
@@ -1364,7 +1364,7 @@ public class StaffScript : Script
         await Functions.SendServerMessage($"{player.User.Name} criou o veículo {model}.", UserStaff.GameAdmin, false);
     }
 
-    [Command("alteracoesplaca")]
+    [Command(["alteracoesplaca"], "Staff", "Lista as solicitações de alterações de placa")]
     public async Task CMD_alteracoesplaca(MyPlayer player)
     {
         if (player.User.Staff < UserStaff.LeadAdmin)
@@ -1394,7 +1394,7 @@ public class StaffScript : Script
             player.SendMessage(MessageType.None, $"Placa {vehicle.NewPlate.ToUpper()} de {vehicle.Model.ToUpper()} por {vehicle.User}");
     }
 
-    [Command("aprovarplaca", "/aprovarplaca (placa)")]
+    [Command(["aprovarplaca"], "Staff", "Aprova uma alteração de placa", "(placa)")]
     public async Task CMD_aprovarplaca(MyPlayer player, string plate)
     {
         if (player.User.Staff < UserStaff.LeadAdmin)
@@ -1457,7 +1457,7 @@ public class StaffScript : Script
         await player.WriteLog(LogType.PlateChange, $"Aprovou placa {vehicle.Id} {vehicle.Model} {oldPlate.ToUpper()} > {plate.ToUpper()} de {vehicle.Character.Name}", null);
     }
 
-    [Command("reprovarplaca", "/reprovarplaca (placa)")]
+    [Command(["reprovarplaca"], "Staff", "Reprova uma alteração de placa", "(placa)")]
     public async Task CMD_reprovarplaca(MyPlayer player, string plate)
     {
         if (player.User.Staff < UserStaff.LeadAdmin)
@@ -1496,7 +1496,7 @@ public class StaffScript : Script
         await player.WriteLog(LogType.PlateChange, $"Reprovou placa {vehicle.Id} {vehicle.Model} {plate.ToUpper()}", null);
     }
 
-    [Command("usuario", "/usuario (nome)")]
+    [Command(["usuario"], "Staff", "Visualiza as informações de um usuário", "(nome)")]
     public async Task CMD_usuario(MyPlayer player, string name)
     {
         if (player.User.Staff < UserStaff.GameAdmin)
@@ -1630,7 +1630,7 @@ public class StaffScript : Script
         }
     }
 
-    [Command("checar", "/checar (ID ou nome)", GreedyArg = true)]
+    [Command(["checar"], "Staff", "Visualiza as informações de um personagem", "(ID ou nome)", GreedyArg = true)]
     public async Task CMD_checar(MyPlayer player, string idOrName)
     {
         if (player.User.Staff < UserStaff.GameAdmin)
@@ -1724,7 +1724,7 @@ public class StaffScript : Script
             }));
     }
 
-    [Command("ban", "/ban (ID ou nome) (dias [0 para permanente]) (motivo)", GreedyArg = true)]
+    [Command(["ban"], "Staff", "Bane um jogador", "(ID ou nome) (dias [0 para permanente]) (motivo)", GreedyArg = true)]
     public async Task CMD_ban(MyPlayer player, string idOrName, int days, string reason)
     {
         if (player.User.Staff < UserStaff.GameAdmin)
@@ -2098,7 +2098,7 @@ public class StaffScript : Script
         }
     }
 
-    [Command("aviso", "/aviso (ID ou nome) (motivo)", GreedyArg = true)]
+    [Command(["aviso"], "Staff", "Aplica um aviso em um personagem online", "(ID ou nome) (motivo)", GreedyArg = true)]
     public async Task CMD_aviso(MyPlayer player, string idOrName, string reason)
     {
         if (player.User.Staff < UserStaff.GameAdmin)
@@ -2192,7 +2192,7 @@ public class StaffScript : Script
         }
     }
 
-    [Command("deletarsangue", "/deletarsangue (distância)")]
+    [Command(["deletarsangue"], "Staff", "Deleta todas as amostras de sangue do chão na distância informada", "(distância)")]
     public async Task CMD_deletarsangue(MyPlayer player, int distance)
     {
         if (player.User.Staff < UserStaff.GameAdmin)
@@ -2231,7 +2231,7 @@ public class StaffScript : Script
         await Functions.SendServerMessage($"{player.User.Name} removeu {items.Count} amostra(s) de sangue.", UserStaff.GameAdmin, true);
     }
 
-    [Command("deletarcapsulas", "/deletarcapsulas (distância)")]
+    [Command(["deletarcapsulas"], "Staff", "Deleta todas as cápsulas do chão na distância informada", "(distância)")]
     public async Task CMD_deletarcapsulas(MyPlayer player, int distance)
     {
         if (player.User.Staff < UserStaff.GameAdmin)
@@ -2281,7 +2281,7 @@ public class StaffScript : Script
             .CountAsync();
     }
 
-    [Command("irls")]
+    [Command(["irls"], "Staff", "Vai para o spawn inicial")]
     public async Task CMD_irls(MyPlayer player)
     {
         if (player.User.Staff < UserStaff.GameAdmin)
@@ -2300,7 +2300,7 @@ public class StaffScript : Script
         await player.WriteLog(LogType.Staff, "/irls", null);
     }
 
-    [Command("aspawn", "/aspawn (placa)")]
+    [Command(["aspawn"], "Staff", "Spawna um veículo", "(placa)")]
     public async Task CMD_aspawn(MyPlayer player, string plate)
     {
         if (player.User.Staff < UserStaff.LeadAdmin)
@@ -2334,7 +2334,7 @@ public class StaffScript : Script
             UserStaff.GameAdmin, false);
     }
 
-    [Command("setvw", "/setvw (ID ou nome) (VW)")]
+    [Command(["setvw"], "Staff", "Define o VW de um jogador", "(ID ou nome) (VW)")]
     public async Task CMD_setvw(MyPlayer player, string idOrName, uint vw)
     {
         if (player.User.Staff < UserStaff.GameAdmin)
@@ -2359,7 +2359,7 @@ public class StaffScript : Script
         await player.WriteLog(LogType.Staff, $"/setvw {vw}", target);
     }
 
-    [Command("idade", "/idade (ID ou nome) (idade)")]
+    [Command(["idade"], "Staff", "Altera a idade de um personagem", "(ID ou nome) (idade)")]
     public async Task CMD_idade(MyPlayer player, string idOrName, int age)
     {
         if (player.User.Staff < UserStaff.GameAdmin)
@@ -2392,7 +2392,7 @@ public class StaffScript : Script
         target.SetNametag();
     }
 
-    [Command("debug")]
+    [Command(["debug"], "Staff", "Habilita a visão de depuração")]
     public static void CMD_debug(MyPlayer player)
     {
         if (player.User.Staff < UserStaff.GameAdmin)
@@ -2412,7 +2412,7 @@ public class StaffScript : Script
         player.Emit("ToggleDebug", player.Debug);
     }
 
-    [Command("audios")]
+    [Command(["audios"], "Staff", "Lista os áudios ativos")]
     public static void CMD_audios(MyPlayer player)
     {
         if (player.User.Staff < UserStaff.GameAdmin)
@@ -2433,7 +2433,7 @@ public class StaffScript : Script
             player.SendMessage(MessageType.None, $"{audioSpot?.Id} {audioSpot?.RegisterDate} {audioSpot?.Source} {audioSpot?.PlayerId} {audioSpot?.VehicleId} {audioSpot?.Position} {audioSpot?.Dimension}");
     }
 
-    [Command("congelar", "/congelar (ID ou nome)", GreedyArg = true)]
+    [Command(["congelar"], "Staff", "Congela/descongela um jogador", "(ID ou nome)", GreedyArg = true)]
     public async Task CMD_congelar(MyPlayer player, string idOrName)
     {
         if (player.User.Staff < UserStaff.GameAdmin)
@@ -2459,7 +2459,7 @@ public class StaffScript : Script
         await player.WriteLog(LogType.Staff, $"/congelar {target.Frozen}", target);
     }
 
-    [Command("fixpos", "/fixpos (nome do personagem)", GreedyArg = true)]
+    [Command(["fixpos"], "Staff", "Corrige a posição do personagem para evitar crash ao logar", "(nome do personagem)", GreedyArg = true)]
     public async Task CMD_fixpos(MyPlayer player, string name)
     {
         if (player.User.Staff < UserStaff.GameAdmin)
@@ -2489,7 +2489,7 @@ public class StaffScript : Script
         await player.WriteLog(LogType.Staff, $"/fixpos {character.Name} ({character.Id})", null);
     }
 
-    [Command("vida", "/vida (ID ou nome) (vida)")]
+    [Command(["vida"], "Staff", "Altera a vida de um jogador", "(ID ou nome) (vida)")]
     public async Task CMD_vida(MyPlayer player, string idOrName, int health)
     {
         if (player.User.Staff < UserStaff.GameAdmin)
@@ -2527,7 +2527,7 @@ public class StaffScript : Script
         await player.WriteLog(LogType.Staff, $"/vida {health}", target);
     }
 
-    [Command("colete", "/colete (ID ou nome) (colete)")]
+    [Command(["colete"], "Staff", "Altera o colete de um jogador", "(ID ou nome) (colete)")]
     public async Task CMD_colete(MyPlayer player, string idOrName, int armor)
     {
         if (player.User.Staff < UserStaff.GameAdmin)
@@ -2565,7 +2565,7 @@ public class StaffScript : Script
         await player.WriteLog(LogType.Staff, $"/colete {armor}", target);
     }
 
-    [Command("vertela", "/vertela (ID ou nome)")]
+    [Command(["vertela"], "Staff", "Visualiza informações da tela de um jogador", "(ID ou nome)")]
     public async Task CMD_vertela(MyPlayer player, string idOrName)
     {
         player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
@@ -2609,7 +2609,7 @@ public class StaffScript : Script
         }
     }
 
-    [Command("blocktogstaff")]
+    [Command(["blocktogstaff"], "Staff", "Bloqueia/desbloqueia os togs administrativos")]
     public async Task CMD_blocktogstaff(MyPlayer player)
     {
         if (player.User.Staff < UserStaff.HeadAdmin)
@@ -2635,7 +2635,7 @@ public class StaffScript : Script
         await player.WriteLog(LogType.Staff, "/blocktogstaff", null);
     }
 
-    [Command("anametag")]
+    [Command(["anametag"], "Staff", "Ativa/desativa a nametag à distância")]
     public async Task CMD_anametag(MyPlayer player)
     {
         if (player.User.Staff < UserStaff.GameAdmin)
@@ -2656,7 +2656,7 @@ public class StaffScript : Script
         await player.WriteLog(LogType.Staff, $"/anametag {player.Anametag}", null);
     }
 
-    [Command("checarafk", "/checarafk (ID ou nome)")]
+    [Command(["checarafk"], "Staff", "Checa se o jogador está AFK", "(ID ou nome)")]
     public static void CMD_checarafk(MyPlayer player, string idOrName)
     {
         if (player.User.Staff < UserStaff.GameAdmin)
@@ -2684,7 +2684,7 @@ public class StaffScript : Script
         player.SendMessage(MessageType.None, $"{target.Character.Name} está AFK desde {target.AFKSince}.");
     }
 
-    [Command("afks")]
+    [Command(["afks"], "Staff", "Lista os jogadores que estão AFK")]
     public static void CMD_afks(MyPlayer player)
     {
         if (player.User.Staff < UserStaff.GameAdmin)
@@ -2711,7 +2711,7 @@ public class StaffScript : Script
             player.SendMessage(MessageType.None, $"{afkPlayer.Character.Name} está AFK desde {afkPlayer.AFKSince}.");
     }
 
-    [Command("lobby")]
+    [Command(["lobby"], "Staff", "Lista os jogadores que não estão spawnados")]
     public static void CMD_lobby(MyPlayer player)
     {
         if (player.User.Staff < UserStaff.HeadAdmin)
@@ -2738,7 +2738,7 @@ public class StaffScript : Script
             player.SendMessage(MessageType.None, $"SocialClub: {lobbyPlayer.RealSocialClubName} | IP: {lobbyPlayer.RealIp} | UCP: {lobbyPlayer.User?.Name} ({lobbyPlayer.User?.DiscordUsername}) | Personagem: {lobbyPlayer.Character?.Name}");
     }
 
-    [Command("mascarados")]
+    [Command(["mascarados"], "Staff", "Lista os jogadores mascarados")]
     public static void CMD_mascarados(MyPlayer player)
     {
         if (player.User.Staff < UserStaff.GameAdmin)
@@ -2765,7 +2765,7 @@ public class StaffScript : Script
             player.SendMessage(MessageType.None, $"{maskedPlayer.ICName} ({maskedPlayer.SessionId})");
     }
 
-    [Command("nome", "/nome (ID ou nome) (novo nome)", GreedyArg = true)]
+    [Command(["nome"], "Staff", "Altera o nome permanente de um jogador", "(ID ou nome) (novo nome)", GreedyArg = true)]
     public async Task CMD_nome(MyPlayer player, string idOrName, string newName)
     {
         if (player.User.Staff < UserStaff.Management)
@@ -2799,7 +2799,7 @@ public class StaffScript : Script
         await player.WriteLog(LogType.Staff, $"/nome {oldName} {target.Character.Name}", target);
     }
 
-    [Command("setfaccao", "/setfaccao (ID ou nome) (nome da facção)", GreedyArg = true)]
+    [Command(["setfaccao"], "Staff", "Define a facção de um jogador", "(ID ou nome) (nome da facção)", GreedyArg = true)]
     public async Task CMD_setfaccao(MyPlayer player, string idOrName, string factionName)
     {
         if (!player.StaffFlags.Contains(StaffFlag.Factions))
@@ -2843,7 +2843,7 @@ public class StaffScript : Script
         await Functions.SendServerMessage($"{player.User.Name} setou {target.Character.Name} na facção {faction.Name}.", UserStaff.GameAdmin, false);
     }
 
-    [Command("atunar")]
+    [Command(["atunar"], "Staff", "Realiza modificações em um veículo")]
     public static void CMD_atunar(MyPlayer player)
     {
         if (!player.StaffFlags.Contains(StaffFlag.Factions))
@@ -2861,7 +2861,7 @@ public class StaffScript : Script
         Functions.CMDTuning(player, null, null, true);
     }
 
-    [Command("empregos")]
+    [Command(["empregos"], "Staff", "Abre o painel de gerenciamento de empregos")]
     public static void CMD_empregos(MyPlayer player)
     {
         if (player.User.Staff < UserStaff.Management)
@@ -2982,7 +2982,7 @@ public class StaffScript : Script
             .OrderBy(x => x.Name));
     }
 
-    [Command("testarefeito", "/testarefeito (nome da droga)", GreedyArg = true)]
+    [Command(["testarefeito"], "Staff", "Testa efeitos do GTA V", "(nome da droga)", GreedyArg = true)]
     public static async Task CMD_testarefeito(MyPlayer player, string drugName)
     {
         if (player.User.Staff < UserStaff.GameAdmin)
@@ -3005,7 +3005,7 @@ public class StaffScript : Script
         player.SendMessage(MessageType.Success, $"Você está testando os efeitos da droga {drugName}.");
     }
 
-    [Command("pararefeito")]
+    [Command(["pararefeito"], "Staff", "Para os efeitos do GTA V")]
     public static async Task CMD_pararefeito(MyPlayer player)
     {
         if (player.User.Staff < UserStaff.GameAdmin)

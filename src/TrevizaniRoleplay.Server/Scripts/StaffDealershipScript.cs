@@ -7,12 +7,12 @@ namespace TrevizaniRoleplay.Server.Scripts;
 
 public class StaffDealershipScript : Script
 {
-    [Command("concessionarias")]
+    [Command(["concessionarias"], "Staff", "Abre o painel de gerenciamento de concessionárias")]
     public static void CMD_concessionarias(MyPlayer player)
     {
         if (player.User.Staff < UserStaff.Management)
         {
-            player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 

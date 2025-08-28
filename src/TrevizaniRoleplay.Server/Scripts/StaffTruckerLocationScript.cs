@@ -7,12 +7,12 @@ namespace TrevizaniRoleplay.Server.Scripts;
 
 public class StaffTruckerLocationScript : Script
 {
-    [Command("acaminhoneiro")]
+    [Command(["acaminhoneiro"], "Staff", "Abre o painel de gerenciamento de localizações de caminhoneiros")]
     public static void CMD_acaminhoneiro(MyPlayer player)
     {
         if (!player.StaffFlags.Contains(StaffFlag.TruckerLocations))
         {
-            player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 

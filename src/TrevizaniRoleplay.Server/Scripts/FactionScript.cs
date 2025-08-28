@@ -7,7 +7,7 @@ namespace TrevizaniRoleplay.Server.Scripts;
 
 public class FactionScript : Script
 {
-    [Command("f", "/f (mensagem)", GreedyArg = true)]
+    [Command(["f"], "Facção", "Chat OOC da facção", "(mensagem)", GreedyArg = true)]
     public async Task CMD_f(MyPlayer player, string mensagem)
     {
         if (!player.Character.FactionId.HasValue)
@@ -42,7 +42,7 @@ public class FactionScript : Script
         await player.WriteLog(LogType.FactionChat, $"{player.Character.FactionId} | {mensagem}", null);
     }
 
-    [Command("blockf")]
+    [Command(["blockf"], "Facção", "Bloqueia/desbloqueia o chat OOC da facção")]
     public static void CMD_blockf(MyPlayer player)
     {
         if (!player.FactionFlags.Contains(FactionFlag.BlockChat))
@@ -55,7 +55,7 @@ public class FactionScript : Script
         player.SendFactionMessage($"{player.FactionRank!.Name} {player.Character.Name} {(!player.Faction.BlockedChat ? "des" : string.Empty)}bloqueou o chat da facção.");
     }
 
-    [Command("sairfaccao")]
+    [Command(["sairfaccao"], "Facção", "Sai da facção")]
     public async Task CMD_sairfaccao(MyPlayer player)
     {
         if (!player.Character.FactionId.HasValue)
@@ -70,7 +70,7 @@ public class FactionScript : Script
         await player.Save();
     }
 
-    [Command("convidar", "/convidar (ID ou nome)", GreedyArg = true)]
+    [Command(["convidar"], "Facção", "Convida um jogador para sua facção", "(ID ou nome)", GreedyArg = true)]
     public async Task CMD_convidar(MyPlayer player, string idOrName)
     {
         var faction = player.Faction;
@@ -170,7 +170,7 @@ public class FactionScript : Script
         }
     }
 
-    [Command("membros")]
+    [Command(["membros"], "Facção", "Lista os membros online da facção")]
     public static void CMD_membros(MyPlayer player)
     {
         if (!player.Character.FactionId.HasValue)

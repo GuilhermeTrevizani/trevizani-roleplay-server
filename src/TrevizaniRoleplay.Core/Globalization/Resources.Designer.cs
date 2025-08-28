@@ -1294,6 +1294,15 @@ namespace TrevizaniRoleplay.Core.Globalization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Keys.
+        /// </summary>
+        public static string Keys {
+            get {
+                return ResourceManager.GetString("Keys", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Kick.
         /// </summary>
         public static string Kick {

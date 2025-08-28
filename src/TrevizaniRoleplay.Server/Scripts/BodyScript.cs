@@ -8,12 +8,12 @@ namespace TrevizaniRoleplay.Server.Scripts;
 
 public class BodyScript : Script
 {
-    [Command("recolhercorpo")]
+    [Command(["recolhercorpo"], "Geral", "Envia um corpo para o necrotério")]
     public async Task CMD_recolhercorpo(MyPlayer player)
     {
         if (player.Faction?.Type != FactionType.Police || !player.OnDuty)
         {
-            player.SendNotification(NotificationType.Error, "Você não está em uma facção policial ou não está em serviço.");
+            player.SendMessage(MessageType.Error, "Você não está em uma facção policial ou não está em serviço.");
             return;
         }
 
@@ -21,7 +21,7 @@ public class BodyScript : Script
             && player.GetPosition().DistanceTo(new(x.PosX, x.PosY, x.PosZ)) <= Constants.RP_DISTANCE);
         if (body is null)
         {
-            player.SendNotification(NotificationType.Error, "Você não está próximo de um corpo.");
+            player.SendMessage(MessageType.Error, "Você não está próximo de um corpo.");
             return;
         }
 
@@ -40,12 +40,12 @@ public class BodyScript : Script
         await player.WriteLog(LogType.Faction, $"/recolhercopo {body.Id} {body.Name}", null);
     }
 
-    [Command("arecolhercorpo")]
+    [Command(["arecolhercorpo"], "Staff", "Envia um corpo para o necrotério")]
     public async Task CMD_arecolhercorpo(MyPlayer player)
     {
         if (player.User.Staff < UserStaff.GameAdmin)
         {
-            player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 
@@ -53,7 +53,7 @@ public class BodyScript : Script
             && player.GetPosition().DistanceTo(new(x.PosX, x.PosY, x.PosZ)) <= Constants.RP_DISTANCE);
         if (body is null)
         {
-            player.SendNotification(NotificationType.Error, "Você não está próximo de um corpo.");
+            player.SendMessage(MessageType.Error, "Você não está próximo de um corpo.");
             return;
         }
 
@@ -72,7 +72,7 @@ public class BodyScript : Script
         await player.WriteLog(LogType.Staff, $"/arecolhercopo {body.Id} {body.Name}", null);
     }
 
-    [Command("aremovercorpo")]
+    [Command(["aremovercorpo"], "Staff", "Remove um corpo")]
     public async Task CMD_aremovercorpo(MyPlayer player)
     {
         if (player.User.Staff < UserStaff.GameAdmin)
@@ -103,7 +103,7 @@ public class BodyScript : Script
         await player.WriteLog(LogType.Staff, $"/aremovercorpo {Functions.Serialize(body)}", null);
     }
 
-    [Command("corpoinv")]
+    [Command(["corpoinv"], "Geral", "Abre o inventário de um corpo")]
     public static void CMD_corpoinv(MyPlayer player)
     {
         var body = Global.Bodies.FirstOrDefault(x => x.Dimension == player.GetDimension()
@@ -117,7 +117,7 @@ public class BodyScript : Script
         body.ShowInventory(player, false);
     }
 
-    [Command("corpoferimentos")]
+    [Command(["corpoferimentos"], "Geral", "Visualiza os ferimentos de um corpo")]
     public static void CMD_corpoferimentos(MyPlayer player)
     {
         var body = Global.Bodies.FirstOrDefault(x => x.Dimension == player.GetDimension()

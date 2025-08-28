@@ -7,7 +7,7 @@ namespace TrevizaniRoleplay.Server.Scripts;
 
 public class SmugglerScript : Script
 {
-    [Command("contrabando", "/contrabando (quantidade)")]
+    [Command(["contrabando"], "Geral", "Vende itens para um contrabandista", "(quantidade)")]
     public async Task CMD_contrabando(MyPlayer player, int quantity)
     {
         if (quantity <= 0)

@@ -7,7 +7,7 @@ namespace TrevizaniRoleplay.Server.Scripts;
 
 public class JobScript : Script
 {
-    [Command("sairemprego")]
+    [Command(["sairemprego"], "Emprego", "Sai do emprego")]
     public async Task CMD_sairemprego(MyPlayer player)
     {
         if (player.Character.Job == CharacterJob.Unemployed || player.OnDuty)
@@ -32,7 +32,7 @@ public class JobScript : Script
         player.SendMessage(MessageType.Success, "Você saiu do seu emprego.");
     }
 
-    [Command("emprego")]
+    [Command(["emprego"], "Emprego", "Pega um emprego")]
     public async Task CMD_emprego(MyPlayer player)
     {
         if (player.Character.Job != CharacterJob.Unemployed)
@@ -59,7 +59,7 @@ public class JobScript : Script
         player.SendMessage(MessageType.Success, $"Você pegou o emprego {player.Character.Job.GetDescription()}.");
     }
 
-    [Command("chamadas")]
+    [Command(["chamadas"], "Emprego", "Exibe as chamadas aguardando resposta")]
     public static void CMD_chamadas(MyPlayer player)
     {
         if (player.Character.Job != CharacterJob.TaxiDriver && player.Character.Job != CharacterJob.Mechanic || !player.OnDuty)
@@ -89,7 +89,7 @@ public class JobScript : Script
             player.SendMessage(MessageType.None, $"Chamada #{c.SessionId}");
     }
 
-    [Command("atcha", "/atcha (chamada)")]
+    [Command(["atcha"], "Emprego", "Atende uma chamada", "(chamada)")]
     public static void CMD_atcha(MyPlayer player, int chamada)
     {
         if (player.Character.Job != CharacterJob.TaxiDriver && player.Character.Job != CharacterJob.Mechanic || !player.OnDuty)
@@ -123,7 +123,7 @@ public class JobScript : Script
             target.SendMessage(MessageType.None, $"[CELULAR] SMS de {target.GetCellphoneContactName(Constants.MECHANIC_NUMBER)}: Nosso mecânico {player.Character.Name} está atendendo sua chamada. Celular: {player.Character.Cellphone}.", Constants.CELLPHONE_MAIN_COLOR);
     }
 
-    [Command("duty", Aliases = ["trabalho"])]
+    [Command(["duty", "atrabalho"], "Emprego", "Entra/sai de serviço")]
     public async Task CMD_duty(MyPlayer player)
     {
         if (player.Faction?.HasDuty ?? false)

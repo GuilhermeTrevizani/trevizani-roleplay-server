@@ -8,7 +8,7 @@ namespace TrevizaniRoleplay.Server.Scripts;
 
 public class BankScript : Script
 {
-    [Command("atm")]
+    [Command(["atm"], "Geral", "Gerencia sua conta bancária em uma ATM")]
     public static void CMD_atm(MyPlayer player) => player.Emit("ATMCheck");
 
     [RemoteEvent(nameof(ATMUse))]
@@ -190,7 +190,7 @@ public class BankScript : Script
         }
     }
 
-    [Command("transferir", "/transferir (conta bancária) (valor) (descrição)", GreedyArg = true)]
+    [Command(["transferir"], "Geral", "Transfere o valor para uma conta bancária", "(conta bancária) (valor) (descrição)", GreedyArg = true)]
     public async Task CMD_transferir(MyPlayer player, int bankAccount, int value, string description)
     {
         if (player.Character.Cellphone == 0)

@@ -8,7 +8,7 @@ namespace TrevizaniRoleplay.Server.Scripts;
 
 public class StaffInfoScript : Script
 {
-    [Command("ainfos")]
+    [Command(["ainfos"], "Staff", "Abre o painel de gerenciamento de marcadores de informações")]
     public async Task CMD_ainfos(MyPlayer player)
     {
         if (player.User.Staff < UserStaff.GameAdmin)

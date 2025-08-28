@@ -6,14 +6,14 @@ namespace TrevizaniRoleplay.Server.Scripts;
 
 public class OOCChatScript : Script
 {
-    [Command("b", "/b (mensagem)", GreedyArg = true)]
+    [Command(["b"], "Chat OOC", "Chat OOC local", "(mensagem)", GreedyArg = true)]
     public static async Task CMD_b(MyPlayer player, string message)
     {
         player.SendMessageToNearbyPlayers(message, MessageCategory.OOC);
         await player.WriteLog(LogType.OOCChat, message, null);
     }
 
-    [Command("pm", "/pm (ID ou nome) (mensagem)", GreedyArg = true)]
+    [Command(["pm"], "Chat OOC", "Envia uma mensagem privada", "(ID ou nome) (mensagem)", GreedyArg = true)]
     public async Task CMD_pm(MyPlayer player, string idOrName, string mesage)
     {
         if (player.User.PMToggle && !player.OnAdminDuty)
@@ -51,7 +51,7 @@ public class OOCChatScript : Script
         await player.WriteLog(LogType.PrivateMessages, mesage, target);
     }
 
-    [Command("re", "/re (mensagem)", GreedyArg = true)]
+    [Command(["re"], "Chat OOC", "Responde a última mensagem privada recebida", "(mensagem)", GreedyArg = true)]
     public async Task CMD_re(MyPlayer player, string mesage)
     {
         if (!player.LastPMSessionId.HasValue)

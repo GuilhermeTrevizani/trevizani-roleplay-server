@@ -8,7 +8,7 @@ namespace TrevizaniRoleplay.Server.Scripts;
 
 public class CompanyScript : Script
 {
-    [Command("empresa")]
+    [Command(["empresa"], "Empresa", "Gerencia suas empresas")]
     public static void CMD_empresa(MyPlayer player)
     {
         if (player.Companies.Count == 0)
@@ -347,7 +347,7 @@ public class CompanyScript : Script
             }));
     }
 
-    [Command("alugarempresa")]
+    [Command(["alugarempresa"], "Geral", "Aluga uma empresa")]
     public async Task CMD_alugarempresa(MyPlayer player)
     {
         var company = Global.Companies.Where(x => !x.CharacterId.HasValue && x.WeekRentValue > 0
@@ -355,13 +355,13 @@ public class CompanyScript : Script
         .MinBy(x => player.GetPosition().DistanceTo(new(x.PosX, x.PosY, x.PosZ)) <= Constants.RP_DISTANCE);
         if (company is null)
         {
-            player.SendNotification(NotificationType.Error, "Você não está perto de uma empresa disponível para alugar.");
+            player.SendMessage(MessageType.Error, "Você não está perto de uma empresa disponível para alugar.");
             return;
         }
 
         if (player.Money < company.WeekRentValue)
         {
-            player.SendNotification(NotificationType.Error, string.Format(Resources.YouDontHaveEnoughMoney, company.WeekRentValue));
+            player.SendMessage(MessageType.Error, string.Format(Resources.YouDontHaveEnoughMoney, company.WeekRentValue));
             return;
         }
 

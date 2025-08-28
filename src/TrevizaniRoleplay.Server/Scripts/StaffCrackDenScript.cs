@@ -8,12 +8,12 @@ namespace TrevizaniRoleplay.Server.Scripts;
 
 public class StaffCrackDenScript : Script
 {
-    [Command("bocasfumo")]
+    [Command(["bocasfumo"], "Staff", "Abre o painel gerenciamento de bocas de fumo")]
     public static void CMD_bocasfumo(MyPlayer player)
     {
         if (!player.StaffFlags.Contains(StaffFlag.CrackDens))
         {
-            player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 

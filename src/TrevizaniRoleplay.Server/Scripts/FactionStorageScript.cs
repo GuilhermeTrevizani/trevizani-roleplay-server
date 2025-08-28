@@ -7,7 +7,7 @@ namespace TrevizaniRoleplay.Server.Scripts;
 
 public class FactionStorageScript : Script
 {
-    [Command("farmazenamento")]
+    [Command(["farmazenamento"], "Facção", "Usa o armazenamento da facção")]
     public static void CMD_farmazenamento(MyPlayer player)
     {
         if (!player.FactionFlags.Contains(FactionFlag.Storage))

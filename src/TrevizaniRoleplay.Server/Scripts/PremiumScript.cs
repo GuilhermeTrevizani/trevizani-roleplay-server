@@ -6,7 +6,7 @@ namespace TrevizaniRoleplay.Server.Scripts;
 
 public class PremiumScript : Script
 {
-    [Command("premium")]
+    [Command(["premium"], "Geral", "Abre o painel de gerenciamento Premium")]
     public static void CMD_premium(MyPlayer player)
     {
         bool GetDifferentLevel(string name)

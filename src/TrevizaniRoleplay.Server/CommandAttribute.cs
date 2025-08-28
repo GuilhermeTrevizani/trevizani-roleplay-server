@@ -1,12 +1,12 @@
 ﻿namespace TrevizaniRoleplay.Server;
 
 [AttributeUsage(AttributeTargets.Method)]
-public class CommandAttribute(string command, string helpText = "") : Attribute
+public class CommandAttribute(string[] commands, string category, string description, string helpText = "") : Attribute
 {
-    public readonly string Command = command;
-    public readonly string HelpText = helpText;
-
-    public string[] Aliases { get; set; } = [];
+    public string[] Commands { get; } = commands;
+    public string Category { get; } = category;
+    public string Description { get; } = description;
+    public string HelpText { get; } = helpText;
     public bool GreedyArg { get; set; }
     public bool AllowEmptyStrings { get; set; }
 }

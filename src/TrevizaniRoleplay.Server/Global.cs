@@ -170,4 +170,8 @@ public sealed class Global
     public static ulong PoliceEmergencyCallDiscordChannel { get; set; }
 
     public static string DatabaseConnection { get; set; } = string.Empty;
+
+    public static string CommandsHelpJson { get; set; } = string.Empty;
+
+    public static string CommandsChatJson { get; set; } = string.Empty;
 }

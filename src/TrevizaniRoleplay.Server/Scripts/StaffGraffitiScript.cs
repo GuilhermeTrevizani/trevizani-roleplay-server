@@ -8,7 +8,7 @@ namespace TrevizaniRoleplay.Server.Scripts;
 
 public class StaffGraffitiScript : Script
 {
-    [Command("grafites")]
+    [Command(["grafites"], "Staff", "Abre o painel de gerenciamento de grafites")]
     public async Task CMD_grafites(MyPlayer player)
     {
         if (player.User.Staff < UserStaff.GameAdmin)

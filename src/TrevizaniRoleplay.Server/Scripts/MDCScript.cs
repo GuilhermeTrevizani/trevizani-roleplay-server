@@ -8,7 +8,7 @@ namespace TrevizaniRoleplay.Server.Scripts;
 
 public class MDCScript : Script
 {
-    [Command("mdc")]
+    [Command(["mdc"], "Facção", "Abre o MDC")]
     public async Task CMD_mdc(MyPlayer player)
     {
         if (player.Faction?.HasMDC != true)
@@ -1422,7 +1422,7 @@ public class MDCScript : Script
         }
     }
 
-    [Command("ploc")]
+    [Command(["ploc"], "Facção", "Atualiza a localização da sua unidade")]
     public async Task CMD_ploc(MyPlayer player)
     {
         if (player.Faction?.Government != true)
@@ -1448,7 +1448,7 @@ public class MDCScript : Script
         player.SendMessage(MessageType.Success, "Você atualizou a localização da sua unidade.");
     }
 
-    [Command("ps", "/ps (status)", GreedyArg = true)]
+    [Command(["ps"], "Facção", "Atualiza o status da sua unidade", "(status)", GreedyArg = true)]
     public async Task CMD_ps(MyPlayer player, string status)
     {
         if (player.Faction?.Government != true)

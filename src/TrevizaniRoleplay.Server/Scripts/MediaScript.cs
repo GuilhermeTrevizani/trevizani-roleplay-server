@@ -6,7 +6,7 @@ namespace TrevizaniRoleplay.Server.Scripts;
 
 public class MediaScript : Script
 {
-    [Command("transmissao")]
+    [Command(["transmissao"], "Transmissão", "Inicia/para uma transmissão")]
     public async Task CMD_transmissao(MyPlayer player)
     {
         if (player.Faction?.Type != FactionType.Media)
@@ -37,7 +37,7 @@ public class MediaScript : Script
         await player.WriteLog(LogType.Faction, $"/transmissao {Global.TransmissionActive}", null);
     }
 
-    [Command("vertransmissao")]
+    [Command(["vertransmissao"], "Transmissão", "Acompanha/para de acompanhar uma transmissão")]
     public static void CMD_vertransmissao(MyPlayer player)
     {
         if (!Global.TransmissionActive)
@@ -50,7 +50,7 @@ public class MediaScript : Script
         player.SendMessage(MessageType.Success, $"Você {(player.FollowingTransmission ? "agora está" : "não está mais")} acompanhando a transmissão.");
     }
 
-    [Command("t", "/t (mensagem)", GreedyArg = true)]
+    [Command(["t"], "Transmissão", "Fala em uma transmissão se possuir permissão", "(mensagem)", GreedyArg = true)]
     public async Task CMD_t(MyPlayer player, string message)
     {
         if (!Global.TransmissionActive)
@@ -74,7 +74,7 @@ public class MediaScript : Script
         await player.WriteLog(LogType.General, $"/t {message}", null);
     }
 
-    [Command("tplayer", "/tplayer (ID ou nome)")]
+    [Command(["tplayer"], "Transmissão", "Convida/expulsa alguém para uma transmissão", "(ID ou nome)")]
     public async Task CMD_tplayer(MyPlayer player, string idOrName)
     {
         if (player.Faction?.Type != FactionType.Media)

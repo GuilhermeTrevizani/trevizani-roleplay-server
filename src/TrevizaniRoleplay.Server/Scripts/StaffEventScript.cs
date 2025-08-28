@@ -9,7 +9,7 @@ namespace TrevizaniRoleplay.Server.Scripts;
 
 public class StaffEventScript : Script
 {
-    [Command("tempo", "/tempo (tempo) (temperatura)")]
+    [Command(["tempo"], "Staff", "Define um tempo e temperatura fixos", "(tempo) (temperatura)")]
     public async Task CMD_tempo(MyPlayer player, int tempo, int temperatura)
     {
         if (!player.StaffFlags.Contains(StaffFlag.Events))
@@ -33,7 +33,7 @@ public class StaffEventScript : Script
         await player.WriteLog(LogType.Staff, $"/tempo {Global.WeatherInfo.WeatherType} {Global.WeatherInfo.Main.Temp:N0}", null);
     }
 
-    [Command("anrp", "/anrp (mensagem)", GreedyArg = true)]
+    [Command(["anrp"], "Staff", "Envia um anúncio de roleplay", "(mensagem)", GreedyArg = true)]
     public async Task CMD_anrp(MyPlayer player, string message)
     {
         if (!player.StaffFlags.Contains(StaffFlag.Events))
@@ -63,7 +63,7 @@ public class StaffEventScript : Script
         await channel.SendMessageAsync(embed: embedBuilder.Build());
     }
 
-    [Command("rtempo")]
+    [Command(["rtempo"], "Staff", "Remove o tempo e ativa a sincronização automática")]
     public async Task CMD_rtempo(MyPlayer player)
     {
         if (!player.StaffFlags.Contains(StaffFlag.Events))
@@ -78,7 +78,7 @@ public class StaffEventScript : Script
         await player.WriteLog(LogType.Staff, "/rtempo", null);
     }
 
-    [Command("enome", "/enome (ID ou nome) (novo nome)", GreedyArg = true, AllowEmptyStrings = true)]
+    [Command(["enome"], "Staff", "Define um nome temporário para seu personagem", "(ID ou nome) (novo nome)", GreedyArg = true, AllowEmptyStrings = true)]
     public async Task CMD_enome(MyPlayer player, string idOrName, string newName)
     {
         if (!player.StaffFlags.Contains(StaffFlag.Events))
@@ -118,7 +118,7 @@ public class StaffEventScript : Script
         await player.WriteLog(LogType.Staff, $"/enome {newName}", target);
     }
 
-    [Command("skin", "/skin (ID ou nome) (skin)")]
+    [Command(["skin"], "Staff", "Altera a skin de um jogador", "(ID ou nome) (skin)")]
     public async Task CMD_skin(MyPlayer player, string idOrName, string skin)
     {
         if (!player.StaffFlags.Contains(StaffFlag.Events))
@@ -148,7 +148,7 @@ public class StaffEventScript : Script
         await player.WriteLog(LogType.Staff, $"/skin {skin}", target);
     }
 
-    [Command("objetos")]
+    [Command(["objetos"], "Staff", "Abre o painel de gerenciamento de objetos")]
     public static void CMD_objetos(MyPlayer player)
     {
         if (!player.StaffFlags.Contains(StaffFlag.Events))

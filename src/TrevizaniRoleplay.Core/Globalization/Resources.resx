@@ -1002,4 +1002,7 @@
   <data name="Cold" xml:space="preserve">
     <value>Cold</value>
   </data>
+  <data name="Keys" xml:space="preserve">
+    <value>Keys</value>
+  </data>
 </root>

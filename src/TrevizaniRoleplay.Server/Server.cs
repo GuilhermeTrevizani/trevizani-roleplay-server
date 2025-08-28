@@ -298,6 +298,50 @@ public class Server : Script
         Global.Commands = [.. Assembly.GetExecutingAssembly().GetTypes()
                 .SelectMany(x => x.GetMethods())
                 .Where(x => x.GetCustomAttributes(typeof(CommandAttribute), false).Length > 0)];
+
+        var commandsHelp = new List<CommandHelpResponse>()
+        {
+            new(Resources.Keys, "F2", "Ativa/desativa o cursor"),
+            new(Resources.Keys, "F7", "Habilita/desabilita HUD"),
+            new(Resources.Keys, "B", "Aponta/para de apontar o dedo estando fora de um veículo"),
+            new(Resources.Keys, "T", "Abrir caixa de texto para digitação no chat"),
+            new(Resources.Keys, "F", "Entra em veículo como motorista"),
+            new(Resources.Keys, "G", "Entra em veículo como passageiro"),
+            new(Resources.Keys, "L", "Tranca/destranca propriedades, veículos e portas"),
+            new(Resources.Keys, "J", "Ativa/desativa o controle de velocidade (cruise control)"),
+            new(Resources.Keys, "Z", "Ativa/desativa o modo de andar agachado"),
+            new(Resources.Keys, "Y", "Interage com um ponto de interação ou liga/desliga o motor de um veículo"),
+            new(Resources.Keys, "Shift + G", "Entra em veículo dando prioridade como passageiro externo"),
+            new(Resources.Keys, "O", "Abre/fecha lista de jogadores online"),
+            new(Resources.Keys, "I", "Abre o inventário"),
+            new(Resources.Keys, "SHIFT", "Segurar para ativar o modo drift de um veículo"),
+            new(Resources.Keys, "K", "Entra/sai de garagens com um veículo"),
+            new(Resources.Keys, "HOME", "Abre o celular"),
+            new(Resources.Keys, "F6", "Alterar modo de disparo de uma arma"),
+            new(Resources.Keys, "F8", "Tira uma screenshot"),
+            new(Resources.Keys, "Q", "Desliga/liga som da sirene de um veículo"),
+            new(Resources.Keys, "F3", "Ativa/desativa a câmera do helicóptero"),
+            new(Resources.Keys, "F5", "Ativa/desativa o no-clip"),
+            new(Resources.Keys, "Botão Esquerdo do Mouse", "Ativa/desativa a luz do helicóptero enquanto a câmera estiver ativa"),
+            new(Resources.Keys, "Botão Direito do Mouse", "Altera o modo da visão do helicóptero enquanto a câmera estiver ativa"),
+        };
+
+        var commandsChat = new List<CommandChatResponse>();
+
+        foreach (var commandAttribute in Global.Commands.Select(x => x.GetCustomAttribute<CommandAttribute>()))
+        {
+            foreach (var command in commandAttribute!.Commands)
+            {
+                commandsHelp.Add(new CommandHelpResponse(commandAttribute.Category, $"/{command}", commandAttribute.Description));
+
+                commandsChat.Add(new CommandChatResponse($"/{command}", commandAttribute.Description));
+            }
+        }
+
+        Global.CommandsHelpJson = Functions.Serialize(commandsHelp.OrderBy(x => x.Category).ThenBy(x => x.Name));
+
+        Global.CommandsChatJson = Functions.Serialize(commandsChat.OrderBy(x => x.Command));
+
         Functions.ConsoleLog($"Commands: {Global.Commands.Count}");
 
         Global.Dealerships = await context.Dealerships.ToListAsync();

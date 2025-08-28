@@ -1293,7 +1293,7 @@ public class MyPlayer(NetHandle netHandle) : Player(netHandle)
         await context.SaveChangesAsync();
     }
 
-    public void ConfigChat() => Emit(Constants.CHAT_PAGE_CONFIGURE, User.TimeStampToggle, User.ChatFontType, User.ChatFontSize, User.ChatLines);
+    public void ConfigChat() => Emit(Constants.CHAT_PAGE_CONFIGURE, User.TimeStampToggle, User.ChatFontType, User.ChatFontSize, User.ChatLines, Global.CommandsChatJson);
 
     public void ClearChat() => Emit(Constants.CHAT_PAGE_CLEAR_MESSAGES);
 

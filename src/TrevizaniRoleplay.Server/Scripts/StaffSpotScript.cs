@@ -1,5 +1,4 @@
 ﻿using GTANetworkAPI;
-using TrevizaniRoleplay.Core.Extensions;
 using TrevizaniRoleplay.Server.Extensions;
 using TrevizaniRoleplay.Server.Factories;
 using TrevizaniRoleplay.Server.Models;
@@ -8,7 +7,7 @@ namespace TrevizaniRoleplay.Server.Scripts;
 
 public class StaffSpotScript : Script
 {
-    [Command("pontos")]
+    [Command(["pontos"], "Staff", "Abre o painel de gerenciamento de pontos")]
     public static void CMD_pontos(MyPlayer player)
     {
         if (!player.StaffFlags.Contains(StaffFlag.Spots))
@@ -52,7 +51,7 @@ public class StaffSpotScript : Script
         }
     }
 
-    [Command("criarponto", "/criarponto (tipo)")]
+    [Command(["criarponto"], "Staff", "Cria um ponto", "(tipo)")]
     public Task CMD_criarponto(MyPlayer player, byte type)
     {
         return StaffSpotSave(player, string.Empty, type, player.GetPosition(), player.GetDimension());
@@ -118,7 +117,7 @@ public class StaffSpotScript : Script
         }
     }
 
-    [Command("delponto")]
+    [Command(["delponto"], "Staff", "Deleta o ponto mais próximo")]
     public async Task CMD_delponto(MyPlayer player)
     {
         if (!player.StaffFlags.Contains(StaffFlag.Spots))

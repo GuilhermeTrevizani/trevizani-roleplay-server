@@ -8,7 +8,7 @@ namespace TrevizaniRoleplay.Server.Scripts;
 
 public class PoliceScript : Script
 {
-    [Command("algemar", "/algemar (ID ou nome)")]
+    [Command(["algemar"], "Facção", "Algema/desalgema um personagem", "(ID ou nome)")]
     public static void CMD_algemar(MyPlayer player, string idOrName)
     {
         if (player.Faction?.Type != FactionType.Police)
@@ -57,7 +57,7 @@ public class PoliceScript : Script
         }
     }
 
-    [Command("apreender", "/apreender (id) (valor) (dias) (motivo)", GreedyArg = true)]
+    [Command(["apreender"], "Facção", "Apreende um veículo", "(id) (valor) (dias) (motivo)", GreedyArg = true)]
     public async Task CMD_apreender(MyPlayer player, int id, int value, int days, string reason)
     {
         if (player.Faction?.CanSeizeVehicles != true || !player.OnDuty)
@@ -127,7 +127,7 @@ public class PoliceScript : Script
         player.SendFactionMessage($"{player.FactionRank!.Name} {player.Character.Name} apreendeu {vehicle.Identifier} por ${value:N0} até {endDate}. Motivo: {reason}");
     }
 
-    [Command("radar", "/radar (velocidade)")]
+    [Command(["radar"], "Facção", "Cria um radar de velocidade", "(velocidade)")]
     public static void CMD_radar(MyPlayer player, int speed)
     {
         if (player.Faction?.Type != FactionType.Police || !player.OnDuty)
@@ -161,7 +161,7 @@ public class PoliceScript : Script
         player.SendMessage(MessageType.Success, $"Você criou um radar com a velocidade {speed}.");
     }
 
-    [Command("radaroff")]
+    [Command(["radaroff"], "Remove um radar de velocidade", "Facção")]
     public static void CMD_radaroff(MyPlayer player)
     {
         if (player.Faction?.Type != FactionType.Police || !player.OnDuty)
@@ -182,7 +182,7 @@ public class PoliceScript : Script
         player.SendMessage(MessageType.Success, "Você removeu o radar.");
     }
 
-    [Command("confisco")]
+    [Command(["confisco"], "Facção", "Cria um registro de confisco")]
     public static void CMD_confisco(MyPlayer player)
     {
         if (player.Faction?.Type != FactionType.Police || !player.OnDuty)

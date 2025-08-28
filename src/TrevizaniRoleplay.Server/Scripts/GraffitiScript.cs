@@ -7,7 +7,7 @@ namespace TrevizaniRoleplay.Server.Scripts;
 
 public class GraffitiScript : Script
 {
-    [Command("grafitar")]
+    [Command(["grafitar"], "Geral", "Inicia um grafite")]
     public static void CMD_grafitar(MyPlayer player)
     {
         if (player.IsActionsBlocked())
@@ -98,7 +98,7 @@ public class GraffitiScript : Script
         }
     }
 
-    [Command("rgrafite")]
+    [Command(["rgrafite"], "Geral", "Remove um grafite")]
     public async Task CMD_rgrafite(MyPlayer player)
     {
         if (player.IsActionsBlocked())
@@ -108,8 +108,7 @@ public class GraffitiScript : Script
         }
 
         var graffiti = Global.Graffitis
-           .Where(x => x.CharacterId == player.Character.Id
-               && x.Dimension == player.GetDimension()
+           .Where(x => x.Dimension == player.GetDimension()
                && player.GetPosition().DistanceTo(new(x.PosX, x.PosY, x.PosZ)) <= Constants.RP_DISTANCE)
            .MinBy(x => player.GetPosition().DistanceTo(new(x.PosX, x.PosY, x.PosZ)));
         if (graffiti is null)
@@ -124,7 +123,7 @@ public class GraffitiScript : Script
         context.Graffitis.Remove(graffiti);
         await context.SaveChangesAsync();
 
-        await player.WriteLog(LogType.Faction, $"/rgrafite {Functions.Serialize(graffiti)}", null);
-        player.SendMessage(MessageType.Success, "Você removeu seu grafite.");
+        await player.WriteLog(LogType.General, $"/rgrafite {Functions.Serialize(graffiti)}", null);
+        player.SendMessage(MessageType.Success, "Você removeu o grafite.");
     }
 }

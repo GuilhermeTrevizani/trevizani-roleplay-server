@@ -6,7 +6,7 @@ namespace TrevizaniRoleplay.Server.Scripts;
 
 public class FactionUniformScript : Script
 {
-    [Command("adduniforme", "/adduniforme (nome)", GreedyArg = true)]
+    [Command(["adduniforme"], "Facção", "Cria um uniforme com as roupas que está vestindo", "(nome)", GreedyArg = true)]
     public async Task CMD_adduniforme(MyPlayer player, string name)
     {
         if (name.Length > 50)
@@ -49,7 +49,7 @@ public class FactionUniformScript : Script
         player.SendMessage(MessageType.Success, $"Você criou o uniforme {name}.");
     }
 
-    [Command("deluniforme", "/deluniforme (nome)", GreedyArg = true)]
+    [Command(["deluniforme"], "Facção", "Remove um uniforme", "(nome)", GreedyArg = true)]
     public async Task CMD_deluniforme(MyPlayer player, string name)
     {
         if (!(player.Faction?.HasDuty ?? false) || !player.OnDuty)
@@ -81,7 +81,7 @@ public class FactionUniformScript : Script
         player.SendMessage(MessageType.Success, $"Você deletou o uniforme {name}.");
     }
 
-    [Command("criaruniforme", "/criaruniforme (nome)", GreedyArg = true)]
+    [Command(["criaruniforme"], "Facção", "Cria um uniforme através do menu de seleção", "(nome)", GreedyArg = true)]
     public static void CMD_criaruniforme(MyPlayer player, string name)
     {
         if (name.Length > 50)

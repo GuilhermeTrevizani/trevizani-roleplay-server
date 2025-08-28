@@ -6,7 +6,7 @@ namespace TrevizaniRoleplay.Server.Scripts;
 
 public class OutfitScript : Script
 {
-    [Command("outfits")]
+    [Command(["outfits"], "Geral", "Abre a interface de outfits")]
     public static void CMD_outfits(MyPlayer player)
     {
         if (!player.ValidPed)
@@ -21,7 +21,7 @@ public class OutfitScript : Script
             player.MaxOutfit);
     }
 
-    [Command("outfit", "/outfit (slot)")]
+    [Command(["outfit"], "Geral", "(slot)", "Altera o outfit em uso")]
     public static void CMD_outfit(MyPlayer player, int outfit) => SetOutfit(player, outfit);
 
     [RemoteEvent(nameof(SetOutfit))]

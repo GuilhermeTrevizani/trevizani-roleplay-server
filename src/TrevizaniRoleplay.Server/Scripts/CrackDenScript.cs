@@ -141,7 +141,7 @@ public class CrackDenScript : Script
         }
     }
 
-    [Command("bocafumo")]
+    [Command(["bocafumo"], "Geral", "Usa uma boca de fumo")]
     public static void CMD_bocafumo(MyPlayer player)
     {
         var crackDen = Global.CrackDens.FirstOrDefault(x =>
@@ -149,7 +149,7 @@ public class CrackDenScript : Script
             && x.Dimension == player.GetDimension());
         if (crackDen is null)
         {
-            player.SendNotification(NotificationType.Error, "Você não está próximo de nenhuma boca de fumo.");
+            player.SendMessage(MessageType.Error, "Você não está próximo de nenhuma boca de fumo.");
             return;
         }
 

@@ -6,7 +6,7 @@ namespace TrevizaniRoleplay.Server.Scripts;
 
 public class DebugScript : Script
 {
-    [Command("x")]
+    [Command(["x"], "Staff", "Comando auxiliar")]
     public static void CMD_x(MyPlayer player)
     {
         if (player.User.Staff < UserStaff.GameAdmin)
@@ -20,7 +20,7 @@ public class DebugScript : Script
         player.SendMessage(MessageType.Success, "/x");
     }
 
-    [Command("x2", "/x2 (component) (drawable) (texture)")]
+    [Command(["x2"], "Staff", "Alterar roupas", "(component) (drawable) (texture)")]
     public static void CMD_x2(MyPlayer player, int component, int drawable, int texture)
     {
         if (player.User.Staff < UserStaff.Founder)
@@ -34,7 +34,7 @@ public class DebugScript : Script
         player.SendMessage(MessageType.Success, $"/x2 {component} {drawable} {texture}");
     }
 
-    [Command("x3", "/x3 (component) (drawable) (texture)")]
+    [Command(["x3"], "Staff", "Alterar acessórios", "(component) (drawable) (texture)")]
     public static void CMD_x3(MyPlayer player, int component, int drawable, int texture)
     {
         if (player.User.Staff < UserStaff.Founder)
@@ -48,7 +48,7 @@ public class DebugScript : Script
         player.SendMessage(MessageType.Success, $"/x3 {component} {drawable} {texture}");
     }
 
-    [Command("x4", "/x4 (collection) (overlay)")]
+    [Command(["x4"], "Staff", "Alterar tatuagens", "(collection) (overlay)")]
     public static void CMD_x4(MyPlayer player, string collection, string overlay)
     {
         if (player.User.Staff < UserStaff.Founder)

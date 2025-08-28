@@ -7,18 +7,18 @@ namespace TrevizaniRoleplay.Server.Scripts;
 
 public class TruckerScript : Script
 {
-    [Command("tpda")]
+    [Command(["tpda"], "Emprego", "Abre o painel de gerenciamento de caminhoneiros")]
     public static void CMD_tpda(MyPlayer player)
     {
         if (player.Character.Job != CharacterJob.Trucker || !player.OnDuty)
         {
-            player.SendNotification(NotificationType.Error, "Você não é um caminhoneiro ou não está em serviço.");
+            player.SendMessage(MessageType.Error, "Você não é um caminhoneiro ou não está em serviço.");
             return;
         }
 
         if (Global.TruckerLocations.Count == 0)
         {
-            player.SendNotification(NotificationType.Error, "Não há rotas criadas.");
+            player.SendMessage(MessageType.Error, "Não há rotas criadas.");
             return;
         }
 
@@ -32,7 +32,7 @@ public class TruckerScript : Script
         })));
     }
 
-    [Command("carregarcaixas")]
+    [Command(["carregarcaixas"], "Emprego", "Carrega o seu veículo com as caixas da rota")]
     public static async Task CMD_carregarcaixas(MyPlayer player)
     {
         if (player.Character.Job != CharacterJob.Trucker || !player.OnDuty)
@@ -99,7 +99,7 @@ public class TruckerScript : Script
         });
     }
 
-    [Command("cancelarcaixas")]
+    [Command(["cancelarcaixas"], "Emprego", "Devolve as caixas da rota")]
     public static void CMD_cancelarcaixas(MyPlayer player)
     {
         if (player.Character.Job != CharacterJob.Trucker || !player.OnDuty)
@@ -141,7 +141,7 @@ public class TruckerScript : Script
         player.SendMessage(MessageType.Success, "Você descarregou seu veículo.");
     }
 
-    [Command("entregarcaixas")]
+    [Command(["entregarcaixas"], "Emprego", "Entrega as caixas da rota em um ponto de entrega")]
     public static async Task CMD_entregarcaixas(MyPlayer player)
     {
         if (player.Character.Job != CharacterJob.Trucker || !player.OnDuty)

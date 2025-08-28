@@ -7,7 +7,7 @@ namespace TrevizaniRoleplay.Server.Scripts;
 
 public class StaffGiveItemScript : Script
 {
-    [Command("daritem")]
+    [Command(["daritem"], "Staff", "Abre o painel para dar itens para um personagem")]
     public static void CMD_daritem(MyPlayer player)
     {
         if (!player.StaffFlags.Contains(StaffFlag.GiveItem))

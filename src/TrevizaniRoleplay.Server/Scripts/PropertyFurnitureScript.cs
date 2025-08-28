@@ -26,7 +26,7 @@ public class PropertyFurnitureScript : Script
         return true;
     }
 
-    [Command("mobilias")]
+    [Command(["mobilias"], "Propriedades", "Gerencia as mobílias de uma propriedade")]
     public async Task CMD_mobilias(MyPlayer player)
     {
         var property = Global.Properties.FirstOrDefault(x => x.Number == player.GetDimension());

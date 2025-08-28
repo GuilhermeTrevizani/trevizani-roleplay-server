@@ -7,7 +7,7 @@ namespace TrevizaniRoleplay.Server.Scripts;
 
 public class GarbageCollectorScript : Script
 {
-    [Command("pegarlixo")]
+    [Command(["pegarlixo"], "Emprego", "Pega um saco de lixo em um ponto de coleta")]
     public static void CMD_pegarlixo(MyPlayer player)
     {
         if (player.Character.Job != CharacterJob.GarbageCollector || !player.OnDuty)
@@ -37,7 +37,7 @@ public class GarbageCollectorScript : Script
         player.SendMessageToNearbyPlayers($"pega um saco de lixo.", MessageCategory.Ame);
     }
 
-    [Command("colocarlixo")]
+    [Command(["colocarlixo"], "Emprego", "Coloca um saco de lixo em um caminhão de lixo")]
     public static void CMD_colocarlixo(MyPlayer player)
     {
         if (player.Character.Job != CharacterJob.GarbageCollector || !player.OnDuty)

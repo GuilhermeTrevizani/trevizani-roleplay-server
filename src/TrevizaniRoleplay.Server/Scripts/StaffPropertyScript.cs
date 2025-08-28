@@ -7,7 +7,7 @@ namespace TrevizaniRoleplay.Server.Scripts;
 
 public class StaffPropertyScript : Script
 {
-    [Command("int", "/int (tipo)")]
+    [Command(["int"], "Staff", "Visualiza um tipo de interior", "(tipo)")]
     public async Task CMD_int(MyPlayer player, byte type)
     {
         if (!player.StaffFlags.Contains(StaffFlag.Properties))
@@ -33,7 +33,7 @@ public class StaffPropertyScript : Script
         await player.WriteLog(LogType.Staff, $"/int {type}", null);
     }
 
-    [Command("irprop", "/irprop (número)")]
+    [Command(["irprop"], "Staff", "Vai para uma propriedade", "(número)")]
     public async Task CMD_irprop(MyPlayer player, int number)
     {
         var property = Global.Properties.FirstOrDefault(x => x.Number == number);
@@ -47,7 +47,7 @@ public class StaffPropertyScript : Script
         await player.WriteLog(LogType.Staff, $"/irprop {number}", null);
     }
 
-    [Command("delprop", "/delprop (número)")]
+    [Command(["delprop"], "Staff", "Deleta uma propriedade", "(número)")]
     public async Task CMD_delprop(MyPlayer player, int number)
     {
         if (!player.StaffFlags.Contains(StaffFlag.Properties))
@@ -96,7 +96,7 @@ public class StaffPropertyScript : Script
         player.SendMessage(MessageType.Success, "Propriedade excluída.");
     }
 
-    [Command("rdonoprop", "/rdonoprop (número)")]
+    [Command(["rdonoprop"], "Staff", "Remove o dono da propriedade", "(número)")]
     public async Task CMD_rdonoprop(MyPlayer player, int number)
     {
         if (!player.StaffFlags.Contains(StaffFlag.Properties))
@@ -123,19 +123,19 @@ public class StaffPropertyScript : Script
         player.SendMessage(MessageType.Success, "Dono da propriedade removido.");
     }
 
-    [Command("criarpropriedade", "/criarpropriedade (interior) (valor)", Aliases = ["cprop"])]
+    [Command(["criarpropriedade", "cprop"], "Staff", "Cria uma propriedade", "(interior) (valor)")]
     public static void CMD_criarpropriedade(MyPlayer player, int interior, int value)
     {
         player.Emit("CreateProperty", interior, value, string.Empty, null);
     }
 
-    [Command("criarapartamento", "/criarapartamento (interior) (valor) (número propriedade mãe) (nome)", Aliases = ["cap"], GreedyArg = true)]
+    [Command(["criarapartamento", "cap"], "Staff", "Cria um apartamento", "(interior) (valor) (número propriedade mãe) (nome)", GreedyArg = true)]
     public static void CMD_criarapartamento(MyPlayer player, int interior, int value, int parentPropertyName, string name)
     {
         player.Emit("CreateProperty", interior, value, name, parentPropertyName);
     }
 
-    [Command("eprop", "/eprop (número)")]
+    [Command(["eprop"], "Staff", "Edita uma propriedade", "(número)")]
     public static void CMD_eprop(MyPlayer player, int number)
     {
         if (!player.StaffFlags.Contains(StaffFlag.Properties))
@@ -365,7 +365,7 @@ public class StaffPropertyScript : Script
         }
     }
 
-    [Command("apinv")]
+    [Command(["apinv"], "Staff", "Visualiza o inventário de uma propriedade")]
     public static void CMD_apinv(MyPlayer player)
     {
         if (!player.StaffFlags.Contains(StaffFlag.Properties))

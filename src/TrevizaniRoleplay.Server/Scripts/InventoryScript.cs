@@ -7,7 +7,7 @@ namespace TrevizaniRoleplay.Server.Scripts;
 
 public class InventoryScript : Script
 {
-    [Command("inventario", Aliases = ["inv"])]
+    [Command(["inventario", "inv"], "Geral", "Abre o inventário")]
     public static void CMD_inventario(MyPlayer player) => player.ShowInventory();
 
     [RemoteEvent(nameof(ShowInventory))]
@@ -1403,7 +1403,7 @@ public class InventoryScript : Script
         item.CreateObject();
     }
 
-    [Command("pagar", "/pagar (ID ou nome) (quantidade)")]
+    [Command(["pagar"], "Geral", "Entrega dinheiro para um personagem próximo", "(ID ou nome) (quantidade)")]
     public async Task CMD_pagar(MyPlayer player, string idOrName, int quantity)
     {
         var item = player.Items.FirstOrDefault(x => x.ItemTemplateId == new Guid(Constants.MONEY_ITEM_TEMPLATE_ID));
@@ -1530,12 +1530,12 @@ public class InventoryScript : Script
         }
     }
 
-    [Command("armacorpo", Aliases = ["armac"])]
+    [Command(["armacorpo", "armac"], "Geral", "Altera posicionamento da arma acoplada ao corpo")]
     public static void CMD_armacorpo(MyPlayer player)
     {
         if (player.IsActionsBlocked())
         {
-            player.SendNotification(NotificationType.Error, Resources.YouCanNotDoThisBecauseYouAreHandcuffedInjuredOrBeingCarried);
+            player.SendMessage(MessageType.Error, Resources.YouCanNotDoThisBecauseYouAreHandcuffedInjuredOrBeingCarried);
             return;
         }
 
@@ -1543,7 +1543,7 @@ public class InventoryScript : Script
             && Global.WeaponsInfos.FirstOrDefault(y => y.Name == GlobalFunctions.GetWeaponName(x.GetItemType()))?.AttachToBody == true);
         if (string.IsNullOrWhiteSpace(player.AttachedWeapon) || weaponOnBody is null)
         {
-            player.SendNotification(NotificationType.Error, "Você não está com uma arma no corpo.");
+            player.SendMessage(MessageType.Error, "Você não está com uma arma no corpo.");
             return;
         }
 
@@ -1609,7 +1609,7 @@ public class InventoryScript : Script
         }
     }
 
-    [Command("equipar", "/equipar (nome [lista])")]
+    [Command(["equipar"], "Facção", "(nome [lista])", "Pega equipamentos")]
     public async Task CMD_equipar(MyPlayer player, string name)
     {
         if (!(player.Faction?.Government ?? false) || !player.OnDuty)
@@ -1702,7 +1702,7 @@ public class InventoryScript : Script
         player.SendMessage(MessageType.Success, $"Você equipou {factionEquipment.Name}.");
     }
 
-    [Command("celulares")]
+    [Command(["celulares"], "Geral", "Lista os seus números")]
     public void CMD_celulares(MyPlayer player)
     {
         var cellphones = player.Items.Where(x => x.GetCategory() == ItemCategory.Cellphone).ToList();

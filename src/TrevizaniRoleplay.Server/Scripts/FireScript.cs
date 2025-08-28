@@ -7,7 +7,7 @@ namespace TrevizaniRoleplay.Server.Scripts;
 
 public class FireScript : Script
 {
-    [Command("incendios")]
+    [Command(["incendios"], "Facção", "Abre o painel de gerenciamento de incêndios")]
     public static void CMD_incendios(MyPlayer player)
     {
         if (!player.FactionFlags.Contains(FactionFlag.FireManager))

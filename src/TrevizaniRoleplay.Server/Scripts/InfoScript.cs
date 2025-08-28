@@ -7,7 +7,7 @@ namespace TrevizaniRoleplay.Server.Scripts;
 
 public class InfoScript : Script
 {
-    [Command("infos")]
+    [Command(["infos"], "Geral", "Gerencia suas marcas de informações")]
     public static void CMD_infos(MyPlayer player)
     {
         player.Emit("Info:Show", GetInfosJson(player));

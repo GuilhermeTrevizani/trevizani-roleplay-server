@@ -6,7 +6,7 @@ namespace TrevizaniRoleplay.Server.Scripts;
 
 public class FirefighterScript : Script
 {
-    [Command("curar", "/curar (ID ou nome)")]
+    [Command(["curar"], "Facção", "Cura um personagem ferido", "(ID ou nome)")]
     public static void CMD_curar(MyPlayer player, string idOrName)
     {
         if (player.Faction?.Type != FactionType.Firefighter || !player.OnDuty)

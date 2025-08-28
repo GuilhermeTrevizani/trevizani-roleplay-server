@@ -9,7 +9,7 @@ namespace TrevizaniRoleplay.Server.Scripts;
 
 public class VehicleScript : Script
 {
-    [Command("vestacionar")]
+    [Command(["vestacionar"], "Veículos", "Estaciona um veículo")]
     public async Task CMD_vestacionar(MyPlayer player)
     {
         if (player.Vehicle is not MyVehicle vehicle || vehicle.Driver != player)
@@ -62,7 +62,7 @@ public class VehicleScript : Script
         player.SendMessage(MessageType.Error, Resources.YouDoNotHaveAccessToTheVehicle);
     }
 
-    [Command("vlista")]
+    [Command(["vlista"], "Veículos", "Mostra seus veículos")]
     public async Task CMD_vlista(MyPlayer player)
     {
         var context = Functions.GetDatabaseContext();
@@ -91,7 +91,7 @@ public class VehicleScript : Script
         player.Emit("Server:SpawnarVeiculos", $"Veículos de {player.Character.Name} ({DateTime.Now})", Functions.Serialize(vehicles));
     }
 
-    [Command("vvender", "/vvender (ID ou nome) (valor)")]
+    [Command(["vvender"], "Veículos", "Vende um veículo para outro personagem", "(ID ou nome) (valor)")]
     public static void CMD_vvender(MyPlayer player, string idOrName, int valor)
     {
         var vehicle = Global.Vehicles
@@ -141,7 +141,7 @@ public class VehicleScript : Script
         target.SendMessage(MessageType.Success, $"{player.ICName} ofereceu para você o veículo {vehicle.VehicleDB.Model.ToUpper()} {vehicle.VehicleDB.Plate} por ${valor:N0}. (/ac {(int)invite.Type} para aceitar ou /rc {(int)invite.Type} para recusar)");
     }
 
-    [Command("vtransferir", "/vtransferir (ID ou nome)")]
+    [Command(["vtransferir"], "Veículos", "Transfere um veículo para outro personagem", "(ID ou nome)")]
     public static void CMD_vtransferir(MyPlayer player, string idOrName)
     {
         var vehicle = Global.Vehicles
@@ -248,7 +248,7 @@ public class VehicleScript : Script
         }
     }
 
-    [Command("vporta", "/vporta (porta [1-4])", Aliases = ["vp"])]
+    [Command(["vporta", "vp"], "Veículos", "Abre/fecha a porta de um veículo", "(porta [1-4])")]
     public static void CMD_vporta(MyPlayer player, int door)
     {
         if (door < 1 || door > 4)
@@ -272,7 +272,7 @@ public class VehicleScript : Script
         (vehicle.Controller ?? player).TriggerEvent("SetVehicleDoorState", vehicle, door, vehicle.DoorsStates[door]);
     }
 
-    [Command("capo")]
+    [Command(["capo"], "Veículos", "Abre/fecha o capô de um veículo")]
     public static void CMD_capo(MyPlayer player)
     {
         var vehicle = Global.Vehicles.Where(x => player.GetPosition().DistanceTo(x.GetPosition()) <= Constants.RP_DISTANCE
@@ -290,7 +290,7 @@ public class VehicleScript : Script
         (vehicle.Controller ?? player).TriggerEvent("SetVehicleDoorState", vehicle, Constants.VEHICLE_DOOR_HOOD, vehicle.DoorsStates[Constants.VEHICLE_DOOR_HOOD]);
     }
 
-    [Command("portamalas")]
+    [Command(["portamalas"], "Veículos", "Abre/fecha o porta-malas de um veículo")]
     public static async Task CMD_portamalas(MyPlayer player)
     {
         if (player.IsInVehicle)
@@ -320,7 +320,7 @@ public class VehicleScript : Script
         await player.WriteLog(LogType.General, $"/portamalas {vehicle.Identifier} ({(vehicle.DoorsStates[Constants.VEHICLE_DOOR_TRUNK] ? "fechar" : "abrir")})", null);
     }
 
-    [Command("abastecer", "/abastecer (porcentagem)")]
+    [Command(["abastecer"], "Veículos", "Abastece um veículo em um posto de combustível", "(porcentagem)")]
     public static void CMD_abastecer(MyPlayer player, int percentage)
     {
         if (player.IsInVehicle)
@@ -458,7 +458,7 @@ public class VehicleScript : Script
         }
     }
 
-    [Command("danos", "/danos (veículo)")]
+    [Command(["danos"], "Veículos", "Visualiza os danos de um veículo", "(veículo)")]
     public static void CMD_danos(MyPlayer player, int id)
     {
         var vehicle = Global.Vehicles.FirstOrDefault(x => x.Id == id);
@@ -488,7 +488,7 @@ public class VehicleScript : Script
                 })), false);
     }
 
-    [Command("velmax", "/velmax (velocidade)")]
+    [Command(["velmax"], "Veículos", "Define a velocidade máxima de um veículo", "(velocidade)")]
     public static void CMD_velmax(MyPlayer player, int speed)
     {
         if (speed < 5 && speed != 0)
@@ -520,7 +520,7 @@ public class VehicleScript : Script
             $"Você alterou a velocidade máxima do veículo para {speed} MPH.");
     }
 
-    [Command("janela", "/janela (opção [fe, fd, te, td, todas])", Aliases = ["janelas", "ja"], AllowEmptyStrings = true)]
+    [Command(["janela", "janelas", "ja"], "Veículos", "Abre/fecha a janela de um veículo", "(opção [fe, fd, te, td, todas])", AllowEmptyStrings = true)]
     public static void CMD_janela(MyPlayer player, string? janela)
     {
         if (player.Vehicle is not MyVehicle vehicle)
@@ -712,7 +712,7 @@ public class VehicleScript : Script
         }
     }
 
-    [Command("xmr")]
+    [Command(["xmr"], "Veículos", "Altera as configurações do XMR")]
     public static void CMD_xmr(MyPlayer player)
     {
         if (player.Vehicle is not MyVehicle vehicle)
@@ -737,7 +737,7 @@ public class VehicleScript : Script
             player.User.GetCurrentPremium() != UserPremium.None, Functions.Serialize(Global.AudioRadioStations.OrderBy(x => x.Name)));
     }
 
-    [Command("quebrartrava", Aliases = ["picklock"])]
+    [Command(["quebrartrava", "picklock"], "Veículos", "Quebra a trava de um veículo")]
     public static async Task CMD_quebrartrava(MyPlayer player)
     {
         if (player.IsInVehicle)
@@ -872,12 +872,12 @@ public class VehicleScript : Script
         }
     }
 
-    [Command("reparar")]
+    [Command(["reparar"], "Veículos", "Conserta um veículo na central de mecânicos quando não há mecânicos em serviço")]
     public async Task CMD_reparar(MyPlayer player)
     {
         if (Global.Companies.Any(x => x.GetIsOpen() && x.Type == CompanyType.MechanicWorkshop))
         {
-            player.SendMessage(MessageType.Error, "Não é possível reparar pois há ao menos uma oficina mecânica aberta.");
+            player.SendMessage(MessageType.Error, "Não é possível reparar pois há uma oficina mecânica aberta.");
             return;
         }
 
@@ -946,7 +946,7 @@ public class VehicleScript : Script
         });
     }
 
-    [Command("ligacaodireta", Aliases = ["hotwire"])]
+    [Command(["ligacaodireta", "hotwire"], "Veículos", "Faz ligação direta em um veículo")]
     public static async Task CMD_ligacaodireta(MyPlayer player)
     {
         if (player.Vehicle is not MyVehicle vehicle || vehicle.Driver != player)
@@ -1042,7 +1042,7 @@ public class VehicleScript : Script
         }
     }
 
-    [Command("desmanchar")]
+    [Command(["desmanchar"], "Veículos", "Desmancha um veículo")]
     public async Task CMD_desmanchar(MyPlayer player)
     {
         if (!Global.Spots.Any(x => x.Type == SpotType.VehicleDismantling
@@ -1143,7 +1143,7 @@ public class VehicleScript : Script
         });
     }
 
-    [Command("rebocar", "/rebocar (veículo)")]
+    [Command(["rebocar"], "Veículos", "Rebocar um veículo", "(veículo)")]
     public static void CMD_rebocar(MyPlayer player, int id)
     {
         if (player.Vehicle is not MyVehicle vehicle
@@ -1174,7 +1174,7 @@ public class VehicleScript : Script
         player.SendMessage(MessageType.Success, $"Você rebocou o veículo {attachedVehicle.Identifier}.");
     }
 
-    [Command("rebocaroff")]
+    [Command(["rebocaroff"], "Veículos", "Solta um veículo rebocado")]
     public static void CMD_rebocaroff(MyPlayer player)
     {
         if (player.Vehicle is not MyVehicle vehicle)
@@ -1598,7 +1598,7 @@ public class VehicleScript : Script
         }
     }
 
-    [Command("vtrancar")]
+    [Command(["vtrancar"], "Veículos", "Tranca/destranca um veículo")]
     public static void CMD_vtrancar(MyPlayer player)
     {
         var veh = Global.Vehicles
@@ -1995,7 +1995,7 @@ public class VehicleScript : Script
         }
     }
 
-    [Command("colocar", "/colocar (ID ou nome) (assento (1-3))")]
+    [Command(["colocar"], "Veículos", "Coloca um jogador em um veículo", "(ID ou nome) (assento (1-3))")]
     public async Task CMD_colocar(MyPlayer player, string idOrName, byte seat)
     {
         if (seat < 1 || seat > 3)
@@ -2058,7 +2058,7 @@ public class VehicleScript : Script
         await player.WriteLog(LogType.PutInVehicle, vehicle.Identifier, target);
     }
 
-    [Command("retirar", "/retirar (ID ou nome)")]
+    [Command(["retirar"], "Veículos", "Retira um jogador de um veículo", "(ID ou nome)")]
     public async Task CMD_retirar(MyPlayer player, string idOrName)
     {
         if (player.IsInVehicle)
@@ -2092,7 +2092,7 @@ public class VehicleScript : Script
         await player.WriteLog(LogType.RemoveFromVehicle, vehicle.Identifier, target);
     }
 
-    [Command("helif")]
+    [Command(["helif"], "Veículos", "Congela/descongela um helicóptero")]
     public static void CMD_helif(MyPlayer player)
     {
         if (player.Vehicle is not MyVehicle vehicle || vehicle.Driver != player)
@@ -2117,7 +2117,7 @@ public class VehicleScript : Script
         player.SendMessage(MessageType.Success, $"Você {(!vehicle.Frozen ? "des" : string.Empty)}congelou o helicóptero.");
     }
 
-    [Command("valugar")]
+    [Command(["valugar"], "Veículos", "Aluga um veículo de emprego")]
     public async Task CMD_valugar(MyPlayer player)
     {
         if (player.Character.Job == CharacterJob.Unemployed || !player.OnDuty)
@@ -2180,7 +2180,7 @@ public class VehicleScript : Script
         player.SendMessage(MessageType.Success, $"Você alugou um {job.VehicleRentModel.ToUpper()} por ${job.VehicleRentValue:N0} até {vehicle.RentExpirationDate}.");
     }
 
-    [Command("cinto")]
+    [Command(["cinto"], "Veículos", "Coloca/retira o cinto de segurança")]
     public static void CMD_cinto(MyPlayer player)
     {
         if (player.Vehicle is not MyVehicle vehicle)
@@ -2203,7 +2203,7 @@ public class VehicleScript : Script
         player.SendMessageToNearbyPlayers($"{(player.SeatBelt ? "coloca" : "retira")} o cinto de segurança.", MessageCategory.Ame);
     }
 
-    [Command("idveh", "/idveh (placa)")]
+    [Command(["idveh"], "Veículos", "Procura o ID de um veículo", "(placa)")]
     public static void CMD_idveh(MyPlayer player, string plate)
     {
         var vehicle = Global.Vehicles.FirstOrDefault(x => x.VehicleDB.Plate.ToLower() == plate.ToLower());
@@ -2216,7 +2216,7 @@ public class VehicleScript : Script
         player.SendMessage(MessageType.None, $"ID do veículo {vehicle.VehicleDB.Model.ToUpper()} ({vehicle.VehicleDB.Plate.ToUpper()}) é {vehicle.Id}.");
     }
 
-    [Command("vinv")]
+    [Command(["vinv"], "Veículos", "Visualiza o inventário de um veículo")]
     public static async Task CMD_vinv(MyPlayer player)
     {
         var vehicle = Global.Vehicles.Where(x => x.GetDimension() == player.GetDimension()

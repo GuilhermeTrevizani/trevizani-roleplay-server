@@ -1,5 +1,4 @@
 ﻿using GTANetworkAPI;
-using TrevizaniRoleplay.Core.Models.Server;
 using TrevizaniRoleplay.Server.Extensions;
 using TrevizaniRoleplay.Server.Factories;
 using TrevizaniRoleplay.Server.Models;
@@ -8,35 +7,35 @@ namespace TrevizaniRoleplay.Server.Scripts;
 
 public class ICChatScript : Script
 {
-    [Command("me", "/me (mensagem)", GreedyArg = true)]
+    [Command(["me"], "Chat IC", "Interpretação de ações de um personagem", "(mensagem)", GreedyArg = true)]
     public static async Task CMD_me(MyPlayer player, string message)
     {
         player.SendMessageToNearbyPlayers(message, MessageCategory.NormalMe);
         await player.WriteLog(LogType.ICChat, $"/me {message}", null);
     }
 
-    [Command("do", "/do (mensagem)", GreedyArg = true)]
+    [Command(["do"], "Chat IC", "Interpretação do ambiente", "(mensagem)", GreedyArg = true)]
     public static async Task CMD_do(MyPlayer player, string message)
     {
         player.SendMessageToNearbyPlayers(message, MessageCategory.NormalDo);
         await player.WriteLog(LogType.ICChat, $"/do {message}", null);
     }
 
-    [Command("g", "/g (mensagem)", GreedyArg = true)]
+    [Command(["g"], "Chat IC", "Grita", "(mensagem)", GreedyArg = true)]
     public static async Task CMD_g(MyPlayer player, string message)
     {
         player.SendMessageToNearbyPlayers(message, MessageCategory.ShoutIC);
         await player.WriteLog(LogType.ICChat, $"/g {message}", null);
     }
 
-    [Command("baixo", "/baixo (mensagem)", GreedyArg = true)]
+    [Command(["baixo"], "Chat IC", "Fala baixo", "(mensagem)", GreedyArg = true)]
     public static async Task CMD_baixo(MyPlayer player, string message)
     {
         player.SendMessageToNearbyPlayers(message, MessageCategory.LowIC);
         await player.WriteLog(LogType.ICChat, $"/baixo {message}", null);
     }
 
-    [Command("s", "/s (ID ou nome) (mensagem)", GreedyArg = true)]
+    [Command(["s"], "Chat IC", "Sussura", "(ID ou nome) (mensagem)", GreedyArg = true)]
     public static async Task CMD_s(MyPlayer player, string idOrName, string message)
     {
         if (player.Character.Wound != CharacterWound.None)
@@ -63,21 +62,21 @@ public class ICChatScript : Script
         await player.WriteLog(LogType.ICChat, $"/s {message}", target);
     }
 
-    [Command("ame", "/ame (mensagem)", GreedyArg = true)]
+    [Command(["ame"], "Chat IC", "Interpretação de ações de um personagem", "(mensagem)", GreedyArg = true)]
     public static async Task CMD_ame(MyPlayer player, string message)
     {
         player.SendMessageToNearbyPlayers(message, MessageCategory.Ame);
         await player.WriteLog(LogType.ICChat, $"/ame {message}", null);
     }
 
-    [Command("ado", "/ado (mensagem)", GreedyArg = true)]
+    [Command(["ado"], "Chat IC", "Interpretação do ambiente", "(mensagem)", GreedyArg = true)]
     public static async Task CMD_ado(MyPlayer player, string message)
     {
         player.SendMessageToNearbyPlayers(message, MessageCategory.Ado);
         await player.WriteLog(LogType.ICChat, $"/ado {message}", null);
     }
 
-    [Command("mic", "/mic (mensagem)", GreedyArg = true)]
+    [Command(["mic"], "Chat IC", "Fala em um microfone", "(mensagem)", GreedyArg = true)]
     public static async Task CMD_mic(MyPlayer player, string message)
     {
         if (!player.Items.Any(x => x.GetCategory() == ItemCategory.Microphone))
@@ -90,7 +89,7 @@ public class ICChatScript : Script
         await player.WriteLog(LogType.ICChat, $"/mic {message}", null);
     }
 
-    [Command("autobaixo")]
+    [Command(["autobaixo"], "Chat IC", "Ativa/desativa mensagens em tom baixo automaticamente")]
     public static async Task CMD_autobaixo(MyPlayer player)
     {
         player.AutoLow = !player.AutoLow;
@@ -98,7 +97,7 @@ public class ICChatScript : Script
         await player.WriteLog(LogType.ICChat, "/autobaixo", null);
     }
 
-    [Command("para", "/para (ID ou nome) (mensagem)", Aliases = ["p"], GreedyArg = true)]
+    [Command(["para", "p"], "Chat IC", "Fala destinada para uma pessoa", "(ID ou nome) (mensagem)", GreedyArg = true)]
     public static async Task CMD_para(MyPlayer player, string idOrName, string message)
     {
         var target = player.GetCharacterByIdOrName(idOrName, false);
@@ -115,7 +114,7 @@ public class ICChatScript : Script
         await player.WriteLog(LogType.ICChat, $"/para {message}", target);
     }
 
-    [Command("parabaixo", "/parabaixo (ID ou nome) (mensagem)", Aliases = ["pb"], GreedyArg = true)]
+    [Command(["parabaixo", "pb"], "Chat IC", "Fala baixa destinada para uma pessoa", "(ID ou nome) (mensagem)", GreedyArg = true)]
     public static async Task CMD_parabaixo(MyPlayer player, string idOrName, string message)
     {
         var target = player.GetCharacterByIdOrName(idOrName, false);
@@ -132,7 +131,7 @@ public class ICChatScript : Script
         await player.WriteLog(LogType.ICChat, $"/parabaixo {message}", target);
     }
 
-    [Command("paragritar", "/paragritar (ID ou nome) (mensagem)", Aliases = ["pg"], GreedyArg = true)]
+    [Command(["paragritar", "pg"], "Chat IC", "Grito destinado para uma pessoa", "(ID ou nome) (mensagem)", GreedyArg = true)]
     public static async Task CMD_paragritar(MyPlayer player, string idOrName, string message)
     {
         var target = player.GetCharacterByIdOrName(idOrName, false);
@@ -149,35 +148,35 @@ public class ICChatScript : Script
         await player.WriteLog(LogType.ICChat, $"/paragritar {message}", target);
     }
 
-    [Command("mealto", "/mealto (mensagem)", Aliases = ["mea"], GreedyArg = true)]
+    [Command(["mealto", "mea"], "Chat IC", "Interpretação de ações de um personagem com dobro do range normal", "(mensagem)", GreedyArg = true)]
     public static async Task CMD_mealto(MyPlayer player, string message)
     {
         player.SendMessageToNearbyPlayers(message, MessageCategory.ShoutMe);
         await player.WriteLog(LogType.ICChat, $"/mealto {message}", null);
     }
 
-    [Command("doalto", "/doalto (mensagem)", Aliases = ["doa"], GreedyArg = true)]
+    [Command(["doalto", "doa"], "Chat IC", "Interpretação do ambiente com metade do dobro normal", "(mensagem)", GreedyArg = true)]
     public static async Task CMD_doalto(MyPlayer player, string message)
     {
         player.SendMessageToNearbyPlayers(message, MessageCategory.ShoutDo);
         await player.WriteLog(LogType.ICChat, $"/doalto {message}", null);
     }
 
-    [Command("mebaixo", "/mebaixo (mensagem)", Aliases = ["meb"], GreedyArg = true)]
+    [Command(["mebaixo", "meb"], "Chat IC", "Interpretação de ações de um personagem com metade do range normal", "(mensagem)", GreedyArg = true)]
     public static async Task CMD_mebaixo(MyPlayer player, string message)
     {
         player.SendMessageToNearbyPlayers(message, MessageCategory.LowMe);
         await player.WriteLog(LogType.ICChat, $"/mebaixo {message}", null);
     }
 
-    [Command("dobaixo", "/dobaixo (mensagem)", Aliases = ["dob"], GreedyArg = true)]
+    [Command(["dobaixo", "dob"], "Chat IC", "Interpretação do ambiente com metade do range normal", "(mensagem)", GreedyArg = true)]
     public static async Task CMD_dobaixo(MyPlayer player, string message)
     {
         player.SendMessageToNearbyPlayers(message, MessageCategory.LowDo);
         await player.WriteLog(LogType.ICChat, $"/dobaixo {message}", null);
     }
 
-    [Command("cs", "/cs (mensagem)", Aliases = ["cw"], GreedyArg = true)]
+    [Command(["cs", "cw"], "Chat IC", "Sussura para todos no veículo", "(mensagem)", GreedyArg = true)]
     public static async Task CMD_cs(MyPlayer player, string message)
     {
         if (player.Character.Wound != CharacterWound.None)

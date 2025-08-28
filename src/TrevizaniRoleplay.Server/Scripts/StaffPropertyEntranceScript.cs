@@ -7,7 +7,7 @@ namespace TrevizaniRoleplay.Server.Scripts;
 
 public class StaffPropertyEntranceScript : Script
 {
-    [Command("entradasprop", "/entradasprop (número)")]
+    [Command(["entradasprop"], "Staff", "Edita as entradas de uma propriedade", "(número)")]
     public static void CMD_entradasprop(MyPlayer player, int number)
     {
         if (!player.StaffFlags.Contains(StaffFlag.Properties))

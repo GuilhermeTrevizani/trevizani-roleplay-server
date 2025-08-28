@@ -9,7 +9,7 @@ namespace TrevizaniRoleplay.Server.Scripts;
 
 public class CellphoneScript : Script
 {
-    [Command("celular", Aliases = ["cel"])]
+    [Command(["celular", "cel"], "Celular", "Abre o celular")]
     public static void CMD_celular(MyPlayer player)
     {
         if (player.Character.Cellphone == 0)
@@ -70,7 +70,7 @@ public class CellphoneScript : Script
         }
     }
 
-    [Command("sms", "/sms (número ou nome do contato) (mensagem)", GreedyArg = true)]
+    [Command(["sms"], "Celular", "Envia um SMS", "(número ou nome do contato) (mensagem)", GreedyArg = true)]
     public async Task CMD_sms(MyPlayer player, string numberOrName, string message)
     {
         if (string.IsNullOrWhiteSpace(message) || message.Length > 255)
@@ -178,7 +178,7 @@ public class CellphoneScript : Script
         }
     }
 
-    [Command("desligar", Aliases = ["des"])]
+    [Command(["desligar", "des"], "Celular", "Desliga uma ligação em andamento")]
     public async Task CMD_desligar(MyPlayer player)
     {
         if (player.Character.Cellphone == 0)
@@ -225,7 +225,7 @@ public class CellphoneScript : Script
         }
     }
 
-    [Command("atender")]
+    [Command(["atender"], "Celular", "Atende a ligação")]
     public static void CMD_atender(MyPlayer player)
     {
         if (player.Character.Cellphone == 0)
@@ -286,7 +286,7 @@ public class CellphoneScript : Script
         }
     }
 
-    [Command("an", "/an (mensagem)", GreedyArg = true)]
+    [Command(["an"], "Celular", "Envia um anúncio", "(mensagem)", GreedyArg = true)]
     public async Task CMD_an(MyPlayer player, string message)
     {
         if (player.Character.Cellphone == 0)
@@ -424,7 +424,7 @@ public class CellphoneScript : Script
         }
     }
 
-    [Command("ligar", "/ligar (número ou nome do contato)")]
+    [Command(["ligar"], "Celular", "Liga para um número", "(número ou nome do contato)")]
     public async Task CMD_ligar(MyPlayer player, string numberOrName)
     {
         if (player.Character.Cellphone == 0)
@@ -641,7 +641,7 @@ public class CellphoneScript : Script
         }
     }
 
-    [Command("eloc", "/eloc (número ou nome do contato)")]
+    [Command(["eloc"], "Celular", "Envia sua localização", "(número ou nome do contato)")]
     public async Task CMD_eloc(MyPlayer player, string numberOrName)
     {
         if (player.Character.Cellphone == 0)
@@ -766,7 +766,7 @@ public class CellphoneScript : Script
         }
     }
 
-    [Command("gps", "/gps (endereço)", GreedyArg = true)]
+    [Command(["gps"], "Celular", "Busca a localização de uma propriedade", "(endereço)", GreedyArg = true)]
     public static void CMD_gps(MyPlayer player, string address)
     {
         if (player.Character.Cellphone == 0)
@@ -798,7 +798,7 @@ public class CellphoneScript : Script
         player.SendMessage(MessageType.None, $"[CELULAR] Propriedade {property.FormatedAddress} foi marcada no GPS.", Constants.CELLPHONE_SECONDARY_COLOR);
     }
 
-    [Command("temperatura")]
+    [Command(["temperatura"], "Celular", "Visualiza a temperatura e o clima atual")]
     public static void CMD_temperatura(MyPlayer player)
     {
         if (player.Character.Cellphone == 0)
@@ -1325,7 +1325,7 @@ public class CellphoneScript : Script
         }
     }
 
-    [Command("vivavoz")]
+    [Command(["vivavoz"], "Celular", "Ativa/desativa o viva-voz do celular")]
     public static void CMD_vivavoz(MyPlayer player)
     {
         if (player.PhoneCall.Type != PhoneCallType.Answered)

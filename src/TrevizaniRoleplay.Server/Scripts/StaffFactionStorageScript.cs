@@ -7,12 +7,12 @@ namespace TrevizaniRoleplay.Server.Scripts;
 
 public class StaffFactionStorageScript : Script
 {
-    [Command("aarmazenamentos")]
-    public static void CMD_aarmazenamentos(MyPlayer player)
+    [Command(["armazenamentos"], "Staff", "Abre o painel de gerenciamento de armazenamentos")]
+    public static void CMD_armazenamentos(MyPlayer player)
     {
         if (!player.StaffFlags.Contains(StaffFlag.FactionsStorages))
         {
-            player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 

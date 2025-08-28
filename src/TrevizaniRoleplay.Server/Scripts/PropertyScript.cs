@@ -7,7 +7,7 @@ namespace TrevizaniRoleplay.Server.Scripts;
 
 public class PropertyScript : Script
 {
-    [Command("pvender", "/pvender (ID ou nome) (valor)")]
+    [Command(["pvender"], "Propriedades", "Vende uma propriedade para um personagem", "(ID ou nome) (valor)")]
     public static void CMD_pvender(MyPlayer player, string idOrName, int valor)
     {
         var property = Global.Properties
@@ -53,10 +53,10 @@ public class PropertyScript : Script
         target.SendMessage(MessageType.Success, $"{player.ICName} ofereceu para você {property.FormatedAddress} por ${valor:N0}. (/ac {(int)convite.Type} para aceitar ou /rc {(int)convite.Type} para recusar)");
     }
 
-    [Command("pvendergoverno")]
+    [Command(["pvendergoverno"], "Propriedades", "Venda uma propriedade para o governo")]
     public async Task CMD_pvendergoverno(MyPlayer player) => await CMDVenderPropriedadeGoverno(player, false);
 
-    [Command("pupgrade")]
+    [Command(["pupgrade"], "Propriedades", "Realiza atualições na propriedade")]
     public static void CMD_pupgrade(MyPlayer player)
     {
         var property = Global.Properties
@@ -97,7 +97,7 @@ public class PropertyScript : Script
         player.Emit("PropertyUpgrade", $"Upgrades • {property.FormatedAddress}", property.Id.ToString(), itemsJSON);
     }
 
-    [Command("arrombar")]
+    [Command(["arrombar"], "Propriedades", "Arromba a porta de uma propriedade")]
     public async Task CMD_arrombar(MyPlayer player)
     {
         if (player.IsInVehicle)
@@ -162,7 +162,7 @@ public class PropertyScript : Script
         await Functions.SendServerMessage($"{player.Character.Name} ({player.SessionId}) começou a arrombar a propriedade {property.FormatedAddress}.", UserStaff.GameAdmin, false);
     }
 
-    [Command("roubarpropriedade")]
+    [Command(["roubarpropriedade"], "Propriedades", "Rouba uma propriedade")]
     public async Task CMD_roubarpropriedade(MyPlayer player)
     {
         if ((player.User.PropertyRobberyCooldown ?? DateTime.MinValue) > DateTime.Now)
@@ -252,7 +252,7 @@ public class PropertyScript : Script
         });
     }
 
-    [Command("pliberar")]
+    [Command(["pliberar"], "Propriedades", "Libera uma propriedade roubada")]
     public async Task CMD_pliberar(MyPlayer player)
     {
         var property = Global.Properties
@@ -632,7 +632,7 @@ public class PropertyScript : Script
         }
     }
 
-    [Command("pboombox")]
+    [Command(["pboombox"], "Propriedades", "Altera as configurações de uma saída de áudio da propriedade")]
     public static void CMD_pboombox(MyPlayer player)
     {
         var property = Global.Properties.FirstOrDefault(x => x.Number == player.GetDimension());
@@ -766,7 +766,7 @@ public class PropertyScript : Script
         }
     }
 
-    [Command("tv")]
+    [Command(["tv"], "Propriedades", "Altera as configurações de uma TV da propriedade")]
     public async Task CMD_tv(MyPlayer player)
     {
         var property = Global.Properties.FirstOrDefault(x => x.Number == player.GetDimension());
@@ -881,7 +881,7 @@ public class PropertyScript : Script
         }
     }
 
-    [Command("ptempo", "/ptempo (tempo)")]
+    [Command(["ptempo"], "Propriedades", "Altera o tempo da propriedade", "(tempo)")]
     public async Task CMD_ptempo(MyPlayer player, int weather)
     {
         var property = Global.Properties.FirstOrDefault(x => x.Number == player.GetDimension());
@@ -925,7 +925,7 @@ public class PropertyScript : Script
 
     }
 
-    [Command("phora", "/phora (hora)")]
+    [Command(["phora"], "Propriedades", "Altera o horário da propriedade", "(hora)")]
     public async Task CMD_phora(MyPlayer player, byte hour)
     {
         var property = Global.Properties.FirstOrDefault(x => x.Number == player.GetDimension());
@@ -967,7 +967,7 @@ public class PropertyScript : Script
         player.SendMessage(MessageType.Success, $"Você alterou a hora da propriedade para {hour}.");
     }
 
-    [Command("fixloc")]
+    [Command(["fixloc"], "Propriedades", "Corrige sua localização dentro de uma propriedade")]
     public async Task CMD_fixloc(MyPlayer player)
     {
         var property = Global.Properties.FirstOrDefault(x => x.Number == player.GetDimension());

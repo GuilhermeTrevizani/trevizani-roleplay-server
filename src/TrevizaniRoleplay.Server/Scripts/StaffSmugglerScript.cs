@@ -7,12 +7,12 @@ namespace TrevizaniRoleplay.Server.Scripts;
 
 public class StaffSmugglerScript : Script
 {
-    [Command("contrabandistas")]
+    [Command(["contrabandistas"], "Staff", "Abre o painel de gerenciamento de contrabandistas")]
     public static void CMD_contrabandistas(MyPlayer player)
     {
         if (!player.StaffFlags.Contains(StaffFlag.Factions))
         {
-            player.SendNotification(NotificationType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
+            player.SendMessage(MessageType.Error, Resources.YouAreNotAuthorizedToUseThisCommand);
             return;
         }
 

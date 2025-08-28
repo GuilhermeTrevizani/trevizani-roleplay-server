@@ -362,8 +362,7 @@ public class PlayerScript : Script
     {
         var split = message.Split(" ");
         var cmd = split[0].Replace("/", string.Empty).Trim().ToLower();
-        var method = Global.Commands.FirstOrDefault(x => x.GetCustomAttribute<CommandAttribute>()?.Command.ToLower() == cmd.ToLower()
-        || (x.GetCustomAttribute<CommandAttribute>()?.Aliases?.Any(y => y.ToLower() == cmd.ToLower()) ?? false));
+        var method = Global.Commands.FirstOrDefault(x => x.GetCustomAttribute<CommandAttribute>()!.Commands.Any(y => y.ToLower() == cmd.ToLower()));
         if (method?.DeclaringType is null)
         {
             player.SendMessage(MessageType.None, $"O comando {{{Constants.MAIN_COLOR}}}/{cmd}{{#FFFFFF}} não existe. Use {{{Constants.MAIN_COLOR}}}/ajuda{{#FFFFFF}} para visualizar os comandos disponíveis.");
@@ -435,7 +434,7 @@ public class PlayerScript : Script
 
         if (methodParams.Length != arr.Count)
         {
-            player.SendMessage(MessageType.None, $"Use: {{{Constants.MAIN_COLOR}}}{command.HelpText}");
+            player.SendMessage(MessageType.None, $"Use: {{{Constants.MAIN_COLOR}}}/{cmd} {command.HelpText}");
             return;
         }
 
@@ -1353,19 +1352,19 @@ public class PlayerScript : Script
         await context.SaveChangesAsync();
     }
 
-    [Command("propnoclip")]
+    [Command(["propnoclip"], "Propriedades", "Ativa /desativa a câmera livre para mobiliar")]
     public async Task CMD_propnoclip(MyPlayer player)
     {
         var property = Global.Properties.FirstOrDefault(x => x.Number == player.GetDimension());
         if (property is null)
         {
-            player.SendNotification(NotificationType.Error, "Você não está no interior de uma propriedade.");
+            player.SendMessage(MessageType.Error, "Você não está no interior de uma propriedade.");
             return;
         }
 
         if (!property.CanAccess(player))
         {
-            player.SendNotification(NotificationType.Error, "Você não possui acesso a esta propriedade.");
+            player.SendMessage(MessageType.Error, "Você não possui acesso a esta propriedade.");
             return;
         }
 
@@ -1377,7 +1376,7 @@ public class PlayerScript : Script
         player.SendNotification(NotificationType.Success, $"Você {(!player.PropertyNoClip ? "des" : string.Empty)}ativou a câmera livre.");
     }
 
-    [Command("motor")]
+    [Command(["motor"], "Veículos", "Liga/desliga o motor de um veículo")]
     public static async Task CMD_motor(MyPlayer player)
     {
         if (player.Vehicle is not MyVehicle vehicle || vehicle.Driver != player)
