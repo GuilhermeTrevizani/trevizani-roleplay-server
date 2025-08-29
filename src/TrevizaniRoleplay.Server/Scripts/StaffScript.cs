@@ -916,7 +916,7 @@ public class StaffScript : Script
             if (x.Dimension == player.GetDimension()
                 && player.GetPosition().DistanceTo(new(x.PosX, x.PosY, x.PosZ)) <= distance)
             {
-                player.SendMessage(MessageType.None, $"Info {x.Id} | Data: {x.RegisterDate} | Expiração: {x.ExpirationDate}");
+                player.SendMessage(MessageType.None, $"Info {x.Id} | Data: {x.RegisterDate}");
                 hasAnythingNear = true;
             }
         }
@@ -975,7 +975,7 @@ public class StaffScript : Script
             if (x.Dimension == player.GetDimension()
                 && player.GetPosition().DistanceTo(new(x.PosX, x.PosY, x.PosZ)) <= distance)
             {
-                player.SendMessage(MessageType.None, $"Grafite {x.Id} | Data: {x.RegisterDate} | Expiração: {x.ExpirationDate}");
+                player.SendMessage(MessageType.None, $"Grafite {x.Id} | Data: {x.RegisterDate}");
                 hasAnythingNear = true;
             }
         }

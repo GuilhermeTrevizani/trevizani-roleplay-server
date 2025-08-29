@@ -420,8 +420,6 @@ public class Server : Script
         try
         {
             Functions.ConsoleLog("MainTimer_Elapsed Start");
-            await RemoveExpiredInfos();
-            await RemoveExpiredGraffitis();
             await DebitCompaniesWeekRent();
             await SyncWeather();
             Functions.ConsoleLog("MainTimer_Elapsed End");
@@ -522,36 +520,6 @@ public class Server : Script
         {
             Functions.ConsoleLog("SyncWeather End");
         }
-    }
-
-    private async Task RemoveExpiredInfos()
-    {
-        Functions.ConsoleLog("RemoveExpiredInfos Start");
-        var infos = Global.Infos.Where(x => x.ExpirationDate < DateTime.Now).ToList();
-        if (infos.Count > 0)
-        {
-            var context = Functions.GetDatabaseContext();
-            context.Infos.RemoveRange(infos);
-            await context.SaveChangesAsync();
-            infos.ForEach(x => x.RemoveIdentifier());
-            Global.Infos.RemoveAll(infos.Contains);
-        }
-        Functions.ConsoleLog("RemoveExpiredInfos End");
-    }
-
-    private async Task RemoveExpiredGraffitis()
-    {
-        Functions.ConsoleLog("RemoveExpiredGraffitis Start");
-        var graffitis = Global.Graffitis.Where(x => x.ExpirationDate < DateTime.Now).ToList();
-        if (graffitis.Count > 0)
-        {
-            var context = Functions.GetDatabaseContext();
-            context.Graffitis.RemoveRange(graffitis);
-            await context.SaveChangesAsync();
-            graffitis.ForEach(x => x.RemoveIdentifier());
-            Global.Graffitis.RemoveAll(graffitis.Contains);
-        }
-        Functions.ConsoleLog("RemoveExpiredGraffitis End");
     }
 
     private async void MinuteTimer_Elapsed(object sender, ElapsedEventArgs e)

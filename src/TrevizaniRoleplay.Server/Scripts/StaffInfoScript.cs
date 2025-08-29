@@ -101,7 +101,6 @@ public class StaffInfoScript : Script
             {
                 x.Id,
                 x.RegisterDate,
-                x.ExpirationDate,
                 Character = GetCharacter(x.CharacterId),
                 x.PosX,
                 x.PosY,

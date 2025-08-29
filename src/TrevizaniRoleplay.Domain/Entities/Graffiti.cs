@@ -20,14 +20,13 @@ public class Graffiti : BaseEntity
     public byte ColorG { get; private set; }
     public byte ColorB { get; private set; }
     public byte ColorA { get; private set; }
-    public DateTime ExpirationDate { get; private set; }
 
     [JsonIgnore]
     public Character? Character { get; private set; }
 
     public void Create(Guid characterId, string text, int size, GraffitiFont font,
         uint dimension, float posX, float posY, float posZ, float rotR, float rotP, float rotY,
-        byte colorR, byte colorG, byte colorB, byte colorA, int days
+        byte colorR, byte colorG, byte colorB, byte colorA
         )
     {
         CharacterId = characterId;
@@ -45,6 +44,5 @@ public class Graffiti : BaseEntity
         ColorG = colorG;
         ColorB = colorB;
         ColorA = colorA;
-        ExpirationDate = DateTime.Now.AddDays(days);
     }
 }

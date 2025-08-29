@@ -705,13 +705,13 @@ public class PlayerScript : Script
             var distance = 1.5f;
 
             var info = Global.Infos
-                .Where(x => x.Image
+                .Where(x => !string.IsNullOrWhiteSpace(x.Image)
                     && x.Dimension == player.GetDimension()
                     && player.GetPosition().DistanceTo(new(x.PosX, x.PosY, x.PosZ)) <= distance)
                 .MinBy(x => player.GetPosition().DistanceTo(new(x.PosX, x.PosY, x.PosZ)));
             if (info is not null)
             {
-                player.Emit("OpenImage", info.Message);
+                player.Emit("OpenImage", info.Image);
                 return;
             }
 

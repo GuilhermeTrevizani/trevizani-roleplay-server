@@ -14,28 +14,21 @@ public class InfoScript : Script
     }
 
     [RemoteEvent(nameof(InfoSave))]
-    public async Task InfoSave(Player playerParam, int days, string message, bool image)
+    public async Task InfoSave(Player playerParam, string message, string image)
     {
         try
         {
             var player = Functions.CastPlayer(playerParam);
-            var maxDays = player.User.GetCurrentPremium() switch
-            {
-                UserPremium.Gold => 30,
-                UserPremium.Silver => 15,
-                UserPremium.Bronze => 7,
-                _ => 3,
-            };
 
-            if (days > maxDays)
+            if (string.IsNullOrWhiteSpace(message))
             {
-                player.SendNotification(NotificationType.Error, $"O máximo de dias permitido para seu nível de Premium é de {maxDays}.");
+                player.SendNotification(NotificationType.Error, "Mensagem não informada.");
                 return;
             }
 
-            if (image && !GlobalFunctions.IsValidImageUrl(message))
+            if (!string.IsNullOrWhiteSpace(image) && !GlobalFunctions.IsValidImageUrl(image))
             {
-                player.SendNotification(NotificationType.Error, $"URL de imagem inválida. Use Imgur.");
+                player.SendNotification(NotificationType.Error, "URL de imagem inválida. Use Imgur.");
                 return;
             }
 
@@ -54,7 +47,7 @@ public class InfoScript : Script
             }
 
             var info = new Info();
-            info.Create(player.GetPosition().X, player.GetPosition().Y, player.GetPosition().Z - 0.7f, player.GetDimension(), days, player.Character.Id, message, image);
+            info.Create(player.GetPosition().X, player.GetPosition().Y, player.GetPosition().Z - 0.7f, player.GetDimension(), player.Character.Id, message, image);
 
             var context = Functions.GetDatabaseContext();
             await context.Infos.AddAsync(info);
@@ -117,7 +110,6 @@ public class InfoScript : Script
             {
                 x.Id,
                 x.RegisterDate,
-                x.ExpirationDate,
                 x.Message,
                 x.Image,
             }));

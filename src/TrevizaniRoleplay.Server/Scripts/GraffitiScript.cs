@@ -68,19 +68,11 @@ public class GraffitiScript : Script
                 return;
             }
 
-            var days = player.User.GetCurrentPremium() switch
-            {
-                UserPremium.Gold => 21,
-                UserPremium.Silver => 14,
-                UserPremium.Bronze => 7,
-                _ => 5,
-            };
-
             var graffiti = new Graffiti();
             graffiti.Create(player.Character.Id, graffitiRequest.Text, graffitiRequest.Size, graffitiRequest.Font,
                 player.GetDimension(), graffitiRequest.PosX, graffitiRequest.PosY, graffitiRequest.PosZ,
                 graffitiRequest.RotR, graffitiRequest.RotP, graffitiRequest.RotY,
-                graffitiRequest.ColorR, graffitiRequest.ColorG, graffitiRequest.ColorB, graffitiRequest.ColorA, days);
+                graffitiRequest.ColorR, graffitiRequest.ColorG, graffitiRequest.ColorB, graffitiRequest.ColorA);
 
             var context = Functions.GetDatabaseContext();
             await context.Graffitis.AddAsync(graffiti);

@@ -15,7 +15,7 @@ public static class InfoExtension
             marker.InfoId = info.Id;
 
             var colShape = Functions.CreateColShapeCylinder(new Vector3(info.PosX, info.PosY, info.PosZ), 1, 1.5f, info.Dimension);
-            colShape.Description = $"[INFO] {{#FFFFFF}}{(info.Image ? "Pressione Y para visualizar a imagem." : info.Message)}";
+            colShape.Description = $"[{info.RegisterDate.ToShortDateString()}] {{#FFFFFF}}{info.Message.TrimEnd('.')}{(!string.IsNullOrWhiteSpace(info.Image) ? ". Pressione Y para visualizar a imagem." : string.Empty)}";
             colShape.InfoId = info.Id;
         });
     }
